@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.clsaa.dop.server.user</groupId>
-    <artifactId>user-server</artifactId>
+    <groupId>com.clsaa.dop.server.monitoring</groupId>
+    <artifactId>monitoring-server</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>user-server</name>
-    <description>user service for dop</description>
+    <name>monitoring-server</name>
+    <description>monitoring service for dop</description>
     <url>https://github.com/clsaa/dop</url>
 
     <licenses>
@@ -178,7 +178,7 @@
                 <configuration>
                     <fork>true</fork>
                     <executable>true</executable>
-                    <mainClass>com.clsaa.dop.server.user.UserServerApplication</mainClass>
+                    <mainClass>com.clsaa.dop.server.monitoring.MonitoringServerApplication</mainClass>
                 </configuration>
             </plugin>
             <plugin>

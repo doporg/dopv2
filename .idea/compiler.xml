@@ -7,14 +7,17 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="user-server" />
+        <module name="monitoring-server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="monitoring-server" target="1.8" />
       <module name="user-server" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="monitoring-server" options="-parameters" />
       <module name="user-server" options="-parameters" />
     </option>
   </component>

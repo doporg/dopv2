@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/dopv2.iml" filepath="$PROJECT_DIR$/.idea/dopv2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/monitoring-server/monitoring-server.iml" filepath="$PROJECT_DIR$/monitoring-server/monitoring-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/monitoring-server/user-server.iml" filepath="$PROJECT_DIR$/monitoring-server/user-server.iml" />
     </modules>
   </component>
