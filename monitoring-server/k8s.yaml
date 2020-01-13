@@ -30,7 +30,7 @@ spec:
             - name: host-timezone
               mountPath: /etc/timezone
           ports:
-            - containerPort: 13100
+            - containerPort: 14100
       volumes:
         - name: host-time
           hostPath:
