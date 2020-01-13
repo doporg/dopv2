@@ -928,3 +928,40 @@ com.netflix.discovery.shared.transport.TransportException: Cannot execute reques
 [2m2020-01-13 15:53:15.775[0;39m [32m INFO[0;39m [35m10889[0;39m [2m---[0;39m [2m[freshExecutor-0][0;39m [36mcom.netflix.discovery.DiscoveryClient   [0;39m [2m:[0;39m Application version is -1: false
 [2m2020-01-13 15:53:15.775[0;39m [32m INFO[0;39m [35m10889[0;39m [2m---[0;39m [2m[freshExecutor-0][0;39m [36mcom.netflix.discovery.DiscoveryClient   [0;39m [2m:[0;39m Getting all instance registry info from the eureka server
 [2m2020-01-13 15:53:15.809[0;39m [32m INFO[0;39m [35m10889[0;39m [2m---[0;39m [2m[freshExecutor-0][0;39m [36mcom.netflix.discovery.DiscoveryClient   [0;39m [2m:[0;39m The response status is 200
+[2m2020-01-13 15:57:45.510[0;39m [32m INFO[0;39m [35m10889[0;39m [2m---[0;39m [2m[trap-executor-0][0;39m [36mc.n.d.s.r.aws.ConfigClusterResolver     [0;39m [2m:[0;39m Resolving eureka endpoints via configuration
+[2m2020-01-13 15:59:30.899[0;39m [32m INFO[0;39m [35m10889[0;39m [2m---[0;39m [2m[      Thread-36][0;39m [36mo.s.c.n.e.s.EurekaServiceRegistry       [0;39m [2m:[0;39m Unregistering application MONITORING-SERVER with eureka with status DOWN
+[2m2020-01-13 15:59:30.908[0;39m [33m WARN[0;39m [35m10889[0;39m [2m---[0;39m [2m[      Thread-36][0;39m [36mcom.netflix.discovery.DiscoveryClient   [0;39m [2m:[0;39m Saw local status change event StatusChangeEvent [timestamp=1578902370908, current=DOWN, previous=UP]
+[2m2020-01-13 15:59:30.911[0;39m [32m INFO[0;39m [35m10889[0;39m [2m---[0;39m [2m[nfoReplicator-0][0;39m [36mcom.netflix.discovery.DiscoveryClient   [0;39m [2m:[0;39m DiscoveryClient_MONITORING-SERVER/172.19.143.12:monitoring-server:14100:1.0.0-SNAPSHOT: registering service...
+[2m2020-01-13 15:59:30.919[0;39m [32m INFO[0;39m [35m10889[0;39m [2m---[0;39m [2m[      Thread-36][0;39m [36mo.s.s.c.ThreadPoolTaskScheduler         [0;39m [2m:[0;39m Shutting down ExecutorService 'taskScheduler'
+[2m2020-01-13 15:59:30.969[0;39m [32m INFO[0;39m [35m10889[0;39m [2m---[0;39m [2m[nfoReplicator-0][0;39m [36mcom.netflix.discovery.DiscoveryClient   [0;39m [2m:[0;39m DiscoveryClient_MONITORING-SERVER/172.19.143.12:monitoring-server:14100:1.0.0-SNAPSHOT - registration status: 204
+[2m2020-01-13 15:59:32.256[0;39m [32m INFO[0;39m [35m10889[0;39m [2m---[0;39m [2m[      Thread-36][0;39m [36mj.LocalContainerEntityManagerFactoryBean[0;39m [2m:[0;39m Closing JPA EntityManagerFactory for persistence unit 'default'
+[2m2020-01-13 15:59:32.292[0;39m [32m INFO[0;39m [35m10889[0;39m [2m---[0;39m [2m[      Thread-36][0;39m [36mcom.alibaba.druid.pool.DruidDataSource  [0;39m [2m:[0;39m {dataSource-1} closed
+[2m2020-01-13 15:59:32.317[0;39m [32m INFO[0;39m [35m10889[0;39m [2m---[0;39m [2m[      Thread-36][0;39m [36mcom.netflix.discovery.DiscoveryClient   [0;39m [2m:[0;39m Shutting down DiscoveryClient ...
+[2m2020-01-13 15:59:32.326[0;39m [33m WARN[0;39m [35m10889[0;39m [2m---[0;39m [2m[      Thread-36][0;39m [36m.s.c.a.CommonAnnotationBeanPostProcessor[0;39m [2m:[0;39m Destroy method on bean with name 'scopedTarget.eurekaClient' threw an exception: org.springframework.beans.factory.BeanCreationNotAllowedException: Error creating bean with name 'eurekaInstanceConfigBean': Singleton bean creation not allowed while singletons of this factory are in destruction (Do not request a bean from a BeanFactory in a destroy method implementation!)
+[2m2020-01-13 15:59:32.330[0;39m [31mERROR[0;39m [35m10889[0;39m [2m---[0;39m [2m[      Thread-36][0;39m [36mi.n.u.c.D.rejectedExecution             [0;39m [2m:[0;39m Failed to submit a listener notification task. Event loop shut down?
+
+java.util.concurrent.RejectedExecutionException: event executor terminated
+	at io.netty.util.concurrent.SingleThreadEventExecutor.reject(SingleThreadEventExecutor.java:845)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.offerTask(SingleThreadEventExecutor.java:328)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.addTask(SingleThreadEventExecutor.java:321)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.execute(SingleThreadEventExecutor.java:756)
+	at io.netty.util.concurrent.DefaultPromise.safeExecute(DefaultPromise.java:768)
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:432)
+	at io.netty.util.concurrent.DefaultPromise.setFailure(DefaultPromise.java:112)
+	at io.netty.channel.DefaultChannelPromise.setFailure(DefaultChannelPromise.java:89)
+	at io.netty.channel.AbstractChannelHandlerContext.safeExecute(AbstractChannelHandlerContext.java:1040)
+	at io.netty.channel.AbstractChannelHandlerContext.close(AbstractChannelHandlerContext.java:610)
+	at io.netty.channel.AbstractChannelHandlerContext.close(AbstractChannelHandlerContext.java:465)
+	at io.netty.channel.DefaultChannelPipeline.close(DefaultChannelPipeline.java:968)
+	at io.netty.channel.AbstractChannel.close(AbstractChannel.java:242)
+	at reactor.netty.tcp.TcpServerBind$DisposableBind.dispose(TcpServerBind.java:166)
+	at reactor.netty.http.server.HttpServerBind$DisposableBind.dispose(HttpServerBind.java:298)
+	at reactor.netty.DisposableChannel.disposeNow(DisposableChannel.java:92)
+	at reactor.netty.DisposableChannel.disposeNow(DisposableChannel.java:82)
+	at org.springframework.boot.web.embedded.netty.NettyWebServer.stop(NettyWebServer.java:122)
+	at org.springframework.boot.web.reactive.context.ReactiveWebServerApplicationContext$ServerManager.stop(ReactiveWebServerApplicationContext.java:239)
+	at org.springframework.boot.web.reactive.context.ReactiveWebServerApplicationContext.stopAndReleaseReactiveWebServer(ReactiveWebServerApplicationContext.java:163)
+	at org.springframework.boot.web.reactive.context.ReactiveWebServerApplicationContext.onClose(ReactiveWebServerApplicationContext.java:157)
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1032)
+	at org.springframework.context.support.AbstractApplicationContext$1.run(AbstractApplicationContext.java:945)
+
