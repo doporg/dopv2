@@ -81,10 +81,10 @@ const TEST_EN_US = {
     'test.requestScript.method.select': 'Please select request method',
     'test.requestScript.url.input': 'Please input request url',
     'test.requestScript.resultParam.add': 'Add params',
-    'test.requestScript.resultParam.info1': 'Select data from response body as global param, which could be imported by follow-up requests.For example,for response data like  ',
+    'test.requestScript.resultParam.info1': 'Select data from response body as global param, which could be imported by follow-up requests.For testv2,for response data like  ',
     'test.requestScript.resultParam.info2': ', You could define a result param here which named paramA, values a, and use ${paramA} to import it in follow-up requests.',
     'test.requestScript.checkPoint.add': 'Check Points',
-    'test.requestScript.checkPoint.info1': 'Validate response data automatically.For example, for response data like ',
+    'test.requestScript.checkPoint.info1': 'Validate response data automatically.For testv2, for response data like ',
     'test.requestScript.checkPoint.info2': ', You could define a check point whose property is a, and expected value is 1.Check points decides whether this request is successful.',
 
     "test.requestHeader.name": 'Name: ',
