@@ -35,7 +35,7 @@ function recursiveRouterConfigV4(config = []) {
  * @param {object} router 路由对象
  * @param {string} contextPath 上层路由地址
  * @return {Route}
- * @example
+ * @testv2
  * <Switch>
  *   <Route exact path="/" component={Home} />
  *   <Route exact path="/page3" component={Page3} />

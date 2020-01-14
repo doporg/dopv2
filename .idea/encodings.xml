@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding">
+  <component name="Encoding" addBOMForNewFiles="with NO BOM">
+    <file url="file://$PROJECT_DIR$/alert-server" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/example-server" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/link-server" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/monitoring-server" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/monitoring-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/monitoring-server/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/test-server" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/testing-server" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/testv2-server" charset="UTF-8" />
   </component>
 </project>

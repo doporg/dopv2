@@ -58,7 +58,7 @@ const PERMISSION_EN_US = {
     'permission.addUserData': 'add user data',
     'permission.user:': 'user：',
     'permission.fieldValue:': 'field value：',
-    'permission.defaultFieldValue': 'please input field value(example: input "1" for projectId = 1)',
+    'permission.defaultFieldValue': 'please input field value(testv2: input "1" for projectId = 1)',
     'permission.noFieldValueMessage': 'please input value',
     'permission.fieldName': 'field name',
     'permission.rule': 'rule',
