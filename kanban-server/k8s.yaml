@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kanban-server
+  namespace: dop
+spec:
+  selector:
+    matchLabels:
+      app: kanban-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kanban-server
+    spec:
+      containers:
+        - name: kanban-server
+          imagePullPolicy: Always
+          image: registry.dop.clsaa.com/dop/kanban-server:<BUILD_TAG>
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 250m
+            limits:
+              memory: 512Mi
+              cpu: 500m
+          volumeMounts:
+            - name: host-time
+              mountPath: /etc/localtime
+            - name: host-timezone
+              mountPath: /etc/timezone
+          ports:
+            - containerPort: 14600      # 端口自定
+      volumes:
+        - name: host-time
+          hostPath:
+            path: /etc/localtime
+        - name: host-timezone
+          hostPath:
+            path: /etc/timezone
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kanban-server
+  namespace: dop
+  labels:
+    app: kanban-server
+spec:
+  ports:
+    - port: 14600      # 端口自定
+      protocol: TCP
+      targetPort: 14600      # 端口自定
+  selector:
+    app: kanban-server

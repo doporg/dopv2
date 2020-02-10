@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: requirement-server
+  namespace: dop
+spec:
+  selector:
+    matchLabels:
+      app: requirement-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: requirement-server
+    spec:
+      containers:
+        - name: requirement-server
+          imagePullPolicy: Always
+          image: registry.dop.clsaa.com/dop/requirement-server:<BUILD_TAG>
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 250m
+            limits:
+              memory: 512Mi
+              cpu: 500m
+          volumeMounts:
+            - name: host-time
+              mountPath: /etc/localtime
+            - name: host-timezone
+              mountPath: /etc/timezone
+          ports:
+            - containerPort: 14500      # 端口自定
+      volumes:
+        - name: host-time
+          hostPath:
+            path: /etc/localtime
+        - name: host-timezone
+          hostPath:
+            path: /etc/timezone
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: requirement-server
+  namespace: dop
+  labels:
+    app: requirement-server
+spec:
+  ports:
+    - port: 14500      # 端口自定
+      protocol: TCP
+      targetPort: 14500      # 端口自定
+  selector:
+    app: requirement-server
