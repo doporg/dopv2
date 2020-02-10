@@ -19,5 +19,11 @@
       </set>
     </option>
   </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/.doc/1.编码规范.md" />
+    <file url="file://$PROJECT_DIR$/.doc/4.OAth2.0接入.md" />
+    <file url="file://$PROJECT_DIR$/.doc/权限接入.md" />
+    <file url="file://$PROJECT_DIR$/.doc/项目配置.md" />
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
 </project>
