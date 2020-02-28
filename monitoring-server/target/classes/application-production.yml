@@ -53,12 +53,12 @@ spring:
     timeout: 5000
 
 project:
-  host: open.dop.clsaa.com/user-server
-  groupId: com.clsaa.dop.server.user
-  artifactId: user-server
+  host: open.dop.clsaa.com/monitoring-server
+  groupId: com.clsaa.dop.server.monitoring
+  artifactId: monitoring-server
   version: 1.0.0-SNAPSHOT
-  name: user-server
-  description: user service for dop
+  name: monitoring-server
+  description: monitoring service for dop
   url: https://github.com/clsaa/dop
 swagger.enable: true
 eureka:
