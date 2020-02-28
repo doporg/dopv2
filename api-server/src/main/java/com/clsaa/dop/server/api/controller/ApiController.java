@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RestController
 @EnableAutoConfiguration
-public class HelloWorldController {
+public class ApiController {
 
     //如果需要使用服务层对象，则在此声明一个私有对象再进行使用
 

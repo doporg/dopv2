@@ -1,4 +1,4 @@
-package com.clsaa.dop.server.requirement;
+package com.clsaa.dop.server.process;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,17 +8,17 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
- * 应用启动类
+ * process应用启动类
  *
- * @author joyren,lzy
+ * @author 郑博文
  */
 @SpringBootApplication
 @EnableScheduling
 @EnableAsync
 @EnableFeignClients
 @ComponentScan("com.clsaa")
-public class requirementServerApplication {
+public class ProcessServerApplication {
     public static void main(String[] args) {
-        SpringApplication.run(requirementServerApplication.class, args);
+        SpringApplication.run(ProcessServerApplication.class, args);
     }
 }

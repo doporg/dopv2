@@ -17,8 +17,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableAsync
 @EnableFeignClients
 @ComponentScan("com.clsaa")
-public class apiServerApplication {
+public class ApiServerApplication {
     public static void main(String[] args) {
-        SpringApplication.run(apiServerApplication.class, args);
+        SpringApplication.run(ApiServerApplication.class, args);
     }
 }

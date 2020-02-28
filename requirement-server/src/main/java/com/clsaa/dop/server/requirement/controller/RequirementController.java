@@ -1,11 +1,11 @@
 package com.clsaa.dop.server.requirement.controller;
 
-import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.annotations.ApiOperation;
 
 /**
  * 示例应用启动类
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RestController
 @EnableAutoConfiguration
-public class HelloWorldController {
+public class RequirementController {
 
     //如果需要使用服务层对象，则在此声明一个私有对象再进行使用
 
