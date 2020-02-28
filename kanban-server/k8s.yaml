@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kanban-server
+  name: process-server
   namespace: dop
 spec:
   selector:
     matchLabels:
-      app: kanban-server
+      app: process-server
   replicas: 1
   template:
     metadata:
       labels:
-        app: kanban-server
+        app: process-server
     spec:
       containers:
-        - name: kanban-server
+        - name: process-server
           imagePullPolicy: Always
-          image: registry.dop.clsaa.com/dop/kanban-server:<BUILD_TAG>
+          image: registry.dop.clsaa.com/dop/process-server:<BUILD_TAG>
           resources:
             requests:
               memory: 512Mi
@@ -42,14 +42,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: kanban-server
+  name: process-server
   namespace: dop
   labels:
-    app: kanban-server
+    app: process-server
 spec:
   ports:
     - port: 14600      # 端口自定
       protocol: TCP
       targetPort: 14600      # 端口自定
   selector:
-    app: kanban-server
+    app: process-server

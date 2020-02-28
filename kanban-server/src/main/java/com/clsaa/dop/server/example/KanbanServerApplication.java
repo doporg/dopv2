@@ -1,4 +1,4 @@
-package com.clsaa.dop.server.kanban;
+package com.clsaa.dop.server.process;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,8 +17,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableAsync
 @EnableFeignClients
 @ComponentScan("com.clsaa")
-public class kanbanServerApplication {
+public class processServerApplication {
     public static void main(String[] args) {
-        SpringApplication.run(kanbanServerApplication.class, args);
+        SpringApplication.run(processServerApplication.class, args);
     }
 }

@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.clsaa.dop.server.kanban</groupId>
-    <artifactId>kanban-server</artifactId>
+    <groupId>com.clsaa.dop.server.process</groupId>
+    <artifactId>process-server</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>kanban-server</name>
-    <description>kanban service for dop</description>
+    <name>process-server</name>
+    <description>process service for dop</description>
     <url>https://github.com/clsaa/dop</url>
 
     <licenses>
@@ -178,7 +178,7 @@
                 <configuration>
                     <fork>true</fork>
                     <executable>true</executable>
-                    <mainClass>com.clsaa.dop.server.kanban.kanbanServerApplication</mainClass>
+                    <mainClass>com.clsaa.dop.server.process.processServerApplication</mainClass>
                 </configuration>
             </plugin>
             <plugin>

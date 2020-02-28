@@ -1,4 +1,4 @@
-package com.clsaa.dop.server.kanban.config;
+package com.clsaa.dop.server.process.config;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;

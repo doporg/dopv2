@@ -1,4 +1,4 @@
-package com.clsaa.dop.server.kanban.controller;
+package com.clsaa.dop.server.process.controller;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class HelloWorldController {
     //如果需要使用服务层对象，则在此声明一个私有对象再进行使用
 
     @ApiOperation(value = "接口名称", notes = "接口说明")
-    @PostMapping("/v2/kanban")
+    @PostMapping("/v2/process")
     /*
      * 访问用 PostMapping, 相应的，创建数据或删除输入需要用其他注解（GerMapping / DeleteMapping）
      */

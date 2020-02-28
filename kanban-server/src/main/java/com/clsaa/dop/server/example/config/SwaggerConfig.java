@@ -1,4 +1,4 @@
-package com.clsaa.dop.server.kanban.config;
+package com.clsaa.dop.server.process.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
