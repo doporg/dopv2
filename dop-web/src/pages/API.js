@@ -12,6 +12,7 @@ const test = "/test-server";
 
 const API = {
     address: "http://www.dop.clsaa.com/#/",
+    // address: "http://localhost:3000/#/",
     gateway: host,
     pipeline: host + pipeline,
     application: host + application,
