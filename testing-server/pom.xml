@@ -48,6 +48,19 @@
     </dependencyManagement>
 
     <dependencies>
+        <!--jgit-->
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit</artifactId>
+            <version>5.6.1.202002131546-r</version>
+        </dependency>
+
+        <!--sonar-scanner-api-->
+        <dependency>
+            <groupId>org.sonarsource.scanner.api</groupId>
+            <artifactId>sonar-scanner-api</artifactId>
+            <version>2.15.0.2182</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
