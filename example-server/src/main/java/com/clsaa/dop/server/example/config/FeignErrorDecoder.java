@@ -16,7 +16,7 @@ import java.io.IOException;
  * @author joyren
  */
 @Configuration
-public class FeignErrorDecoder implements ErrorDecoder {
+public class  FeignErrorDecoder implements ErrorDecoder {
 
     @Override
     public Exception decode(String methodKey, Response response) {
