@@ -48,14 +48,16 @@
     </dependencyManagement>
 
     <dependencies>
-        <!--jgit-->
+        <dependency>
+            <groupId>org.sonarsource.scanner.cli</groupId>
+            <artifactId>sonar-scanner-cli</artifactId>
+            <version>4.2.0.1873</version>
+        </dependency>
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
             <artifactId>org.eclipse.jgit</artifactId>
             <version>5.6.1.202002131546-r</version>
         </dependency>
-
-        <!--sonar-scanner-api-->
         <dependency>
             <groupId>org.sonarsource.scanner.api</groupId>
             <artifactId>sonar-scanner-api</artifactId>

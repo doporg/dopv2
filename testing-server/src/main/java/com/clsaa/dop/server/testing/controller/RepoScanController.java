@@ -1,12 +1,15 @@
 package com.clsaa.dop.server.testing.controller;
 
 
+import com.sun.javaws.Main;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.sonarsource.scanner.api.EmbeddedScanner;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -22,7 +25,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/v2")
 @Slf4j
-public class ScanRepoController {
+public class RepoScanController {
     /**
      *
      */
@@ -46,7 +49,7 @@ public class ScanRepoController {
         }
 
         // clean up here to not keep using more and more disk-space for these samples
-         FileUtils.deleteDirectory(localPath);
+        //FileUtils.deleteDirectory(localPath);
 
 
 
