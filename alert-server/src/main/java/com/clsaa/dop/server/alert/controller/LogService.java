@@ -1,7 +1,7 @@
 package com.clsaa.dop.server.alert.controller;
 
 /**
- * @ClassNameLogService
+ * @ClassName LogService
  * @Author
  * @Version 1.0
  * @Describtion TODO

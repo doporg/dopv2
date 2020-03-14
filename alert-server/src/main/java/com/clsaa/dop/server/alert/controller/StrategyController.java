@@ -1,7 +1,7 @@
 package com.clsaa.dop.server.alert.controller;
 
 /**
- * @ClassNameStrategyController
+ * @ClassName StrategyController
  * @Author
  * @Version 1.0
  * @Describtion TODO

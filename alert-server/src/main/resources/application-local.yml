@@ -9,10 +9,10 @@ spring:
   application:
     name: alert-server
   datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://115.28.186.77:30306/test?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
-    username: dop
-    password: Dop_mysql_12345
+#    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/yummy?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
     max-active: 10
     max-idle: 5
@@ -44,15 +44,15 @@ spring:
 spring.jackson.serialization.WRITE_DATES_AS_TIMESTAMPS: true
 spring.jackson.serialization.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS: false
 
-project:
-  host: localhost:${server.port}
-  groupId: @project.groupId@
-  artifactId: @project.artifactId@
-  version: @project.version@
-  name: @project.name@
-  description: @project.description@
-  url: @project.url@
-swagger.enable: true
+#project:
+#  host: localhost:${server.port}
+#  groupId: @project.groupId@
+#  artifactId: @project.artifactId@
+#  version: @project.version@
+#  name: @project.name@
+#  description: @project.description@
+#  url: @project.url@
+#swagger.enable: true
 eureka:
   instance:
     appname: ${spring.application.name}

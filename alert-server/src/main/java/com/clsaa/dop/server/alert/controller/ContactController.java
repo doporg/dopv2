@@ -1,7 +1,7 @@
 package com.clsaa.dop.server.alert.controller;
 
 /**
- * @ClassNameContactController
+ * @ClassName ContactController
  * @Author
  * @Version 1.0
  * @Describtion TODO
