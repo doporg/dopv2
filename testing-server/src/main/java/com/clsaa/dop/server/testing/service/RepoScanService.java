@@ -1,6 +1,11 @@
 package com.clsaa.dop.server.testing.service;
 
 
+import com.clsaa.dop.server.testing.config.SonarConfig;
+import com.clsaa.dop.server.testing.dao.UserProjectMappingRepository;
+import com.clsaa.dop.server.testing.model.po.UserProjectMapping;
+import com.clsaa.dop.server.testing.util.ProjectKeyGenerator;
+import com.clsaa.dop.server.testing.util.SonarScannerLogger;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
@@ -24,16 +29,21 @@ import java.util.Map;
 @Service
 @Slf4j
 public class RepoScanService {
+
     @Autowired
-    private EmbeddedScanner embeddedScanner;
+    private UserProjectMappingRepository userProjectMappingRepository;
 
-    public void creatScan(String codePath,String projectName,String sonarToken,String codeUser,String codePwd) throws Exception {
-        //set sonar token
-        log.info(embeddedScanner.globalProperties().get(""));
-        Map<String,String> sonarProperties = new HashMap<>();
-        sonarProperties.put("sonar.login",sonarToken);
-        embeddedScanner.addGlobalProperties(sonarProperties);
+    public String creatScan(Long userId,String codePath,String projectName,String sonarToken,String codeUser,String codePwd) throws Exception {
+        String projectKey = ProjectKeyGenerator.generateProjectKey(projectName);
+        //sonarscanner
+        EmbeddedScanner scanner = EmbeddedScanner.create("Maven", "3.6.1", new SonarScannerLogger());
+        Map<String,String> sonarPropertiesMap = new HashMap<>();
+        sonarPropertiesMap.put("sonar.host.url", SonarConfig.SONAR_SERVER_URL);
+        sonarPropertiesMap.put("sonar.sourceEncoding", "UTF-8");
+        sonarPropertiesMap.put("sonar.login",sonarToken);
+        scanner.addGlobalProperties(sonarPropertiesMap);
 
+        //mkdir
         File localPath = File.createTempFile("TestGitRepository", "");
         if(!localPath.delete()) {
             throw new IOException("Could not delete temporary file " + localPath);
@@ -50,18 +60,25 @@ public class RepoScanService {
             log.info("Having repository: " + result.getRepository().getDirectory());
         }
         Map<String, String> projectSettingMap = new LinkedHashMap<>();
-        projectSettingMap.put(ScanProperties.PROJECT_KEY, projectName);
+        projectSettingMap.put(ScanProperties.PROJECT_KEY, projectKey);
         projectSettingMap.put(ScanProperties.PROJECT_BASEDIR, localPath.getAbsolutePath());
         projectSettingMap.put(ScanProperties.PROJECT_SOURCE_DIRS, "src\\main\\java");
         projectSettingMap.put(ScanProperties.PROJECT_SOURCE_ENCODING, "UTF-8");
         projectSettingMap. put("sonar.java.binaries", "target\\classes");
-//        projectSettingMap.put("sonar.java.source", "src/main/java");
 
-        embeddedScanner.start();
-        embeddedScanner.execute(projectSettingMap);
+        scanner.start();
+        try {
+            scanner.execute(projectSettingMap);
+        }catch (Exception e){
+            log.error("Exception",e);
+        }finally {
+            UserProjectMapping userProjectMapping = UserProjectMapping.builder().userId(userId).projectKey(projectKey).build();
+            this.userProjectMappingRepository.saveAndFlush(userProjectMapping);
+            FileUtils.deleteDirectory(localPath);
+        }
 
+        return projectKey;
 
-        FileUtils.deleteDirectory(localPath);
     }
 
 

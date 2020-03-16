@@ -1,8 +1,12 @@
 package com.clsaa.dop.server.testing.controller;
 
 
+import com.clsaa.dop.server.testing.config.BizCodes;
+import com.clsaa.dop.server.testing.config.HttpHeaders;
 import com.clsaa.dop.server.testing.model.dto.RepoScanDTO;
 import com.clsaa.dop.server.testing.service.RepoScanService;
+import com.clsaa.rest.result.bizassert.BizAssert;
+import com.clsaa.rest.result.bizassert.BizCode;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +29,10 @@ public class RepoScanController {
      */
     @ApiOperation("")
     @PostMapping(value = "/repo/scan")
-    public void repoScan(@RequestBody RepoScanDTO repoScanDTO) throws Exception {
-        this.repoScanService.creatScan(repoScanDTO.getCodePath(),repoScanDTO.getProjectName(),repoScanDTO.getSonarToken(),repoScanDTO.getCodeUser(),repoScanDTO.getCodePwd());
+    public String repoScan(@RequestHeader(HttpHeaders.X_LOGIN_USER) Long loginUserId , @RequestBody RepoScanDTO repoScanDTO) throws Exception {
+        BizAssert.validParam(loginUserId != null && loginUserId != 0,
+                new BizCode(BizCodes.INVALID_PARAM.getCode(), "用户未登录"));
+        return this.repoScanService.creatScan(loginUserId,repoScanDTO.getCodePath(),repoScanDTO.getProjectName(),repoScanDTO.getSonarToken(),repoScanDTO.getCodeUser(),repoScanDTO.getCodePwd());
     }
 
 }

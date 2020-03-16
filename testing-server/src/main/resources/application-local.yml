@@ -38,7 +38,7 @@ spring:
     useGlobalDataSourceStat: true
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
 
 spring.jackson.serialization.WRITE_DATES_AS_TIMESTAMPS: true
