@@ -42,7 +42,7 @@ public class Rule implements Serializable{
 	@Column(name = "relation")
 	Relation relation;
 
-	enum  Relation{
+	public enum  Relation{
 		greater,smaller
 	}
 

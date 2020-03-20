@@ -1,12 +1,9 @@
 package com.clsaa.dop.server.alert.model.po;
 
-import jdk.nashorn.internal.objects.annotations.Constructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,8 +15,7 @@ import java.util.List;
  **/
 
 @Entity
-@Getter
-@Setter
+@Data
 @Table(name = "Strategy")
 public class Strategy implements Serializable{
 
@@ -59,7 +55,7 @@ public class Strategy implements Serializable{
 	@Column(name = "level")
 	private Level level;
 
-	private enum Level{
+	public enum Level{
 		Normal,Serve
 	}
 
@@ -69,7 +65,7 @@ public class Strategy implements Serializable{
 	@Column(name = "state")
 	private State state;
 
-	private enum State{
+	public enum State{
 		On,Off
 	}
 
@@ -91,7 +87,7 @@ public class Strategy implements Serializable{
 	 */
 	private ContactWays contactWays;
 
-	private enum ContactWays{
+	public enum ContactWays{
 
 		Email("Email"),
 		Message("Message"),
@@ -107,4 +103,19 @@ public class Strategy implements Serializable{
 	}
 
 
+	@Override
+	public String toString() {
+		return "Strategy{" +
+				"id=" + id +
+				", userId=" + userId +
+				", ruleList=" + ruleList +
+				", alertName='" + alertName + '\'' +
+				", description='" + description + '\'' +
+				", level=" + level +
+				", state=" + state +
+				", inform_interval=" + inform_interval +
+				", contactList=" + contactList +
+				", contactWays=" + contactWays +
+				'}';
+	}
 }

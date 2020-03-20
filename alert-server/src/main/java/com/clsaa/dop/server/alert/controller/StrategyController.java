@@ -1,5 +1,9 @@
 package com.clsaa.dop.server.alert.controller;
 
+import com.clsaa.dop.server.alert.service.StrategyService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
+
 /**
  * @ClassName StrategyController
  * @Author
@@ -8,5 +12,13 @@ package com.clsaa.dop.server.alert.controller;
  * @return
  * @since 2020-03-06
  **/
+
+@RestController
 public class StrategyController {
+
+	@Autowired
+	private StrategyService strategyService;
+
+
+
 }
