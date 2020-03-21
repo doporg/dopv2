@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: process-server
+  namespace: dop
+spec:
+  selector:
+    matchLabels:
+      app: process-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: process-server
+    spec:
+      containers:
+        - name: process-server
+          imagePullPolicy: Always
+          image: registry.dop.clsaa.com/dop/process-server:<BUILD_TAG>
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 250m
+            limits:
+              memory: 512Mi
+              cpu: 500m
+          volumeMounts:
+            - name: host-time
+              mountPath: /etc/localtime
+            - name: host-timezone
+              mountPath: /etc/timezone
+          ports:
+            - containerPort: 14600      # 端口自定
+      volumes:
+        - name: host-time
+          hostPath:
+            path: /etc/localtime
+        - name: host-timezone
+          hostPath:
+            path: /etc/timezone
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: process-server
+  namespace: dop
+  labels:
+    app: process-server
+spec:
+  ports:
+    - port: 14600      # 端口自定
+      protocol: TCP
+      targetPort: 14600      # 端口自定
+  selector:
+    app: process-server

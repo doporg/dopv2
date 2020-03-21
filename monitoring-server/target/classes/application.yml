@@ -7,7 +7,7 @@ spring:
       enabled: true
       force: true
   application:
-    name: user-server
+    name: monitoring-server
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://115.28.186.77:30306/db_dop_monitoring?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
@@ -55,11 +55,11 @@ spring:
 
 project:
   host: localhost:${server.port}
-  groupId: com.clsaa.dop.server.user
-  artifactId: user-server
+  groupId: com.clsaa.dop.server.monitoring
+  artifactId: monitoring-server
   version: 1.0.0-SNAPSHOT
-  name: user-server
-  description: user service for dop
+  name: monitoring-server
+  description: monitoring service for dop
   url: https://github.com/clsaa/dop
 swagger.enable: true
 eureka:

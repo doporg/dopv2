@@ -10,7 +10,7 @@ const {toast} = Feedback;
 
 class App extends Component {
     constructor(props){
-        super(props)
+        super(props);
         this.state = {
             time: null
         }
