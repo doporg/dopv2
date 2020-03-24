@@ -12,6 +12,8 @@ import codeConfig from "../pages/Code";
 import {testConfig} from "../pages/TestCases";
 import {imageConfig} from "../pages/Image";
 
+import {demoConfig} from "../pages/Demo";
+
 const baseConfig = [
     {
         path: '/notPermission',
@@ -27,6 +29,12 @@ const baseConfig = [
 ];
 
 
-const routerConfig = [...imageConfig,...testConfig, ...codeConfig, ...projectConfig,  ...permissionConfig, ...pipelineConfig, ...loginConfig, ...baseConfig];
+const routerConfig = [
+        ...demoConfig,
+    ...imageConfig,
+    ...testConfig,
+    ...codeConfig,
+    ...projectConfig,
+    ...permissionConfig, ...pipelineConfig, ...loginConfig, ...baseConfig];
 
 export default routerConfig;
