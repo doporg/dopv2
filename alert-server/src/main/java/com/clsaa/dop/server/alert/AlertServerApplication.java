@@ -14,7 +14,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableAsync
 @EnableFeignClients
-@EnableEurekaServer
 @ComponentScan("com.clsaa")
 public class AlertServerApplication {
     public static void main(String[] args) {

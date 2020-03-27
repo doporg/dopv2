@@ -57,9 +57,9 @@ public class Strategy implements Serializable{
 	 * 告警级别：一般，严重
 	 */
 	@Column(name = "level")
-	private Level level;
+	Level level;
 
-	private enum Level{
+	public enum Level{
 		Normal,Serve
 	}
 
@@ -67,9 +67,9 @@ public class Strategy implements Serializable{
 	 * 告警状态:启用和禁止
 	 */
 	@Column(name = "state")
-	private State state;
+	State state;
 
-	private enum State{
+	public enum State{
 		On,Off
 	}
 
@@ -91,7 +91,7 @@ public class Strategy implements Serializable{
 	 */
 	private ContactWays contactWays;
 
-	private enum ContactWays{
+	public enum ContactWays{
 
 		Email("Email"),
 		Message("Message"),

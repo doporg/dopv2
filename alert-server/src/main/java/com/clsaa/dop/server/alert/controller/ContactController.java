@@ -9,4 +9,5 @@ package com.clsaa.dop.server.alert.controller;
  * @since 2020-03-06
  **/
 public class ContactController {
+
 }

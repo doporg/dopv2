@@ -10,7 +10,7 @@ spring:
     name: alert-server
   datasource:
 #    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://localhost:3306/yummy?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    url: jdbc:mysql://localhost:3306/alert?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -64,7 +64,7 @@ eureka:
     lease-expiration-duration-in-seconds: 10
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://127.0.0.1:8080/eureka/
     registry-fetch-interval-seconds: 5 #定时刷新本地缓存
 ribbon:
   ReadTimeout: 10000

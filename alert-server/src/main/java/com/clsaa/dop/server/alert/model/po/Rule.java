@@ -40,9 +40,9 @@ public class Rule implements Serializable{
 	 * 条件
 	 */
 	@Column(name = "relation")
-	Relation relation;
+	public Relation relation;
 
-	enum  Relation{
+	public enum  Relation{
 		greater,smaller
 	}
 
