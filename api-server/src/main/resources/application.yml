@@ -38,7 +38,7 @@ spring:
     useGlobalDataSourceStat: true
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
 
 spring.jackson.serialization.WRITE_DATES_AS_TIMESTAMPS: true
@@ -63,6 +63,8 @@ eureka:
     #续约到期时间
     lease-expiration-duration-in-seconds: 10
   client:
+    register-with-eureka: false
+    fetch-registry: false
     serviceUrl:
       defaultZone: http://121.42.13.103:32129/eureka
     registry-fetch-interval-seconds: 5 #定时刷新本地缓存
@@ -71,3 +73,6 @@ ribbon:
   ConnectTimeout: 10000
   ServerListRefreshInterval: 2000
 logging.path: ./logs/${spring.application.name}
+api:
+  kong:
+    url: http://106.13.69.146:8001

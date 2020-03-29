@@ -71,3 +71,6 @@ ribbon:
   ConnectTimeout: 10000
   ServerListRefreshInterval: 2000
 logging.path: ./logs/${spring.application.name}
+api:
+  kong:
+    url: http://106.13.69.146:8001
