@@ -4,6 +4,8 @@ import com.clsaa.dop.server.alert.model.po.Strategy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+
 /**
  * @ClassName StrategyDao
  * @Author
@@ -15,5 +17,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface StrategyDao extends JpaRepository<Strategy , Long>{
-	Strategy getStrategiesByUserId(int userId);
+//	Strategy getStrategiesByUserId(int userId);
+	ArrayList<Strategy> getStrategiesByUserId(Long userId);
 }

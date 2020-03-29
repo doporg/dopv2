@@ -2,11 +2,13 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="alert-server" />
+        <module name="discovery-server" />
         <module name="example-server" />
         <module name="link-server" />
         <module name="monitoring-server" />
@@ -16,6 +18,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="alert-server" target="1.8" />
+      <module name="discovery-server" target="1.8" />
       <module name="example-server" target="1.8" />
       <module name="link-server" target="1.8" />
       <module name="monitoring-server" target="1.8" />

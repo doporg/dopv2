@@ -27,8 +27,8 @@ public class StrategyService {
 		strategyDao.save(strategy);
 	}
 
-	public ArrayList<Strategy> getStrategyById(String id) {
-		return null;
+	public ArrayList<Strategy> getStrategyById(Long userId) {
+		return strategyDao.getStrategiesByUserId(userId);
 	}
 
 	public void deleteStrategy(String sid) {

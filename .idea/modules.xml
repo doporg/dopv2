@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/alert-server/alert-server.iml" filepath="$PROJECT_DIR$/alert-server/alert-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/discovery-server/discovery-server.iml" filepath="$PROJECT_DIR$/discovery-server/discovery-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/dopv2.iml" filepath="$PROJECT_DIR$/.idea/dopv2.iml" />
       <module fileurl="file://$PROJECT_DIR$/example-server/example-server.iml" filepath="$PROJECT_DIR$/example-server/example-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/link-server/link-server.iml" filepath="$PROJECT_DIR$/link-server/link-server.iml" />
