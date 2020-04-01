@@ -5,18 +5,28 @@ import com.clsaa.dop.server.api.module.response.ResponseResult;
 import com.clsaa.dop.server.api.module.response.policyDetail.CurrentLimitPolicyDetail;
 import com.clsaa.dop.server.api.module.response.policyDetail.QuotaPolicyDetail;
 import com.clsaa.dop.server.api.module.response.policyDetail.routingPolicyDetail.RoutingPolicyDetail;
+import com.clsaa.dop.server.api.service.PolicyService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/v2/api/policy")
 @EnableAutoConfiguration
 public class PolicyController {
+    private PolicyService policyService;
+
+    @Autowired
+    public PolicyController(PolicyService policyService) {
+        this.policyService = policyService;
+    }
 
     @ApiOperation(value = "查看限流策略")
     @GetMapping("/flowControl/currentLimit/get")
@@ -115,8 +125,17 @@ public class PolicyController {
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
-    public ResponseResult<RoutingPolicyDetail[]> getRoutingPolicy(@ApiParam(name = "policy type", required = true,allowableValues = "All,WeightingPolicy,ServiceDiscoveryPolicy,HeaderPolicy,IPDistributionPolicy")@RequestParam("type")String type){
-        return new ResponseResult<>(0,"success");
+    public ResponseResult<List<RoutingPolicyDetail>> getRoutingPolicy(@ApiParam(name = "policy type", required = true,allowableValues = "All,WeightingPolicy,ServiceDiscoveryPolicy")@RequestParam("type")String type){
+        return policyService.getRoutingPolicy(type);
+    }
+
+    @ApiOperation(value = "查看路由策略详情")
+    @GetMapping("/route/get/{policyId}")
+    @ApiResponses({
+            @ApiResponse(code = 400,message = "错误参数")
+    })
+    public ResponseResult<RoutingPolicyDetail> getRoutingPolicyDetail(@ApiParam(name = "policy id", required = true) @PathVariable("policyId") String policyId){
+        return policyService.getRoutingPolicyDetail(policyId);
     }
 
     @ApiOperation(value = "创建权重策略")
@@ -124,8 +143,8 @@ public class PolicyController {
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
-    public ResponseResult createWeightingPolicyDetail(@ApiParam(name = "weightingPolicyDetail params", required = true) @RequestBody WeightingPolicyParams policyParams){
-        return new ResponseResult(0,"success");
+    public ResponseResult<String> createWeightingPolicyDetail(@ApiParam(name = "weightingPolicyDetail params", required = true) @RequestBody WeightingPolicyParams policyParams){
+        return policyService.createWeightingPolicy(policyParams.getName(),policyParams.getDescription(),policyParams.getAlgorithm(),policyParams.getHashOn(),policyParams.getHeader(),policyParams.getPath(),policyParams.getConfigurations());
     }
 
     @ApiOperation(value = "创建服务发现策略")
@@ -133,27 +152,11 @@ public class PolicyController {
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
-    public ResponseResult createServiceDiscoveryPolicy(@ApiParam(name = "serviceDiscoveryPolicy params", required = true) @RequestBody ServiceDiscoveryPolicyParams policyParams){
-        return new ResponseResult(0,"success");
+    public ResponseResult<String> createServiceDiscoveryPolicy(@ApiParam(name = "serviceDiscoveryPolicy params", required = true) @RequestBody ServiceDiscoveryPolicyParams policyParams){
+        return policyService.createServiceDiscoveryPolicy(policyParams.getName(),policyParams.getDescription(),
+                policyParams.getTargetHost(),policyParams.getTargetPort(),policyParams.getTargetPath());
     }
 
-    @ApiOperation(value = "创建IP分发发现策略")
-    @PostMapping("/route/addIPDistributionPolicy")
-    @ApiResponses({
-            @ApiResponse(code = 400,message = "错误参数")
-    })
-    public ResponseResult createIPDistributionPolicy(@ApiParam(name = "IPDistributionPolicy params", required = true) @RequestBody IPDistributionPolicyParams policyParams){
-        return new ResponseResult(0,"success");
-    }
-
-    @ApiOperation(value = "创建头信息策略")
-    @PostMapping("/route/addHeaderPolicy")
-    @ApiResponses({
-            @ApiResponse(code = 400,message = "错误参数")
-    })
-    public ResponseResult createHeaderPolicy(@ApiParam(name = "HeaderPolicy params", required = true) @RequestBody HeaderPolicyParams policyParams){
-        return new ResponseResult(0,"success");
-    }
 
     @ApiOperation(value = "删除路由策略")
     @DeleteMapping("/route/delete/{policyId}")
@@ -161,46 +164,27 @@ public class PolicyController {
             @ApiResponse(code = 400,message = "错误参数")
     })
     public ResponseResult deleteRoutingPolicy(@ApiParam(name = "policy id", required = true) @PathVariable("policyId") String policyId){
-        return new ResponseResult(0,"success");
+        return policyService.deleteRoutingPolicy(policyId);
     }
 
     @ApiOperation(value = "修改权重策略")
-    @PutMapping("/route/modifyWeightingPolicy/{policyId}")
+    @PatchMapping("/route/modifyWeightingPolicy/{policyId}")
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
     public ResponseResult modifyWeightingPolicy(@ApiParam(name = "policy id", required = true) @PathVariable("policyId") String policyId,
                                                 @ApiParam(name = "weightingPolicy params", required = true) @RequestBody WeightingPolicyParams policyParams){
-        return new ResponseResult(0,"success");
+        return policyService.modifyWeightingPolicy(policyId,policyParams.getName(),policyParams.getDescription(),policyParams.getAlgorithm(),policyParams.getHashOn(),policyParams.getHeader(),policyParams.getPath(),policyParams.getConfigurations());
     }
 
     @ApiOperation(value = "修改服务发现策略")
-    @PutMapping("/route/modifyServiceDiscoveryPolicy/{policyId}")
+    @PatchMapping("/route/modifyServiceDiscoveryPolicy/{policyId}")
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
     public ResponseResult modifyServiceDiscoveryPolicy(@ApiParam(name = "policy id", required = true) @PathVariable("policyId") String policyId,
                                                 @ApiParam(name = "serviceDiscoveryPolicy params", required = true) @RequestBody ServiceDiscoveryPolicyParams policyParams){
-        return new ResponseResult(0,"success");
+        return policyService.modifyServiceDiscoveryPolicy(policyId,policyParams.getName(),policyParams.getDescription(),policyParams.getTargetHost(),policyParams.getTargetPort(),policyParams.getTargetPath());
     }
 
-    @ApiOperation(value = "修改头信息策略")
-    @PutMapping("/route/modifyHeaderPolicy/{policyId}")
-    @ApiResponses({
-            @ApiResponse(code = 400,message = "错误参数")
-    })
-    public ResponseResult modifyHeaderPolicy(@ApiParam(name = "policy id", required = true) @PathVariable("policyId") String policyId,
-                                                       @ApiParam(name = "headerPolicy params", required = true) @RequestBody HeaderPolicyParams policyParams){
-        return new ResponseResult(0,"success");
-    }
-
-    @ApiOperation(value = "修改IP分发策略")
-    @PutMapping("/route/modifyIPDistributionPolicy/{policyId}")
-    @ApiResponses({
-            @ApiResponse(code = 400,message = "错误参数")
-    })
-    public ResponseResult modifyIPDistributionPolicy(@ApiParam(name = "policy id", required = true) @PathVariable("policyId") String policyId,
-                                             @ApiParam(name = "IPDistributionPolicy params", required = true) @RequestBody IPDistributionPolicyParams policyParams){
-        return new ResponseResult(0,"success");
-    }
 }

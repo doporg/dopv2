@@ -2,10 +2,10 @@ package com.clsaa.dop.server.api.serviceImpl;
 
 import com.clsaa.dop.server.api.dao.entity.Route;
 import com.clsaa.dop.server.api.dao.entity.Service;
-import com.clsaa.dop.server.api.dao.entity.Upstream;
+import com.clsaa.dop.server.api.dao.entity.ServiceRoute;
 import com.clsaa.dop.server.api.dao.repository.RouteRepository;
 import com.clsaa.dop.server.api.dao.repository.ServiceRepository;
-import com.clsaa.dop.server.api.dao.repository.UpstreamRepository;
+import com.clsaa.dop.server.api.dao.repository.ServiceRouteRepository;
 import com.clsaa.dop.server.api.module.kong.routeModule.KongRoute;
 import com.clsaa.dop.server.api.module.kong.serviceModule.KongService;
 import com.clsaa.dop.server.api.module.request.lifeCycle.CreateApiParams;
@@ -23,40 +23,36 @@ import java.util.List;
 public class ApiServiceImpl implements ApiService {
     private ServiceRepository serviceRepository;
     private RouteRepository routeRepository;
-    private UpstreamRepository upstreamRepository;
+    private ServiceRouteRepository serviceRouteRepository;
     private ApiRestTemplate apiRestTemplate;
 
     @Autowired
-    public ApiServiceImpl(ServiceRepository serviceRepository, RouteRepository routeRepository, UpstreamRepository upstreamRepository,
+    public ApiServiceImpl(ServiceRepository serviceRepository, RouteRepository routeRepository, ServiceRouteRepository serviceRouteRepository,
                           ApiRestTemplate apiRestTemplate) {
         this.serviceRepository = serviceRepository;
         this.routeRepository = routeRepository;
-        this.upstreamRepository = upstreamRepository;
+        this.serviceRouteRepository = serviceRouteRepository;
         this.apiRestTemplate = apiRestTemplate;
     }
 
     @Override
     public ResponseResult<String> createApi(CreateApiParams createApiParams) {
-        //添加路由策略
-        if (upstreamRepository.findUpstreamById("a116f01d-0c7e-4c00-8068-d1b8cd51847c")==null){
-            upstreamRepository.save(new Upstream("a116f01d-0c7e-4c00-8068-d1b8cd51847c","baidu.com"));
-        }
 
         //查看是否有同名service
         if (serviceRepository.findByName(createApiParams.getName())==null){
             String upstreamId = createApiParams.getRoutingPolicyId()[0];
-            Upstream upstream = upstreamRepository.findUpstreamById(upstreamId);
+            ServiceRoute serviceRoute = serviceRouteRepository.findServiceRouteById(upstreamId);
             //查看路由策略是否存在
-            if(upstream!=null){
+            if(serviceRoute !=null){
                 //更新kong
-                KongService kongService = apiRestTemplate.createService(upstream.getHost(),createApiParams.getName(),createApiParams.getTimeout(),"http", 80L);
+                KongService kongService = apiRestTemplate.createService(serviceRoute.getHost(),createApiParams.getName(),createApiParams.getTimeout(),"http", serviceRoute.getPort(),serviceRoute.getPath());
                 if (kongService!=null){
                     FusePolicy fusePolicy = createApiParams.getFusePolicy();
                     //更新数据库
                     Service service = new Service(kongService.getId(),createApiParams.getName(),createApiParams.getDescription(),
                             createApiParams.getTimeout(),createApiParams.isCaching(),createApiParams.getCachingTime(),fusePolicy.isEnable(),
                             fusePolicy.getFuseDetectionRing(),fusePolicy.getCriticalFusingFailureRate(),fusePolicy.getFuseDuration(),
-                            fusePolicy.getReplyDetectionRingSize(),upstream);
+                            fusePolicy.getReplyDetectionRingSize(), serviceRoute);
                     serviceRepository.saveAndFlush(service);
                     Route route = new Route(false,createApiParams.getRequestMethod(),createApiParams.getRequestPath(),service);
                     routeRepository.saveAndFlush(route);
@@ -77,17 +73,21 @@ public class ApiServiceImpl implements ApiService {
         Route route = routeRepository.findRouteByServiceId(apiId);
         //查看route是否存在
         if (route!=null){
-            KongRoute kongRoute = apiRestTemplate.createRoute(route.getRequestMethod(),route.getRequestPath(),apiId);
-            if (kongRoute!=null){
-                route.setKongRouteId(kongRoute.getId());
-                route.setOnline(true);
-                routeRepository.saveAndFlush(route);
-                return new ResponseResult(0,"success");
+            if(!route.isOnline()){
+                KongRoute kongRoute = apiRestTemplate.createRoute(route.getRequestMethod(),route.getRequestPath(),apiId);
+                if (kongRoute!=null){
+                    route.setKongRouteId(kongRoute.getId());
+                    route.setOnline(true);
+                    routeRepository.saveAndFlush(route);
+                    return new ResponseResult(0,"success");
+                }else {
+                    return new ResponseResult(3,"kong error");
+                }
             }else {
-                return new ResponseResult(2,"kong error");
+                return new ResponseResult(2,"already online");
             }
         }else {
-            return new ResponseResult(1,"fail");
+            return new ResponseResult(1,"not Found");
         }
     }
 
@@ -95,13 +95,17 @@ public class ApiServiceImpl implements ApiService {
     public ResponseResult offlineApi(String apiId) {
         Route route = routeRepository.findRouteByServiceId(apiId);
         if (route!=null){
-            if (apiRestTemplate.deleteRoute(route.getKongRouteId())){
-                route.setKongRouteId("");
-                route.setOnline(false);
-                routeRepository.saveAndFlush(route);
-                return new ResponseResult(0,"success");
+            if (route.isOnline()){
+                if (apiRestTemplate.deleteRoute(route.getKongRouteId())){
+                    route.setKongRouteId("");
+                    route.setOnline(false);
+                    routeRepository.saveAndFlush(route);
+                    return new ResponseResult(0,"success");
+                }else {
+                    return new ResponseResult(2,"delete fail");
+                }
             }else {
-                return new ResponseResult(2,"delete fail");
+                return new ResponseResult(2,"already offline");
             }
         }else {
             return new ResponseResult(1,"not found");
@@ -124,7 +128,7 @@ public class ApiServiceImpl implements ApiService {
                 return new ResponseResult(2,"service is online");
             }
         }else {
-            return new ResponseResult(1,"service not found");
+            return new ResponseResult(1,"not found");
         }
     }
 
@@ -135,18 +139,18 @@ public class ApiServiceImpl implements ApiService {
         Route route = routeRepository.findRouteByServiceId(apiId);
         if (serviceRepository.findServiceById(apiId)!=null&&route!=null){
             String upstreamId = modifyApiParams.getRoutingPolicyId()[0];
-            Upstream upstream = upstreamRepository.findUpstreamById(upstreamId);
+            ServiceRoute serviceRoute = serviceRouteRepository.findServiceRouteById(upstreamId);
             //查看路由策略是否存在
-            if(upstream!=null){
+            if(serviceRoute !=null){
                 //更新kong
-                KongService kongService = apiRestTemplate.modifyService(apiId,upstream.getHost(),modifyApiParams.getName(),modifyApiParams.getTimeout(),"http", 80L);
+                KongService kongService = apiRestTemplate.modifyService(apiId, serviceRoute.getHost(),modifyApiParams.getName(),modifyApiParams.getTimeout(),"http", 80L,serviceRoute.getPath());
                 if (kongService!=null){
                     FusePolicy fusePolicy = modifyApiParams.getFusePolicy();
                     //更新数据库
                     Service service = new Service(apiId,modifyApiParams.getName(),modifyApiParams.getDescription(),
                             modifyApiParams.getTimeout(),modifyApiParams.isCaching(),modifyApiParams.getCachingTime(),fusePolicy.isEnable(),
                             fusePolicy.getFuseDetectionRing(),fusePolicy.getCriticalFusingFailureRate(),fusePolicy.getFuseDuration(),
-                            fusePolicy.getReplyDetectionRingSize(),upstream);
+                            fusePolicy.getReplyDetectionRingSize(), serviceRoute);
                     serviceRepository.saveAndFlush(service);
 
                     route.setRequestMethod(modifyApiParams.getRequestMethod());
@@ -169,7 +173,7 @@ public class ApiServiceImpl implements ApiService {
                 return new ResponseResult<>(2,"no route policy");
             }
         }else{
-            return new ResponseResult<>(1,"no service");
+            return new ResponseResult<>(1,"not found");
         }
     }
 

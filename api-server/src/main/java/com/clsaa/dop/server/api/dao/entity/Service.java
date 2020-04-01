@@ -37,15 +37,15 @@ public class Service {
     @Column(nullable = false)
     private Long replyDetectionRingSize;
 
-    @OneToOne()
-    @JoinColumn(name = "upstream_id",referencedColumnName = "id")
-    private Upstream upstream;
+    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)
+    @JoinColumn(name = "serviceRoute_id",referencedColumnName = "id")
+    private ServiceRoute serviceRoute;
 
     public Service() {
     }
 
     public Service(String id, String name, String description, Long timeout, boolean caching, Long cachingTime,
-                   boolean fuse, Long fuseDetectionRing, Long criticalFusingFailureRate, Long fuseDuration, Long replyDetectionRingSize, Upstream upstream) {
+                   boolean fuse, Long fuseDetectionRing, Long criticalFusingFailureRate, Long fuseDuration, Long replyDetectionRingSize, ServiceRoute serviceRoute) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -57,7 +57,7 @@ public class Service {
         this.criticalFusingFailureRate = criticalFusingFailureRate;
         this.fuseDuration = fuseDuration;
         this.replyDetectionRingSize = replyDetectionRingSize;
-        this.upstream = upstream;
+        this.serviceRoute = serviceRoute;
     }
 
     public String getId() {
@@ -148,11 +148,11 @@ public class Service {
         this.replyDetectionRingSize = replyDetectionRingSize;
     }
 
-    public Upstream getUpstream() {
-        return upstream;
+    public ServiceRoute getServiceRoute() {
+        return serviceRoute;
     }
 
-    public void setUpstream(Upstream upstream) {
-        this.upstream = upstream;
+    public void setServiceRoute(ServiceRoute serviceRoute) {
+        this.serviceRoute = serviceRoute;
     }
 }

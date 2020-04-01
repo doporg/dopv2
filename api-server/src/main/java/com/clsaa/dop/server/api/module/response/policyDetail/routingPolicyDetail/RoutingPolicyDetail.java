@@ -14,10 +14,14 @@ public class RoutingPolicyDetail {
     @ApiModelProperty(value = "description",example = "this is a policy",dataType = "string")
     private String description;
 
-    public RoutingPolicyDetail(String policyId, String name, String description) {
+    @ApiModelProperty(value = "type",dataType = "string",allowableValues = "WeightingPolicy,ServiceDiscoveryPolicy")
+    private String type;
+
+    public RoutingPolicyDetail(String policyId, String name, String description,String type) {
         this.policyId = policyId;
         this.name = name;
         this.description = description;
+        this.type = type;
     }
 
     public RoutingPolicyDetail() {
@@ -33,5 +37,9 @@ public class RoutingPolicyDetail {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getType() {
+        return type;
     }
 }

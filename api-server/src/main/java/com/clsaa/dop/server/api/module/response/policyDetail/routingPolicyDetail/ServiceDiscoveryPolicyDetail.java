@@ -6,35 +6,49 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "权重策略详情")
 public class ServiceDiscoveryPolicyDetail extends RoutingPolicyDetail{
-    @ApiModelProperty(value = "serviceName",dataType = "String")
-    private String serviceName;
 
-    @ApiModelProperty(value = "serviceName",example = "http://TESTWEB/test/add",dataType = "String")
+
+    @ApiModelProperty(value = "targetHost",example = "baidu.com",dataType = "String")
+    private String targetHost;
+
+    @ApiModelProperty(value = "targetPort",example = "80",dataType = "Long")
+    private Long targetPort;
+
+    @ApiModelProperty(value = "targetPath",example = "/test/add",dataType = "String")
     private String targetPath;
-
-    @ApiModelProperty(value = "serviceName",dataType = "String",allowableValues = "RANDOM,POLLING,AVAILABLE.TIME")
-    private String loadAlgorithm;
 
     public ServiceDiscoveryPolicyDetail() {
     }
 
-    public ServiceDiscoveryPolicyDetail(String policyId, String name, String description, String serviceName, String targetPath, String loadAlgorithm) {
-        super(policyId, name, description);
-        this.serviceName = serviceName;
+    public ServiceDiscoveryPolicyDetail(String policyId, String name, String description, String targetHost, Long targetPort, String targetPath) {
+        super(policyId, name, description,"ServiceDiscoveryPolicy");
+        this.targetHost = targetHost;
+        this.targetPort = targetPort;
         this.targetPath = targetPath;
-        this.loadAlgorithm = loadAlgorithm;
-    }
-
-    public String getServiceName() {
-        return serviceName;
     }
 
     public String getTargetPath() {
         return targetPath;
     }
 
-    public String getLoadAlgorithm() {
-        return loadAlgorithm;
+    public void setTargetPath(String targetPath) {
+        this.targetPath = targetPath;
+    }
+
+    public String getTargetHost() {
+        return targetHost;
+    }
+
+    public void setTargetHost(String targetHost) {
+        this.targetHost = targetHost;
+    }
+
+    public Long getTargetPort() {
+        return targetPort;
+    }
+
+    public void setTargetPort(Long targetPort) {
+        this.targetPort = targetPort;
     }
 }
 

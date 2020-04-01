@@ -5,14 +5,11 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "创建api参数类")
 public class CreateApiParams {
-    @ApiModelProperty(value = "name",example = "test api",dataType = "String")
+    @ApiModelProperty(value = "name",example = "test-api",dataType = "String",notes = "only can contains '-' and '_'" )
     private String name;
 
     @ApiModelProperty(value = "description",example = "this is a api",dataType = "String")
     private String description;
-
-    @ApiModelProperty(value = "state",example = "online",allowableValues="online, offline",dataType = "String")
-    private String state;
 
     @ApiModelProperty(value = "requestMethod",example = "GET",dataType = "String",allowableValues="GET, POST, PUT, PATCH, DELETE, COPY, HEAD, OPTIONS, LINK, UNLINK, PURGE, LOCK, UNLOCK, PROPFIND, VIEW")
     private String requestMethod;
@@ -48,7 +45,6 @@ public class CreateApiParams {
                            Long timeout, boolean caching, Long cachingTime, FusePolicy fusePolicy, String[] routingPolicyId, String[] currentLimitPolicyId, String[] quotaPolicyId) {
         this.name = name;
         this.description = description;
-        this.state = state;
         this.requestMethod = requestMethod;
         this.requestPath = requestPath;
         this.timeout = timeout;
@@ -76,13 +72,6 @@ public class CreateApiParams {
         this.description = description;
     }
 
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
 
     public String getRequestMethod() {
         return requestMethod;

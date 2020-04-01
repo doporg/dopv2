@@ -1,8 +1,11 @@
 package com.clsaa.dop.server.api.restTemplate;
 
+//import com.alibaba.fastjson.JSON;
 import com.clsaa.dop.server.api.module.kong.routeModule.KongRoute;
 import com.clsaa.dop.server.api.module.kong.serviceModule.KongService;
 import com.clsaa.dop.server.api.module.kong.serviceModule.KongServiceList;
+import com.clsaa.dop.server.api.module.kong.targetModule.KongTarget;
+import com.clsaa.dop.server.api.module.kong.upstreamModule.KongUpstream;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -17,22 +20,24 @@ public class ApiRestTemplate {
     private RestTemplate restTemplate;
     private static String serviceUrl;
     private static String routeUrl;
+    private static String upstreamUrl;
 
     public ApiRestTemplate() {
         this.restTemplate = new RestTemplate();
     }
 
     @Value("${api.kong.url}")
-    public void setTargetUrl(String targetUrl) {
-        ApiRestTemplate.serviceUrl = targetUrl+"/services";
-        ApiRestTemplate.routeUrl = targetUrl+"/routes";
+    public void setTargetUrl(String url) {
+        ApiRestTemplate.serviceUrl = url+"/services";
+        ApiRestTemplate.routeUrl = url+"/routes";
+        ApiRestTemplate.upstreamUrl = url+"/upstreams";
     }
 
     public KongServiceList getRequest(){
          return restTemplate.getForObject(serviceUrl,KongServiceList.class);
     }
 
-    public KongService createService(String host,String name,Long timeout,String protocol,Long port){
+    public KongService createService(String host,String name,Long timeout,String protocol,Long port,String path){
         MultiValueMap<String,String> header = new LinkedMultiValueMap<>();
         header.add(HttpHeaders.CONTENT_TYPE,(MediaType.MULTIPART_FORM_DATA_VALUE));
 
@@ -40,6 +45,7 @@ public class ApiRestTemplate {
         map.add("host", host);
         map.add("name", name);
         map.add("port", port);
+        map.add("path", path);
         map.add("protocol",protocol);
         map.add("connect_timeout", timeout);
 
@@ -59,7 +65,7 @@ public class ApiRestTemplate {
         }
     }
 
-    public KongService modifyService(String serviceId,String host,String name,Long timeout,String protocol,Long port){
+    public KongService modifyService(String serviceId,String host,String name,Long timeout,String protocol,Long port,String path){
         setUp();
 
         MultiValueMap<String,String> header = new LinkedMultiValueMap<>();
@@ -68,6 +74,7 @@ public class ApiRestTemplate {
         map.add("host", host);
         map.add("name", name);
         map.add("port", port);
+        map.add("path", path);
         map.add("protocol",protocol);
         map.add("connect_timeout", timeout);
         HttpEntity<MultiValueMap> request = new HttpEntity<>(map, header);
@@ -119,6 +126,7 @@ public class ApiRestTemplate {
         }
     }
     public KongRoute modifyRoute(String routeId,String method,String path,String serviceId){
+        setUp();
         MultiValueMap<String,String> header = new LinkedMultiValueMap<>();
         header.add(HttpHeaders.CONTENT_TYPE,(MediaType.MULTIPART_FORM_DATA_VALUE));
 
@@ -160,11 +168,108 @@ public class ApiRestTemplate {
         }
     }
 
+    public KongUpstream createUpstream(String name, String algorithm, String hash_on, String hash_on_header){
+        setUp();
+        MultiValueMap<String,String> header = new LinkedMultiValueMap<>();
+        header.add(HttpHeaders.CONTENT_TYPE,(MediaType.MULTIPART_FORM_DATA_VALUE));
+
+        MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+        map.add("name", name);
+        map.add("algorithm", algorithm);
+        if (algorithm.equals("hash")){
+            map.add("hash_on", hash_on);
+            if (hash_on.equals("header")){
+                map.add("hash_on_header",hash_on_header);
+            }
+        }
+
+        HttpEntity<MultiValueMap> request = new HttpEntity<>(map, header);
+        try {
+            ResponseEntity<KongUpstream> exchangeResult = restTemplate.exchange(upstreamUrl, HttpMethod.POST, request, KongUpstream.class);
+            if (exchangeResult.getStatusCode().equals(HttpStatus.CREATED)){
+                return exchangeResult.getBody();
+            }else {
+                return null;
+            }
+        }catch (HttpClientErrorException ex){
+            ex.printStackTrace();
+            //System.out.println(name+" "+algorithm+" "+hash_on+" "+hash_on_header);
+            return null;
+        }
+    }
+
+    public KongUpstream modifyUpstream(String upstreamId, String algorithm, String hash_on, String hash_on_header){
+        setUp();
+
+        MultiValueMap<String,String> header = new LinkedMultiValueMap<>();
+        header.add(HttpHeaders.CONTENT_TYPE,(MediaType.MULTIPART_FORM_DATA_VALUE));
+
+        MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+        map.add("algorithm", algorithm);
+        if (algorithm.equals("hash")){
+            map.add("hash_on", hash_on);
+            if (hash_on.equals("header")){
+                map.add("hash_on_header",hash_on_header);
+            }
+        }
+        String url = upstreamUrl+"/"+upstreamId;
+
+        HttpEntity<MultiValueMap> request = new HttpEntity<>(map, header);
+        try {
+            ResponseEntity<KongUpstream> exchangeResult = restTemplate.exchange(url, HttpMethod.PATCH, request, KongUpstream.class);
+            if (exchangeResult.getStatusCode().equals(HttpStatus.OK)){
+                return exchangeResult.getBody();
+            }else {
+                //System.out.println(exchangeResult.getStatusCode()+" "+JSON.toJSONString(exchangeResult.getBody()));
+                return null;
+            }
+        }catch (HttpClientErrorException ex){
+            ex.printStackTrace();
+            //System.out.println(name+" "+algorithm+" "+hash_on+" "+hash_on_header);
+            return null;
+        }
+    }
+
+    public KongTarget createTarget(String upstreamId,String target,int weight){
+        MultiValueMap<String,String> header = new LinkedMultiValueMap<>();
+        header.add(HttpHeaders.CONTENT_TYPE,(MediaType.MULTIPART_FORM_DATA_VALUE));
+
+        MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+        map.add("target", target);
+        map.add("weight", weight);
+
+
+        HttpEntity<MultiValueMap> request = new HttpEntity<>(map, header);
+        try {
+            ResponseEntity<KongTarget> exchangeResult = restTemplate.exchange(getTargetUrl(upstreamId), HttpMethod.POST, request, KongTarget.class);
+            if (exchangeResult.getStatusCode().equals(HttpStatus.CREATED)){
+                return exchangeResult.getBody();
+            }else {
+                return null;
+            }
+        }catch (HttpClientErrorException ex){
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public boolean deleteUpstream(String upstreamId){
+        return delete(upstreamId, upstreamUrl);
+    }
+
+    public void deleteTarget(String upstreamId,String targetId){
+       delete(upstreamId+"/targets/"+targetId, upstreamUrl);
+    }
+
     private void setUp(){
         HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
         requestFactory.setConnectTimeout(60000);
         requestFactory.setReadTimeout(20000);
         restTemplate.setRequestFactory(requestFactory);
+    }
+
+    private String getTargetUrl(String upstreamId){
+        return upstreamUrl+"/"+upstreamId+"/targets";
     }
 
 

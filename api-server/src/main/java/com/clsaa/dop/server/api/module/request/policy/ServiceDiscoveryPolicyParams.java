@@ -4,37 +4,38 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 
-@ApiModel(description = "权重策略详情")
+@ApiModel(description = "服务发现策略详情")
 public class ServiceDiscoveryPolicyParams extends RoutingPolicyParams{
-    @ApiModelProperty(value = "serviceName",dataType = "String")
-    private String serviceName;
 
-    @ApiModelProperty(value = "serviceName",example = "http://TESTWEB/test/add",dataType = "String")
+    @ApiModelProperty(value = "targetPath",example = "/test/add",dataType = "String")
     private String targetPath;
 
-    @ApiModelProperty(value = "serviceName",dataType = "String",allowableValues = "RANDOM,POLLING,AVAILABLE.TIME")
-    private String loadAlgorithm;
+    @ApiModelProperty(value = "targetHost",example = "baidu.com",dataType = "String")
+    private String targetHost;
+
+    @ApiModelProperty(value = "targetPort",example = "80",dataType = "Long")
+    private Long targetPort;
 
     public ServiceDiscoveryPolicyParams() {
     }
 
-    public ServiceDiscoveryPolicyParams(String name, String description, String serviceName, String targetPath, String loadAlgorithm) {
-        super( name, description);
-        this.serviceName = serviceName;
+    public ServiceDiscoveryPolicyParams(String name, String description, String targetPath, String targetHost, Long targetPort) {
+        super(name, description);
         this.targetPath = targetPath;
-        this.loadAlgorithm = loadAlgorithm;
-    }
-
-    public String getServiceName() {
-        return serviceName;
+        this.targetHost = targetHost;
+        this.targetPort = targetPort;
     }
 
     public String getTargetPath() {
         return targetPath;
     }
 
-    public String getLoadAlgorithm() {
-        return loadAlgorithm;
+    public String getTargetHost() {
+        return targetHost;
+    }
+
+    public Long getTargetPort() {
+        return targetPort;
     }
 }
 
