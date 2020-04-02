@@ -19,20 +19,28 @@ import org.springframework.web.bind.annotation.*;
  */
 @CrossOrigin
 @RestController
-@RequestMapping("/api/v2")
+@RequestMapping("/api/v2/scan")
 @Slf4j
 public class RepoScanController {
     @Autowired
     private RepoScanService repoScanService;
-    /**
-     *
-     */
-    @ApiOperation("")
-    @PostMapping(value = "/repo/scan")
-    public String repoScan(@RequestHeader(HttpHeaders.X_LOGIN_USER) Long loginUserId , @RequestBody RepoScanDTO repoScanDTO) throws Exception {
+
+    @ApiOperation(value = "快速扫描任务")
+    @PostMapping(value = "/quick")
+    public String quickScan(@RequestHeader(HttpHeaders.X_LOGIN_USER) Long loginUserId , @RequestBody RepoScanDTO repoScanDTO) {
         BizAssert.validParam(loginUserId != null && loginUserId != 0,
                 new BizCode(BizCodes.INVALID_PARAM.getCode(), "用户未登录"));
-        return this.repoScanService.creatScan(loginUserId,repoScanDTO.getCodePath(),repoScanDTO.getProjectName(),repoScanDTO.getSonarToken(),repoScanDTO.getCodeUser(),repoScanDTO.getCodePwd());
+        return this.repoScanService.quickScan(loginUserId,repoScanDTO.getCodePath(),repoScanDTO.getProjectName(),repoScanDTO.getCodeUser(),repoScanDTO.getCodePwd());
     }
+
+    @ApiOperation(value = "CI代码扫描服务")
+    @PostMapping(value = "/ci")
+    public String repoScan(@RequestHeader(HttpHeaders.X_LOGIN_USER) Long loginUserId, @RequestBody RepoScanDTO repoScanDTO){
+        return this.repoScanService.repoScan(loginUserId,repoScanDTO.getCodePath(),repoScanDTO.getProjectName(),repoScanDTO.getCodeUser(),repoScanDTO.getCodePwd(),repoScanDTO.getType());
+    }
+
+
+
+
 
 }

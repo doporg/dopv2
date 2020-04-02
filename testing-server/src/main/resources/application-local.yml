@@ -1,5 +1,5 @@
 server:
-  port: 14200       #端口自定
+  port: 8888       #端口自定
 spring:
   http:
     encoding:

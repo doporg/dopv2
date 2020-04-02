@@ -6,7 +6,6 @@ import com.clsaa.dop.server.testing.model.vo.TaskInfoVO;
 import com.clsaa.dop.server.testing.service.TaskInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 /**
@@ -24,5 +23,9 @@ public class TaskInfoController {
         return  taskInfoService.getAllTasks(userId);
     }
 
+    @GetMapping("/scanresult/{projectkey}")
+    public void getScanResult(@RequestHeader(HttpHeaders.X_LOGIN_USER) Long userId,@PathVariable("projectkey")String projectKey){
+       taskInfoService.getScanResult(projectKey);
+    }
 
 }

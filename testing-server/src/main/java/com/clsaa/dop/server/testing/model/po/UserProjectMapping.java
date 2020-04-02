@@ -1,6 +1,7 @@
 package com.clsaa.dop.server.testing.model.po;
 
 
+import com.clsaa.dop.server.testing.util.StartType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,4 +25,7 @@ public class UserProjectMapping {
 
     @Column(name = "project_key")
     private String projectKey;
+
+    @Column(name = "start_type")
+    private StartType startType;
 }

@@ -1,4 +1,5 @@
 package com.clsaa.dop.server.testing.model.vo;
+import com.clsaa.dop.server.testing.util.StartType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,4 +15,5 @@ public class TaskInfoVO implements Serializable {
     private String componentKey;
     private String status;
     private String submittedAt;
+    private StartType startType;
 }
