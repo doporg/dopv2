@@ -20,7 +20,8 @@ const API = {
     code: host + code,
     user: host + user,
     image: host + image,
-    test: host + test
+    test: host + test,
+    link: "http://localhost:14300"
 };
 
 export default API;

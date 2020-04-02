@@ -1,0 +1,46 @@
+import React, { Component } from 'react';
+import Menu, { Item as MenuItem } from '@icedesign/menu';
+import { withRouter, Link } from 'react-router-dom';
+import FoundationSymbol from 'foundation-symbol';
+import {linkAsideMenuConfig} from './linkMenuConfig';
+import { Icon } from '@icedesign/base';
+
+import '../Aside/index.scss'
+
+class LinkAside extends Component {
+    static propTypes = {};
+
+    static defaultProps = {};
+
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
+
+    render() {
+        const { location } = this.props;
+        const { pathname } = location;
+        return (
+            <Menu mode="inline" selectedKeys={[pathname]} className="ice-menu-custom">
+                {Array.isArray(linkAsideMenuConfig) &&
+                linkAsideMenuConfig.length > 0 &&
+                linkAsideMenuConfig.map((nav) => {
+                    return (
+                        <MenuItem key={nav.path}>
+                            <Link to={nav.path} className="ice-menu-link">
+                                {nav.icon ? (
+                                    <FoundationSymbol size="small" type={nav.icon} >
+                                        <Icon size="small" type={nav.icon} />
+                                    </FoundationSymbol>
+                                ) : null}
+                                <span className="ice-menu-item-text">{nav.name}</span>
+                            </Link>
+                        </MenuItem>
+                    );
+                })}
+            </Menu>
+        );
+    }
+}
+
+export default withRouter(LinkAside)

@@ -1,0 +1,83 @@
+.footerButton {
+    width: 75px;
+}
+
+.choose-button {
+    margin-bottom: 25px;
+}
+
+.change-button {
+    vertical-align: middle;
+    /*margin-left: 5px;*/
+    height: 31px;
+    width: 90%;
+}
+
+.choose-pro-prompt {
+    justify-content: center;
+    align-content: center;
+    height: 350px;
+}
+
+.choose-pro-icon-div {
+    display:block;
+    text-align:center;
+    padding-top: 100px;
+}
+.choose-pro-h-div {
+    display:block;
+    text-align:center;
+    padding-top: 10px;
+}
+
+.prompt-p {
+    font-size: 18px;
+    color: black;
+    font-weight: 100;
+}
+
+.project-input {
+    vertical-align: middle;
+    width: 400px;
+    outline: none;
+    border: none;
+    border-radius: 15px;
+}
+
+/*input[type='text'] {*/
+    /*text-align: center;*/
+    /*font-size: 16px;*/
+    /*color: rgba(0,0,0,0.6);*/
+    /*vertical-align: middle;*/
+/*}*/
+
+.search-by-traceid {
+    vertical-align: middle;
+}
+
+.search-condition {
+    box-shadow: none;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.9);
+    /* background-color: #f8f9fa !important; */
+    background-clip: border-box;
+    margin-bottom: 10px;
+    width: 100%;
+    /*padding: 0 5px;*/
+}
+
+
+/*搜索条件中，label的属性*/
+.search-condition-label {
+
+}
+
+/*搜索条件中的下拉框的属性*/
+.search-select {
+    width: 100%;
+}
+
+.date-picker-style {
+    width: 100%;
+    min-width: auto;
+}
