@@ -2,6 +2,8 @@ package com.clsaa.dop.server.testing.controller;
 
 
 import com.clsaa.dop.server.testing.config.HttpHeaders;
+import com.clsaa.dop.server.testing.manage.SonarRestService;
+import com.clsaa.dop.server.testing.model.bo.TaskMeasureBO;
 import com.clsaa.dop.server.testing.model.vo.TaskInfoVO;
 import com.clsaa.dop.server.testing.service.TaskInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class TaskInfoController {
     @Autowired
     private TaskInfoService taskInfoService;
 
+    @Autowired
+    private SonarRestService sonarRestService;
+
     @GetMapping("/tasks")
     public List<TaskInfoVO> getAllTasks(@RequestHeader(HttpHeaders.X_LOGIN_USER) Long userId){
         return  taskInfoService.getAllTasks(userId);
@@ -26,6 +31,11 @@ public class TaskInfoController {
     @GetMapping("/scanresult/{projectkey}")
     public void getScanResult(@RequestHeader(HttpHeaders.X_LOGIN_USER) Long userId,@PathVariable("projectkey")String projectKey){
        taskInfoService.getScanResult(projectKey);
+    }
+
+    @GetMapping("/qualitygate")
+    public TaskMeasureBO getQualityResult(@RequestHeader(HttpHeaders.X_LOGIN_USER) Long userId,@RequestParam("projectKey") String projectKey){
+        return sonarRestService.getQualityGate(projectKey);
     }
 
 }
