@@ -44,13 +44,6 @@
     border-radius: 15px;
 }
 
-/*input[type='text'] {*/
-    /*text-align: center;*/
-    /*font-size: 16px;*/
-    /*color: rgba(0,0,0,0.6);*/
-    /*vertical-align: middle;*/
-/*}*/
-
 .search-by-traceid {
     vertical-align: middle;
 }
@@ -80,4 +73,12 @@
 .date-picker-style {
     width: 100%;
     min-width: auto;
+}
+
+.popup-style {
+    overflow: hidden;
+}
+
+.trace-id:hover{
+    color: #5485f7;
 }

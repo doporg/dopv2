@@ -9,6 +9,9 @@ const LINK_EN_US = {
     'link.cancel': 'Cancel',
     'link.confirm': 'Confirm',
 
+    'link.success' : 'Success',
+    'link.fail': 'Fail',
+
     'link.choose.project': 'Select a project',
     'link.please.choose.project': 'Please select a project to view',
 
@@ -28,6 +31,9 @@ const LINK_EN_US = {
     'link.search.by.maxDuration': 'Duration(μs)<=',
     'link.search.by.resultlimit': 'Limit',
     'link.search.by.sort': 'Sort',
+
+    'link.search.condition.description': 'Search Condition Description',
+
     'link.search.by.traceId': 'Please enter traceId',
 
     'link.datepicker.now': 'today',
@@ -42,7 +48,7 @@ const LINK_EN_US = {
     'link.time.one.day': '1 day',
     'link.time.two.days': '2 days',
     'link.time.seven.days': '7 days',
-    'link.time.customize': 'customize',
+    'link.time.customize': 'Custom time interval',
 
     // 排序选项
     'link.sort.by.timestampDesc': 'Timestamp Desc',
@@ -59,7 +65,14 @@ const LINK_EN_US = {
     'link.list.table.timestamp': 'Timestamp',
     'link.list.table.duration': 'Duration',
     'link.list.table.successOrFail': 'Success/Fail',
-    'link.list.table.detail':'Detail'
+    'link.list.table.detail':'Detail',
+
+    'link.warn.noChosenProject' : 'No Chosen project.',
+    'link.error.prompt.format': 'Format error',
+    'link.error.positive.integer': 'Enter positive integer',
+    'link.error.prompt.contentError': 'Please fill in the form correctly.',
+
+    'link.no.data': 'No Data'
 };
 
 export default LINK_EN_US;
