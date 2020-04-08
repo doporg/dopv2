@@ -71,6 +71,7 @@ const LINK_EN_US = {
     'link.error.prompt.format': 'Format error',
     'link.error.positive.integer': 'Enter positive integer',
     'link.error.prompt.contentError': 'Please fill in the form correctly.',
+    'link.error.traceId.regex': 'TraceId is encoded as 16 or 32 lowercase hex characters, please re-enter',
 
     'link.no.data': 'No Data'
 };

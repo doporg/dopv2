@@ -4,7 +4,6 @@ export const test = () => {
 
 // zipkin存储的时间戳是微秒格式，16位
 export const timestampToDate = (timestamp) => {
-    // console.log("要转换的时间戳是: " + timestamp);
     let main = parseInt(timestamp/1000), remain = parseInt(timestamp%1000);
     let date = new Date(main);
     let year = date.getFullYear();
@@ -16,8 +15,6 @@ export const timestampToDate = (timestamp) => {
     let second = formatTwoDigit(date.getSeconds());
 
     return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" +second;
-    // console.log("时间戳转换时间" + result);
-    // return result;
 };
 
 const formatTwoDigit = (value) => {
@@ -33,30 +30,23 @@ export const toTimestamp = (date, time) => {
     // 时分
     let hour = parseInt(time.split(":")[0]), minutes = parseInt(time.split(":")[1]);
 
-    let result = date.getTime() + 3600000 * (hour - hourOver) + 60000 * (minutes - minutesOver) - 1000 * second;
-    console.log("result: " + result);
-    return result;
+    return date.getTime() + 3600000 * (hour - hourOver) + 60000 * (minutes - minutesOver) - 1000 * second;
 };
 
 // duration输入单位可能为μs或ms或s,需要转为微秒 e.g.100000 (for 100ms)
 export const toMicroseconds = (value) => {
-    // console.log("输入为： !" + value + "!");
     if (value === "") {
         return 0;
     }
     let result = 0;
     if (value.endsWith("ms")) {
         result = value.substr(0, value.length - 2) * 1000;
-        // console.log("毫秒的: " + result);
     } else if (value.endsWith("μs")) { //μs为单位
         result = value.substr(0, value.length - 2);
-        // console.log("微秒的: " + result);
     } else if (value.endsWith("s")) {
         result = value.substr(0, value.length - 1) * 1000000;
-        // console.log("秒的: " + result);
     } else {
         result = value;
-        // console.log("没有单位（默认微秒）: " + result);
     }
     // zipkin要求传入参数为整数
     return parseInt(result);
@@ -70,9 +60,7 @@ export const getCurrentTime = () => {
     hour = (hour < 10) ? "0" + hour : hour;
     minute = (minute < 10) ? "0" + minute : minute;
 
-    let result = hour + ":" + minute;
-    console.log(result);
-    return result;
+    return (hour + ":" + minute);
 };
 
 // 获取当前时间戳

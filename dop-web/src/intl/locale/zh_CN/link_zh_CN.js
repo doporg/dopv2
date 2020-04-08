@@ -71,6 +71,7 @@ const LINK_ZH_CN = {
     'link.error.prompt.format': '格式错误',
     'link.error.positive.integer': '请填写正整数',
     'link.error.prompt.contentError': '请正确填写表单',
+    'link.error.traceId.regex': 'traceId编码为16-32位小写十六进制字符，请重新输入',
 
     'link.no.data': '没有数据'
 };

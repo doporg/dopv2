@@ -1,15 +1,14 @@
 import React, {Component} from 'react'
 import {injectIntl} from "react-intl";
+import {Link} from 'react-router-dom';
 import Axios from 'axios';
+
 import Select from "@icedesign/base/lib/select";
 import Button from "@icedesign/base/lib/button";
 import Dialog from "@icedesign/base/lib/dialog";
 import Search from "@icedesign/base/lib/search";
 import Table from "@icedesign/base/lib/table";
 import Feedback from "@icedesign/base/lib/feedback"
-
-import API from "../../API";
-import "../linkStyles.css";
 import Input from "@icedesign/base/lib/input";
 import Icon from "@icedesign/base/lib/icon";
 import IceContainer from '@icedesign/container';
@@ -19,12 +18,15 @@ import Grid from "@icedesign/base/lib/grid";
 import Field from "@icedesign/base/lib/field";
 import Card from "@icedesign/base/lib/card";
 import DatePicker from "@icedesign/base/lib/date-picker";
+import Tag from "@icedesign/base/lib/tag";
 
+import API from "../../API";
+import "../linkStyles.css";
 // import {Table,Search,Dialog,Select,Button} from "@icedesign/base";
 
 import {getCurrentTimestamp, toTimestamp, getCurrentTime, toMicroseconds, timestampToDate, formatDuration} from "../util/TimeUtil";
-import Tag from "@icedesign/base/lib/tag";
 
+const lookBackBase = 3600000;
 class LinkList extends Component{
 
     constructor(props) {
@@ -60,11 +62,6 @@ class LinkList extends Component{
             serviceList: [],
             spanNameList: ["all"],
 
-            searchCondition: {
-                serviceName: 'all',
-                spanName: 'all',
-                lookBack: 3600000,
-            },
             timeRangeDisplay: 'none',
 
             linkList: [],
@@ -93,40 +90,124 @@ class LinkList extends Component{
         this.state.isLoading = false;
     }
     componentDidMount() {
-
+        let searchConditions = window.sessionStorage.getItem("linkSearchCondition");
+        const {setValues} = this.field;
+        let searchObj = JSON.parse(searchConditions);
+        if (searchObj !== undefined && searchObj !== null) {
+            setValues(searchObj);
+            if (searchObj['lookback-type'] === -1) { // 自定义选择时间
+                this.setState({
+                    timeRangeDisplay: 'flex'
+                });
+            }
+            this.setState({isLoading: true});
+            searchObj['start-date'] = new Date(searchObj['start-date']);
+            searchObj['end-date'] = new Date(searchObj['end-date']);
+            this.getTraceList(searchObj);
+        }
     }
-    getServiceList = () => {
-        let getLinkListUrl = API.link + '/api/v2/services';
-        Axios.get(getLinkListUrl).then(response => {
-            let serviceListTmp = response.data;
-            serviceListTmp.unshift("all");
-            this.setState({serviceList: serviceListTmp});
+
+    // 查询符合条件的trace
+    submitSearch = (e) => {
+        const Toast = Feedback.toast;
+        this.field.validate((errors, values) => {
+            console.log(values);
+            if (errors) {
+                Toast.error(this.props.intl.messages['link.error.prompt.contentError']);
+                return;
+            }
+            this.setState({
+                isLoading: true
+            });
+            window.sessionStorage.setItem("linkSearchCondition", JSON.stringify(values));
+            this.getTraceList(values);
         });
     };
+    getTraceList = (values) => {
+        let getLinkListUrl = API.link + "/getTraceList";
+        // 计算lookback和endTs
+        var lookBack, endTs;
+        if (values['lookback-type'] !== -1) { //选择列表中的时间选项
+            lookBack = values['lookback-type'] * lookBackBase;
+            endTs = getCurrentTimestamp();
+        } else { // 如果是自定义时间
+            let startTs = toTimestamp(values['start-date'], values['start-time']);
+            endTs = toTimestamp(values['end-date'], values['end-time']);
+            lookBack = endTs - startTs;
+        }
+        let params = {
+            serviceName: values["service-name"],
+            spanName: values["span-name"],
+            annotation: values["annotation"],
+            minDuration: toMicroseconds(values["min-duration"]),
+            maxDuration: toMicroseconds(values["max-duration"]),
+            endTs: endTs,
+            lookback: lookBack,
+            limit: values["limit"]
+        };
+        console.log("param: " + JSON.stringify(params));
+        Axios.get(getLinkListUrl, {params: params}).then(response => {
+            let linkListTmp = response.data;
+            this.setState({
+                linkList: linkListTmp,
+                isLoading: false,
+                totalCount: linkListTmp.length
+            });
+        }).catch((error)=>{
+            console.error("查询trace列表出错：", error);
+        });
+    };
+
+    // 显示project选择弹窗
     onOpenChooseProDialog = () => {
-        // let user_id = window.sessionStorage.getItem('user-id');
         this.setState({
             chooseProDialogVisible: true,
             isLoading: true
         });
-        // 获得全部项目列表
+        this.getProjectList(this.state.pageNoForPro);
+    };
+    // project列表分页显示
+    onChangeProjectPage = (currentPage) => {
+        this.setState({isLoading:true});
+        // this.getProjectList(currentPage);
+        let size = this.state.pageSizeForPro;
+        let begin = size * (currentPage - 1);
+        let currentList = this.state.projectList.slice(begin, begin + size);
+        this.setState({
+            pageNoForPro: currentPage,
+            currentPageProList: currentList,
+            isLoading: false
+        });
+    };
+    // 分页查询project列表
+    getProjectList = (currentPageNo) => {
+        // 获得分页项目列表
         let getProjectListUrl = API.link + "/getProjectList";
-        Axios.get(getProjectListUrl).then(response=>
+        // let param = {
+        //     pageNo: currentPageNo,
+        //     pageSize: this.state.pageSizeForPro
+        // };
+        let param = {};
+        Axios.get(getProjectListUrl, {params: param}).then(response=>
         {
             let projectListTmp = {};
             projectListTmp = response.data;
             this.setState({
+                pageNoForPro: 1,
                 projectList: projectListTmp,
-                currentPageProList: projectListTmp.slice(0, 8),
+                currentPageProList: projectListTmp.slice(0,8),
                 isLoading: false,
                 totalCountForPro: projectListTmp.length,
             });
-        });
 
+            // this.setState({
+            //     currentPageProList: response.data.pageList,
+            //     isLoading: false,
+            //     totalCountForPro: response.data.totalCount,
+            // });
+        });
     };
-    onCloseDialog = () => {
-        this.setState({chooseProDialogVisible: false});
-    };
+    // 确认选择project,更改页面布局，显示链路查询条件
     onConfirmChooseProject = () => {
         const Toast = Feedback.toast;
         let clickedId = this.state.clickedProjectID;
@@ -148,83 +229,26 @@ class LinkList extends Component{
         });
         this.getServiceList();
     };
+    // 改变project选择
     onChangeChooseProject = (ids, records) => {
         this.state.chooseProRowSelection.selectedRowKeys = ids;
         this.setState({
             clickedProjectID: ids[0],
-            clickedProjectName:  records[0].name
+            clickedProjectName:  records[0].title
         });
     };
-    onChangeProjectPage = (currentPage) => {
-        this.setState({isLoading:true});
-        let size = this.state.pageSizeForPro;
-        let begin = size * (currentPage - 1);
-        let currentList = this.state.projectList.slice(begin, begin + size);
-        this.setState({
-            pageNoForPro: currentPage,
-            currentPageProList: currentList,
-            isLoading: false
+
+    // 确认选择的project后，根据projectId查询application
+    getServiceList = () => {
+        let getLinkListUrl = API.link + '/api/v2/services';
+        Axios.get(getLinkListUrl).then(response => {
+            let serviceListTmp = response.data;
+            serviceListTmp.unshift("all");
+            this.setState({serviceList: serviceListTmp});
         });
     };
-    searchTraceList = (e) => {
-        const {getValue} = this.field;
-        const Toast = Feedback.toast;
-        this.field.validate((errors, values) => {
-            console.log(values);
-            if (errors) {
-               Toast.error(this.props.intl.messages['link.error.prompt.contentError']);
-               return;
-           }
-           this.setState({
-               isLoading: true
-           });
-           let getLinkListUrl = API.link + "/getTraceList";
-           // 计算lookback和endTs
-           var lookBack, endTs;
-           if (this.state.timeRangeDisplay === 'none') { //选择列表中的时间选项
-               lookBack = this.state.searchCondition.lookBack;
-               endTs = getCurrentTimestamp();
-           } else { // 如果是自定义时间
-               let startTs = toTimestamp(values['start-date'], values['start-time']);
-               endTs = toTimestamp(values['end-date'], values['end-time']);
-               lookBack = endTs - startTs;
-               // console.log("lookback: "+lookBack);
-           }
-           let params = {
-                serviceName: this.state.searchCondition.serviceName,
-                spanName: this.state.searchCondition.spanName,
-                annotation: values["annotation"],
-                minDuration: toMicroseconds(values["minDuration"]),
-                maxDuration: toMicroseconds(values["maxDuration"]),
-                endTs: endTs,
-                lookback: lookBack,
-                limit: values["limit"]
-            };
-            console.log("param: " + JSON.stringify(params));
-            Axios.get(getLinkListUrl, {params: params}).then(response => {
-                let linkListTmp = response.data;
-                console.log(JSON.stringify(linkListTmp));
-                this.setState({
-                    linkList: linkListTmp,
-                    isLoading: false,
-                    totalCount: linkListTmp.length
-                })
-            }).catch((error)=>{
-                console.error("查询trace列表出错：", error);
-            });
-        });
-    };
-    onChangeLinkPage = (currentPage) => {
-        // 具体内容还没写
-        this.setState({isLoading:true});
-        let size = this.state.pageSize;
-        this.setState({
-            pageNo: currentPage,
-            isLoading: false
-        });
-    };
-    changeServiceName = (value) => {
-        this.state.searchCondition.serviceName = value;
+    // 选择要查找的trace所属service，同时根据service name查询span name
+    changeServiceNameAndSearchSpanName = (value) => {
         let getSpanNameListUrl = API.link + "/api/v2/spans";
         let params = {
             serviceName: value
@@ -237,35 +261,45 @@ class LinkList extends Component{
             });
         });
     };
+
+    // 分页显示trace list
+    onChangeLinkPage = (currentPage) => {
+        // 具体内容还没写
+        this.setState({isLoading:true});
+        let size = this.state.pageSize;
+        this.setState({
+            pageNo: currentPage,
+            isLoading: false
+        });
+    };
+    // 选择回看的时间，可自定义
     chooseLookBackType = (value) =>{
         const {setValues, setErrors} = this.field;
-        setValues({
-            'start-date': new Date(),
-            'start-time': getCurrentTime(),
-            'end-date': new Date(),
-            'end-time': getCurrentTime(),
-        });
         if (value === -1) {
             this.setState({
                 timeRangeDisplay: 'flex'
+            });
+            setValues({
+                'start-date': new Date(),
+                'start-time': getCurrentTime(),
+                'end-date': new Date(),
+                'end-time': getCurrentTime(),
             });
         } else {
             this.setState({
                 timeRangeDisplay: 'none'
             });
-            this.state.searchCondition.lookBack = value * 3600000;
             setErrors({
                 'start-time': "",
                 'end-time': "",
             });
         }
     };
+    // trace list排序
     onSortLinkListTable = (dataIndex, order) => {
-        console.log("dataIndex: " + dataIndex + ", order: " + order);
         let dataSource = this.state.linkList.sort(function(a, b) {
             if (dataIndex === 'spanName') { //字符串，不能相减
                 let result = a[dataIndex] > b[dataIndex];
-                // console.log("a[dataIndex]: " + a[dataIndex] + "\n" + "b[dataIndex]: " + b[dataIndex] +"\n" + "result: " + result);
                 return order === "asc"? (result ? 1 : -1) : (result ? -1 : 1);
             } else {
                 let result = a[dataIndex] - b[dataIndex];
@@ -277,6 +311,9 @@ class LinkList extends Component{
         });
     };
     render() {
+        const {Row, Col} = Grid;
+        const {init} = this.field;
+
         const lookBackOptions = [
             {value: 1, label: this.props.intl.messages['link.time.one.hour']},
             {value: 3, label: this.props.intl.messages['link.time.three.hours']},
@@ -287,20 +324,6 @@ class LinkList extends Component{
             {value: 84, label: this.props.intl.messages['link.time.seven.days']},
             {value: -1, label: this.props.intl.messages['link.time.customize']},
         ];
-        const sortOptions = [
-            this.props.intl.messages['link.sort.by.timestampDesc'],
-            this.props.intl.messages['link.sort.by.timestampAsc'],
-            this.props.intl.messages['link.sort.by.durationDesc'],
-            this.props.intl.messages['link.sort.by.durationAsc'],
-            this.props.intl.messages['link.sort.by.servicePercentageDesc'],
-            this.props.intl.messages['link.sort.by.servicePercentageAsc']
-        ];
-        const dialogStyle= {
-            width: "50%"
-        };
-        const selectConditionCardStyle = {
-            padding: '15px'
-        };
         const datePickerLocale = {
             now: this.props.intl.messages['link.datepicker.now'],
             ok: this.props.intl.messages['link.confirm']
@@ -309,13 +332,12 @@ class LinkList extends Component{
                 <Button type="primary" size="medium" onClick={this.onConfirmChooseProject.bind(this)}>
                     {this.props.intl.messages['link.confirm']}
                 </Button>
-                <Button type="normal" size="medium" onClick={this.onCloseDialog.bind(this)}>
+                <Button type="normal" size="medium" onClick={()=>{this.setState({chooseProDialogVisible: false});}}>
                     {this.props.intl.messages['link.cancel']}
                 </Button>
             </div>);
-        const {Row, Col} = Grid;
-        const { init, getError, getValue, setValue} = this.field;
         const cardTitle = <i>{this.props.intl.messages['link.project.name']}:&nbsp;&nbsp;{this.state.chosenProjectName}</i>;
+        // 检查搜索条件是否符合格式
         const checkTime = (rule, value, callback) => {
             let pattern = /^(20|21|22|23|[0-1]\d):[0-5]\d$/;
             let reg = new RegExp(pattern);
@@ -343,25 +365,23 @@ class LinkList extends Component{
                 return callback();
             }
         };
-
+        // 渲染表格
         const renderTraceId = (value, index, record) => {
-            return <a href="/#/link/detail" className='trace-id'>{record['traceId']}</a>;
+            return <Link to={"/link/detail?traceId=" + value}>{value}</Link>;
         };
         const renderHasError = (hasError) => {
             if (hasError) {
-                return <Tag shape='readonly' style={{color:'#a94442',margin:'0',width:'80px',backgroundColor: '#f2dede'}}>{this.props.intl.messages['link.fail']}</Tag>
+                return <Tag shape='readonly' style={{color:'#a94442',margin:'0',width:'86px',backgroundColor: '#f2dede'}}>{this.props.intl.messages['link.fail']}</Tag>
             } else {
-                return <Tag shape='readonly' style={{margin:'0',width:'80px'}}>{this.props.intl.messages['link.success']}</Tag>
+                return <Tag shape='readonly' style={{margin:'0',width:'86px'}}>{this.props.intl.messages['link.success']}</Tag>
             }
         };
-        const propsConf = {
-            className: 'error-link',
-            style: {background: '#f2dede', color: '#a94442'}
-        };
-
         const setRowProps = (record, index) => {
             if (record['hasError']) {
-                return propsConf;
+                return {
+                    className: 'error-link',
+                    style: {background: '#f2dede', color: '#a94442'}
+                };
             }
         };
         return (
@@ -387,8 +407,20 @@ class LinkList extends Component{
                                 autoWidth
                                 placeholder={this.props.intl.messages['link.search.by.traceId']}
                                 hasIcon={false}
-                                value={this.state.searchedTraceId}
+                                // value={this.state.searchedTraceId}
                                 size='large'
+                                onSearch={(value)=>{
+                                    console.log("search button: " + JSON.stringify(value));
+                                    let traceId = value.key;
+                                    let pattern = /^[a-f0-9]{16,32}$/;
+                                    if (!new RegExp(pattern).test(traceId)) {
+                                        const Toast = Feedback.toast;
+                                        Toast.error(this.props.intl.messages['link.error.traceId.regex']);
+                                        console.log(traceId);
+                                    } else {
+                                        this.props.history.push("/link/detail?traceId=" + traceId);
+                                    }
+                                }}
                         />
                     </Col>
                 </Row>
@@ -397,15 +429,14 @@ class LinkList extends Component{
             <Dialog
                 visible={this.state.chooseProDialogVisible}
                 footer={chooseProDialogFooter}
-                footerAlign='right'
-                shouldUpdatePosition
+                footerAlign='right' shouldUpdatePosition
                 minMargin={50}
-                onClose={this.onCloseDialog.bind(this)}
+                onClose={()=>{this.setState({chooseProDialogVisible: false});}}
                 title={this.props.intl.messages['link.choose.project']}
-                style={dialogStyle}>
+                style={{width: "50%"}}>
                 <Table dataSource={this.state.currentPageProList} isLoading={this.state.isLoading} rowSelection={this.state.chooseProRowSelection}>
                     <Table.Column title={this.props.intl.messages['link.project.id']} dataIndex="id" width="25%" align='center'/>
-                    <Table.Column title={this.props.intl.messages['link.project.name']} dataIndex="name" align='center'/>
+                    <Table.Column title={this.props.intl.messages['link.project.name']} dataIndex="title" align='center'/>
                 </Table>
                 <Pagination total={this.state.totalCountForPro}
                             current={this.state.pageNoForPro}
@@ -427,7 +458,7 @@ class LinkList extends Component{
             </IceContainer>
             {/*链路主体部分，包括筛选条件和链路列表*/}
             <div style={{display: this.state.displayChangeButton}}>
-                <Card className='search-condition' bodyHeight='auto' title={cardTitle} style={selectConditionCardStyle}>
+                <Card className='search-condition' bodyHeight='auto' title={cardTitle} style={{padding: '15px'}}>
                     <Form labelAlign="top" field={this.field}>
                         {/*服务名，span名，时间选择框*/}
                         <Row>
@@ -438,7 +469,14 @@ class LinkList extends Component{
                                             dataSource={this.state.serviceList}
                                             showSearch
                                             defaultValue='all'
-                                            onChange={this.changeServiceName.bind(this)}/>
+                                            {...init("service-name",{
+                                                props: {
+                                                    onChange: (v) => {
+                                                        this.changeServiceNameAndSearchSpanName(v);
+                                                    }
+                                                }
+                                            })}
+                                    />
                                 </Form.Item>
                             </Col>
                             <Col span='6'>
@@ -448,10 +486,7 @@ class LinkList extends Component{
                                             dataSource={this.state.spanNameList}
                                             showSearch
                                             defaultValue='all'
-                                            onChange={(value) => {
-                                                // console.log("choose spanName: " + value);
-                                                this.state.searchCondition.spanName = value;}
-                                            }
+                                            {...init("span-name",{})}
                                     />
                                 </Form.Item>
                             </Col>
@@ -461,7 +496,13 @@ class LinkList extends Component{
                                             autoWidth={true}
                                             dataSource={lookBackOptions}
                                             defaultValue={lookBackOptions[0]}
-                                            onChange={this.chooseLookBackType.bind(this)}
+                                            {...init("lookback-type",{
+                                                props: {
+                                                    onChange : (v) => {
+                                                        this.chooseLookBackType(v);
+                                                    }
+                                                }
+                                            })}
                                     />
                                 </Form.Item>
                             </Col>
@@ -534,7 +575,7 @@ class LinkList extends Component{
                                 <Form.Item label={this.props.intl.messages['link.search.by.minDuration']}>
                                     <Input placeholder='Ex: 100ms or 5s'
                                            defaultValue=''
-                                           {...init("minDuration", {
+                                           {...init("min-duration", {
                                                rules:[
                                                    {validator: checkDuration.bind(this)}
                                                ]
@@ -546,7 +587,7 @@ class LinkList extends Component{
                                 <Form.Item label={this.props.intl.messages['link.search.by.maxDuration']}>
                                     <Input placeholder='Ex: 100ms or 5s'
                                            defaultValue=''
-                                           {...init("maxDuration", {
+                                           {...init("max-duration", {
                                                rules:[
                                                    {validator: checkDuration.bind(this)}
                                                    ]
@@ -567,7 +608,7 @@ class LinkList extends Component{
                         </Row>
                         {/*提交查询按钮*/}
                         <Row>
-                            <Button type="primary" size='medium' onClick={this.searchTraceList.bind(this)}>
+                            <Button type="primary" size='medium' onClick={this.submitSearch.bind(this)}>
                                 {this.props.intl.messages['link.search.submit.search']}
                             </Button>
                             <Icon type='help' size='small'
@@ -576,7 +617,7 @@ class LinkList extends Component{
                         </Row>
                     </Form>
                 </Card>
-                <Dialog visible={this.state.helpDialogVisible} style={dialogStyle}
+                <Dialog visible={this.state.helpDialogVisible} style={{width: "50%"}}
                         footer={false}
                         title={this.props.intl.messages['link.search.condition.description']}
                         onClose={()=>{this.setState({helpDialogVisible: false});}}>
