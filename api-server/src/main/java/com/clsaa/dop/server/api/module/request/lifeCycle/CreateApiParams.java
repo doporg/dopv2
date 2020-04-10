@@ -1,5 +1,6 @@
 package com.clsaa.dop.server.api.module.request.lifeCycle;
 
+import com.clsaa.dop.server.api.module.request.policy.CurrentLimitPolicyParam;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -32,17 +33,11 @@ public class CreateApiParams {
     @ApiModelProperty(value = "routingPolicyId",dataType = "String[]")
     private String[] routingPolicyId;
 
-    @ApiModelProperty(value = "currentLimitPolicy",dataType = "String[]")
-    private String[] currentLimitPolicyId;
-
-    @ApiModelProperty(value = "quotaPolicy",dataType = "String[]")
-    private String[] quotaPolicyId;
-
     public CreateApiParams() {
     }
 
     public CreateApiParams(String name, String description, String state, String requestMethod, String requestPath,
-                           Long timeout, boolean caching, Long cachingTime, FusePolicy fusePolicy, String[] routingPolicyId, String[] currentLimitPolicyId, String[] quotaPolicyId) {
+                           Long timeout, boolean caching, Long cachingTime, FusePolicy fusePolicy, String[] routingPolicyId) {
         this.name = name;
         this.description = description;
         this.requestMethod = requestMethod;
@@ -52,8 +47,6 @@ public class CreateApiParams {
         this.cachingTime = cachingTime;
         this.fusePolicy = fusePolicy;
         this.routingPolicyId = routingPolicyId;
-        this.currentLimitPolicyId = currentLimitPolicyId;
-        this.quotaPolicyId = quotaPolicyId;
     }
 
     public String getName() {
@@ -128,21 +121,4 @@ public class CreateApiParams {
     public void setRoutingPolicyId(String[] routingPolicyId) {
         this.routingPolicyId = routingPolicyId;
     }
-
-    public String[] getCurrentLimitPolicyId() {
-        return currentLimitPolicyId;
-    }
-
-    public void setCurrentLimitPolicyId(String[] currentLimitPolicyId) {
-        this.currentLimitPolicyId = currentLimitPolicyId;
-    }
-
-    public String[] getQuotaPolicyId() {
-        return quotaPolicyId;
-    }
-
-    public void setQuotaPolicyId(String[] quotaPolicyId) {
-        this.quotaPolicyId = quotaPolicyId;
-    }
-
 }

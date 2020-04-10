@@ -20,6 +20,9 @@ public class ServiceRoute {
     private String description;
 
     @Column(nullable = false)
+    private String type;
+
+    @Column(nullable = false)
     private String host;
 
     @Column(nullable = false)
@@ -38,18 +41,11 @@ public class ServiceRoute {
     public ServiceRoute() {
     }
 
-    public ServiceRoute(String name, String description, String host, long port, String path) {
+
+    public ServiceRoute(String name,String description,String type, String host,String path, Upstream upstream) {
         this.name = name;
         this.description = description;
-        this.host = host;
-        this.port = port;
-        this.path = path;
-    }
-
-
-    public ServiceRoute(String name,String description, String host,String path, Upstream upstream) {
-        this.name = name;
-        this.description = description;
+        this.type = type;
         this.host = host;
         this.port = 80;
         this.path = path;
@@ -121,10 +117,6 @@ public class ServiceRoute {
     }
 
     public String getType(){
-        if (upstream==null){
-            return "ServiceDiscoveryPolicy";
-        }else {
-            return "WeightingPolicy";
-        }
+       return type;
     }
 }

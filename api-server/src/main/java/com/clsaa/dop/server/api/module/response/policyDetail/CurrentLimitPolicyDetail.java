@@ -11,13 +11,13 @@ public class CurrentLimitPolicyDetail {
     @ApiModelProperty(value = "name",example = "testPolicy",dataType = "string")
     private String name;
 
-    @ApiModelProperty(value = "cycle",example = "10",dataType = "int")
-    private int cycle;
+    @ApiModelProperty(value = "cycle",allowableValues = "second,minute,hour,day",dataType = "String")
+    private String cycle;
 
     @ApiModelProperty(value = "requests",example = "60",dataType = "int")
     private int requests;
 
-    public CurrentLimitPolicyDetail(String policyId, String name, int cycle, int requests) {
+    public CurrentLimitPolicyDetail(String policyId, String name, String cycle, int requests) {
         this.policyId = policyId;
         this.name = name;
         this.cycle = cycle;
@@ -43,11 +43,11 @@ public class CurrentLimitPolicyDetail {
         this.name = name;
     }
 
-    public int getCycle() {
+    public String getCycle() {
         return cycle;
     }
 
-    public void setCycle(int cycle) {
+    public void setCycle(String cycle) {
         this.cycle = cycle;
     }
 

@@ -2,7 +2,6 @@ package com.clsaa.dop.server.api.module.response;
 
 import com.clsaa.dop.server.api.module.request.lifeCycle.FusePolicy;
 import com.clsaa.dop.server.api.module.response.policyDetail.CurrentLimitPolicyDetail;
-import com.clsaa.dop.server.api.module.response.policyDetail.QuotaPolicyDetail;
 import com.clsaa.dop.server.api.module.response.policyDetail.routingPolicyDetail.RoutingPolicyDetail;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -45,14 +44,12 @@ public class ApiDetail {
     @ApiModelProperty(value = "currentLimitPolicies",dataType = "CurrentLimitPolicyDetail[]")
     private CurrentLimitPolicyDetail[] currentLimitPolicies;
 
-    @ApiModelProperty(value = "quotaPolicies",dataType = "QuotaPolicyDetail[]")
-    private QuotaPolicyDetail[] quotaPolicies;
 
     public ApiDetail() {
     }
 
     public ApiDetail(String apiId, String name, String description, boolean state, String requestMethod, String requestPath,
-                     Long timeout, boolean caching, Long cachingTime, FusePolicy fusePolicy, RoutingPolicyDetail[] routingPolicies, CurrentLimitPolicyDetail[] currentLimitPolicies, QuotaPolicyDetail[] quotaPolicies) {
+                     Long timeout, boolean caching, Long cachingTime, FusePolicy fusePolicy, RoutingPolicyDetail[] routingPolicies, CurrentLimitPolicyDetail[] currentLimitPolicies) {
         this.apiId = apiId;
         this.name = name;
         this.description = description;
@@ -65,7 +62,6 @@ public class ApiDetail {
         this.fusePolicy = fusePolicy;
         this.routingPolicies = routingPolicies;
         this.currentLimitPolicies = currentLimitPolicies;
-        this.quotaPolicies = quotaPolicies;
     }
 
     public String getApiId() {
@@ -162,13 +158,5 @@ public class ApiDetail {
 
     public void setCurrentLimitPolicies(CurrentLimitPolicyDetail[] currentLimitPolicies) {
         this.currentLimitPolicies = currentLimitPolicies;
-    }
-
-    public QuotaPolicyDetail[] getQuotaPolicies() {
-        return quotaPolicies;
-    }
-
-    public void setQuotaPolicies(QuotaPolicyDetail[] quotaPolicies) {
-        this.quotaPolicies = quotaPolicies;
     }
 }

@@ -21,6 +21,14 @@ public class Target {
     @JoinColumn(name = "Upstream_id",referencedColumnName = "id")
     private Upstream upstream;
 
+    public Target(String id, String host, Long port, Upstream upstream) {
+        this.id = id;
+        this.host = host;
+        this.port = port.intValue();
+        this.weights = 100;
+        this.upstream = upstream;
+    }
+
     public Target(String id, String host, int port, int weights, Upstream upstream) {
         this.id = id;
         this.host = host;

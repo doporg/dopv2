@@ -10,7 +10,5 @@ public interface ServiceRouteRepository extends JpaRepository<ServiceRoute,Strin
 
     ServiceRoute findByName(String name);
 
-    List<ServiceRoute> findByUpstreamIsNotNull();
-
-    List<ServiceRoute> findByUpstreamIsNull();
+    List<ServiceRoute> findByType(String type);
 }

@@ -1,6 +1,7 @@
 package com.clsaa.dop.server.api.dao.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Service {
@@ -12,6 +13,9 @@ public class Service {
 
     @Column(nullable = false, columnDefinition = "varchar(255) character set utf8")
     private String description;
+
+    @Column(nullable = false)
+    private String rateLimitingPluginId;
 
     @Column(nullable = false)
     private Long timeout;
@@ -41,6 +45,9 @@ public class Service {
     @JoinColumn(name = "serviceRoute_id",referencedColumnName = "id")
     private ServiceRoute serviceRoute;
 
+    @OneToMany(mappedBy  = "service",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<CurrentLimitPolicy> currentLimitPolicies;
+
     public Service() {
     }
 
@@ -58,6 +65,7 @@ public class Service {
         this.fuseDuration = fuseDuration;
         this.replyDetectionRingSize = replyDetectionRingSize;
         this.serviceRoute = serviceRoute;
+        this.rateLimitingPluginId = "";
     }
 
     public String getId() {
@@ -82,6 +90,10 @@ public class Service {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setRateLimitingPluginId(String rateLimitingPluginId) {
+        this.rateLimitingPluginId = rateLimitingPluginId;
     }
 
     public Long getTimeout() {
@@ -154,5 +166,13 @@ public class Service {
 
     public void setServiceRoute(ServiceRoute serviceRoute) {
         this.serviceRoute = serviceRoute;
+    }
+
+    public List<CurrentLimitPolicy> getCurrentLimitPolicies() {
+        return currentLimitPolicies;
+    }
+
+    public String getRateLimitingPluginId() {
+        return rateLimitingPluginId;
     }
 }

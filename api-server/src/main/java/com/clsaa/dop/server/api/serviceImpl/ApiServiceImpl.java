@@ -1,18 +1,16 @@
 package com.clsaa.dop.server.api.serviceImpl;
 
-import com.clsaa.dop.server.api.dao.entity.Route;
-import com.clsaa.dop.server.api.dao.entity.Service;
-import com.clsaa.dop.server.api.dao.entity.ServiceRoute;
-import com.clsaa.dop.server.api.dao.repository.RouteRepository;
-import com.clsaa.dop.server.api.dao.repository.ServiceRepository;
-import com.clsaa.dop.server.api.dao.repository.ServiceRouteRepository;
+import com.clsaa.dop.server.api.dao.entity.*;
+import com.clsaa.dop.server.api.dao.repository.*;
 import com.clsaa.dop.server.api.module.kong.routeModule.KongRoute;
 import com.clsaa.dop.server.api.module.kong.serviceModule.KongService;
+import com.clsaa.dop.server.api.module.kong.upstreamModule.KongUpstream;
 import com.clsaa.dop.server.api.module.request.lifeCycle.CreateApiParams;
 import com.clsaa.dop.server.api.module.request.lifeCycle.FusePolicy;
 import com.clsaa.dop.server.api.module.request.lifeCycle.ModifyApiParams;
 import com.clsaa.dop.server.api.module.response.ApiDetail;
 import com.clsaa.dop.server.api.module.response.ResponseResult;
+import com.clsaa.dop.server.api.module.response.policyDetail.routingPolicyDetail.RoutingPolicyDetail;
 import com.clsaa.dop.server.api.restTemplate.ApiRestTemplate;
 import com.clsaa.dop.server.api.service.ApiService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,12 +40,12 @@ public class ApiServiceImpl implements ApiService {
         if (serviceRepository.findByName(createApiParams.getName())==null){
             String upstreamId = createApiParams.getRoutingPolicyId()[0];
             ServiceRoute serviceRoute = serviceRouteRepository.findServiceRouteById(upstreamId);
-            //查看路由策略是否存在
+            FusePolicy fusePolicy = createApiParams.getFusePolicy();
+            //查看负载均衡策略是否存在
             if(serviceRoute !=null){
-                //更新kong
                 KongService kongService = apiRestTemplate.createService(serviceRoute.getHost(),createApiParams.getName(),createApiParams.getTimeout(),"http", serviceRoute.getPort(),serviceRoute.getPath());
-                if (kongService!=null){
-                    FusePolicy fusePolicy = createApiParams.getFusePolicy();
+                KongUpstream kongUpstream = apiRestTemplate.modifyFusePolicy(serviceRoute.getHost(),fusePolicy);
+                if (kongService!=null&&kongUpstream!=null){
                     //更新数据库
                     Service service = new Service(kongService.getId(),createApiParams.getName(),createApiParams.getDescription(),
                             createApiParams.getTimeout(),createApiParams.isCaching(),createApiParams.getCachingTime(),fusePolicy.isEnable(),
@@ -56,6 +54,7 @@ public class ApiServiceImpl implements ApiService {
                     serviceRepository.saveAndFlush(service);
                     Route route = new Route(false,createApiParams.getRequestMethod(),createApiParams.getRequestPath(),service);
                     routeRepository.saveAndFlush(route);
+
                     return new ResponseResult<>(0,"success",service.getId());
                 }else {
                     return new ResponseResult<>(3,"fail");
@@ -140,12 +139,14 @@ public class ApiServiceImpl implements ApiService {
         if (serviceRepository.findServiceById(apiId)!=null&&route!=null){
             String upstreamId = modifyApiParams.getRoutingPolicyId()[0];
             ServiceRoute serviceRoute = serviceRouteRepository.findServiceRouteById(upstreamId);
-            //查看路由策略是否存在
+            FusePolicy fusePolicy = modifyApiParams.getFusePolicy();
+
+            //查看路由策略、限流策略是否存在
             if(serviceRoute !=null){
                 //更新kong
                 KongService kongService = apiRestTemplate.modifyService(apiId, serviceRoute.getHost(),modifyApiParams.getName(),modifyApiParams.getTimeout(),"http", 80L,serviceRoute.getPath());
-                if (kongService!=null){
-                    FusePolicy fusePolicy = modifyApiParams.getFusePolicy();
+                KongUpstream kongUpstream = apiRestTemplate.modifyFusePolicy(serviceRoute.getHost(),fusePolicy);
+                if (kongService!=null&&kongUpstream!=null){
                     //更新数据库
                     Service service = new Service(apiId,modifyApiParams.getName(),modifyApiParams.getDescription(),
                             modifyApiParams.getTimeout(),modifyApiParams.isCaching(),modifyApiParams.getCachingTime(),fusePolicy.isEnable(),
@@ -182,11 +183,14 @@ public class ApiServiceImpl implements ApiService {
         Route route = routeRepository.findRouteByServiceId(apiId);
         if(route!=null){
             Service service = route.getService();
+            ServiceRoute serviceRoute = service.getServiceRoute();
             FusePolicy fusePolicy = new FusePolicy(service.isFuse(),service.getFuseDetectionRing(),service.getCriticalFusingFailureRate(),
                     service.getFuseDuration(),service.getReplyDetectionRingSize());
+            RoutingPolicyDetail[] routingPolicies = new RoutingPolicyDetail[1];
+            routingPolicies[0] = new RoutingPolicyDetail(serviceRoute.getId(),serviceRoute.getName(),serviceRoute.getDescription(),serviceRoute.getType());
             return new ResponseResult<>(0,"success",new ApiDetail(apiId,service.getName(),service.getDescription(),
                     route.isOnline(),route.getRequestMethod(),route.getRequestPath(),service.getTimeout(),service.isCaching(),
-                    service.getCachingTime(),fusePolicy,null,null,null));
+                    service.getCachingTime(),fusePolicy,routingPolicies,null));
         }else{
             return new ResponseResult<>(1,"no service");
         }
@@ -203,7 +207,7 @@ public class ApiServiceImpl implements ApiService {
                     service.getFuseDuration(),service.getReplyDetectionRingSize());
             apiDetailList[i] = new ApiDetail(service.getId(),service.getName(),service.getDescription(),
                     route.isOnline(),route.getRequestMethod(),route.getRequestPath(),service.getTimeout(),service.isCaching(),
-                    service.getCachingTime(),fusePolicy,null,null,null);
+                    service.getCachingTime(),fusePolicy,null,null);
         }
         return new ResponseResult<>(0,"success",apiDetailList);
     }

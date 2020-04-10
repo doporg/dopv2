@@ -27,9 +27,12 @@ public class Upstream {
     public Upstream() {
     }
 
-    public Upstream(String id) {
+    public Upstream(String id,String name) {
         this.id = id;
+        this.name = name;
         this.algorithm = "round-robin";
+        this.hash_on = "";
+        this.header = "";
     }
 
 

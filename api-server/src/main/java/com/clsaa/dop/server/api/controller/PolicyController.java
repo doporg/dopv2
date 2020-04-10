@@ -3,7 +3,6 @@ package com.clsaa.dop.server.api.controller;
 import com.clsaa.dop.server.api.module.request.policy.*;
 import com.clsaa.dop.server.api.module.response.ResponseResult;
 import com.clsaa.dop.server.api.module.response.policyDetail.CurrentLimitPolicyDetail;
-import com.clsaa.dop.server.api.module.response.policyDetail.QuotaPolicyDetail;
 import com.clsaa.dop.server.api.module.response.policyDetail.routingPolicyDetail.RoutingPolicyDetail;
 import com.clsaa.dop.server.api.service.PolicyService;
 import io.swagger.annotations.ApiOperation;
@@ -29,21 +28,12 @@ public class PolicyController {
     }
 
     @ApiOperation(value = "查看限流策略")
-    @GetMapping("/flowControl/currentLimit/get")
+    @GetMapping("/flowControl/currentLimit/getByService/{serviceId}")
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
-    public ResponseResult<CurrentLimitPolicyDetail[]> getCurrentLimitPolicy(){
-        return new ResponseResult<>(0,"success");
-    }
-
-    @ApiOperation(value = "查看限流策略详情")
-    @GetMapping("/flowControl/currentLimit/get/{policyId}")
-    @ApiResponses({
-            @ApiResponse(code = 400,message = "错误参数")
-    })
-    public ResponseResult<CurrentLimitPolicyDetail> getCurrentLimitPolicyDetail(@ApiParam(name = "policy id", required = true) @PathVariable("policyId") String policyId){
-        return new ResponseResult<>(0,"success");
+    public ResponseResult<List<CurrentLimitPolicyDetail>> getCurrentLimitPolicy(@ApiParam(name = "service id", required = true) @PathVariable("serviceId") String serviceId){
+        return policyService.getCurrentLimitPolicies(serviceId);
     }
 
     @ApiOperation(value = "创建限流策略")
@@ -51,18 +41,18 @@ public class PolicyController {
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
-    public ResponseResult createCurrentLimitPolicy(@ApiParam(name = "currentLimitPolicy params", required = true) @RequestBody CurrentLimitPolicyParams policyParams){
-        return new ResponseResult(0,"success");
+    public ResponseResult<String> createCurrentLimitPolicy(@ApiParam(name = "currentLimitPolicy params", required = true) @RequestBody CurrentLimitPolicyParam policyParams){
+        return policyService.createCurrentLimitPolicy(policyParams.getName(),policyParams.getCycle(),policyParams.getRequests(),policyParams.getServiceId());
     }
 
     @ApiOperation(value = "修改限流策略")
-    @PutMapping("/flowControl/currentLimit/modify/{policyId}")
+    @PatchMapping("/flowControl/currentLimit/modify/{policyId}")
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
     public ResponseResult modifyCurrentLimitPolicy(@ApiParam(name = "policy id", required = true) @PathVariable("policyId") String policyId,
-                                                   @ApiParam(name = "currentLimitPolicy params", required = true) @RequestBody CurrentLimitPolicyParams policyParams){
-        return new ResponseResult(0,"success");
+                                                   @ApiParam(name = "currentLimitPolicy params", required = true) @RequestBody CurrentLimitPolicyParam policyParams){
+        return policyService.modifyCurrentLimitPolicy(policyParams.getName(),policyParams.getCycle(),policyParams.getRequests(),policyId);
     }
 
     @ApiOperation(value = "删除限流策略")
@@ -71,53 +61,7 @@ public class PolicyController {
             @ApiResponse(code = 400,message = "错误参数")
     })
     public ResponseResult deleteCurrentLimitPolicy(@ApiParam(name = "policy id", required = true) @PathVariable("policyId") String policyId){
-        return new ResponseResult(0,"success");
-    }
-
-    @ApiOperation(value = "查看配额策略")
-    @GetMapping("/flowControl/quota/get")
-    @ApiResponses({
-            @ApiResponse(code = 400,message = "错误参数")
-    })
-    public ResponseResult<QuotaPolicyDetail[]> getQuotaPolicy(){
-        return new ResponseResult<>(0,"success");
-    }
-
-    @ApiOperation(value = "查看配额策略详情")
-    @GetMapping("/flowControl/quota/get/{policyId}")
-    @ApiResponses({
-            @ApiResponse(code = 400,message = "错误参数")
-    })
-    public ResponseResult<QuotaPolicyDetail> getQuotaPolicyDetail(@ApiParam(name = "policy id", required = true) @PathVariable("policyId") String policyId){
-        return new ResponseResult<>(0,"success");
-    }
-
-    @ApiOperation(value = "创建配额策略")
-    @PostMapping("/flowControl/quota/create")
-    @ApiResponses({
-            @ApiResponse(code = 400,message = "错误参数")
-    })
-    public ResponseResult createQuotaPolicy(@ApiParam(name = "quotaPolicy params", required = true) @RequestBody QuotaPolicyParams policyParams){
-        return new ResponseResult(0,"success");
-    }
-
-    @ApiOperation(value = "修改配额策略")
-    @PutMapping("/flowControl/quota/modify/{policyId}")
-    @ApiResponses({
-            @ApiResponse(code = 400,message = "错误参数")
-    })
-    public ResponseResult modifyQuotaPolicy(@ApiParam(name = "policy id", required = true) @PathVariable("policyId") String policyId,
-                                            @ApiParam(name = "quotaPolicy params", required = true) @RequestBody QuotaPolicyParams policyParams){
-        return new ResponseResult(0,"success");
-    }
-
-    @ApiOperation(value = "删除配额策略")
-    @DeleteMapping("/flowControl/quota/delete/{policyId}")
-    @ApiResponses({
-            @ApiResponse(code = 400,message = "错误参数")
-    })
-    public ResponseResult deleteQuotaPolicy(@ApiParam(name = "policy id", required = true) @PathVariable("policyId") String policyId){
-        return new ResponseResult(0,"success");
+        return policyService.deleteCurrentLimitPolicy(policyId);
     }
 
     @ApiOperation(value = "查看路由策略")
