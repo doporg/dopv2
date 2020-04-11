@@ -1,5 +1,6 @@
 package com.clsaa.dop.server.link.controller;
 
+import com.clsaa.dop.server.link.model.Span;
 import com.clsaa.dop.server.link.model.vo.TraceVO;
 import com.clsaa.dop.server.link.service.ZipkinQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -20,7 +19,8 @@ public class TraceController {
     private ZipkinQueryService zipkinQueryService;
 
     @GetMapping(value = "/getTraceById")
-    public TraceVO getTraceById(@RequestParam(value = "traceId")String traceId) {
+    public Span[] getTraceById(@RequestParam(value = "traceId")String traceId) {
+        System.out.println("traceId:" + traceId);
         return zipkinQueryService.getTraceById(traceId);
     }
 
@@ -34,8 +34,7 @@ public class TraceController {
             @RequestParam(value = "endTs", required = false)String endTimestamp,
             @RequestParam(value = "lookback", defaultValue = "3600000")int lookback,
             @RequestParam(value = "limit", defaultValue = "10")int limit) {
-        Date date = new Date();
-        String.valueOf(date.getTime());
+
         return zipkinQueryService.getTraceList(serviceName, spanName, annotation, minDuration, maxDuration, endTimestamp, lookback, limit);
     }
 }

@@ -13,18 +13,18 @@
     width: 90%;
 }
 
-.choose-pro-prompt {
+.empty-prompt {
     justify-content: center;
     align-content: center;
     height: 350px;
 }
 
-.choose-pro-icon-div {
+.prompt-icon-div {
     display:block;
     text-align:center;
     padding-top: 100px;
 }
-.choose-pro-h-div {
+.prompt-h-div {
     display:block;
     text-align:center;
     padding-top: 10px;
@@ -81,4 +81,19 @@
 
 .trace-id:hover{
     color: #5485f7;
+}
+
+.top-bar {
+    background: rgb(255, 255, 255);
+    padding: 0 20px;
+    left: 240px;
+    top: 62px;
+    height: 60px;
+    right: 0;
+    display: flex;
+    position: fixed;
+    z-index: 99;
+    box-shadow: 2px 0 4px rgba(0,0,0,0.2);
+    justify-content: space-between;
+    align-items: center;
 }

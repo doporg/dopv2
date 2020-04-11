@@ -3,7 +3,6 @@ package com.clsaa.dop.server.link;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -32,11 +31,11 @@ public class LinkServerApplication {
         SpringApplication.run(LinkServerApplication.class, args);
     }
 
-    @LoadBalanced
-    @Bean
-    RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
+//    @LoadBalanced
+//    @Bean
+//    RestTemplate restTemplate() {
+//        return new RestTemplate();
+//    }
 
     @Bean
     public MySQLStorage mySQLStorage(@Qualifier("datasource.druid") DataSource dataSource) {

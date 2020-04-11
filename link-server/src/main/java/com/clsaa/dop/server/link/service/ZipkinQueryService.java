@@ -1,47 +1,41 @@
 package com.clsaa.dop.server.link.service;
 
+import com.clsaa.dop.server.link.config.BizCodes;
+import com.clsaa.dop.server.link.feign.ZipkinQueryInterface;
 import com.clsaa.dop.server.link.model.Span;
 import com.clsaa.dop.server.link.model.vo.TraceVO;
-import com.clsaa.dop.server.link.util.NotFoundTraceException;
-import com.clsaa.dop.server.link.util.RestTemplateErrorHandler;
+import com.clsaa.rest.result.bizassert.BizAssert;
+import com.clsaa.rest.result.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 public class ZipkinQueryService {
 
-    private static final String bathUrl = "http://link-server/api/v2";
-
     @Autowired
-    private RestTemplate restTemplate;
+    private ZipkinQueryInterface zipkinQueryInterface;
 
     /**
      * find by traceID
      * @param traceId traceId
      * @return Trace
      */
-    public TraceVO getTraceById(String traceId) {
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
-        Span[] spanList;
-
-        try{
-            spanList = restTemplate.getForObject(bathUrl + "/trace/" + traceId, Span[].class);
-        } catch (NotFoundTraceException e) {
+    public Span[] getTraceById(String traceId) {
+        Span[] res;
+        try {
+            res = zipkinQueryInterface.getTraceById(traceId);
+        } catch (NotFoundException e) {
             System.out.println("traceId不存在");
+//            BizAssert.justInvalidParam(BizCodes.NOT_FOUND_TRACE);
             return null;
         }
-        System.out.println("------------------------------------------------------------");
-        for (Span span : spanList) {
-            System.out.println(span.toString());
-        }
-        return this.convertTraceToVo(traceId, spanList);
+        return res;
     }
+
 
     public List<TraceVO> getTraceList(String serviceName, String spanName, String annotation, String minDuration,
                                       String maxDuration, String endTimestamp, long lookback, int limit) {
@@ -54,8 +48,11 @@ public class ZipkinQueryService {
         System.out.println("lookback: " + lookback);
         System.out.println("limit: " + limit);
         List<TraceVO> list = new ArrayList<>();
-        list.add(getTraceById("42bab38648369882"));
-        list.add(getTraceById("da1536541887c58c"));
+        list.add(convertTraceToVo("42bab38648369882",getTraceById("42bab38648369882")));
+        list.add(convertTraceToVo("da1536541887c58c",getTraceById("da1536541887c58c")));
+        list.add(convertTraceToVo("31c63ba714b7f6ea",getTraceById("31c63ba714b7f6ea")));
+        list.add(convertTraceToVo("171d5ee431a29779",getTraceById("171d5ee431a29779")));
+        list.add(convertTraceToVo("1a2c1d3577fda929",getTraceById("1a2c1d3577fda929")));
         return list;
     }
 

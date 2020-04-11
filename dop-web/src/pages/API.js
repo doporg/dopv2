@@ -9,6 +9,7 @@ const code = "/code-server";
 const user = "/user-server";
 const image = "/image-server";
 const test = "/test-server";
+const link = "/link-server";
 
 const API = {
     address: "http://www.dop.clsaa.com/#/",

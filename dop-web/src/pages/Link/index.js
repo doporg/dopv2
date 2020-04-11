@@ -12,6 +12,12 @@ const linkConfig = [
         isLogin: true
     },
     {
+        path: '/link/detail/:traceId',
+        layout: LinkLayout,
+        component: LinkDetail,
+        isLogin: true
+    },
+    {
         path: '/link/detail',
         layout: LinkLayout,
         component: LinkDetail,

@@ -2,8 +2,8 @@ const LINK_ZH_CN = {
 
     'link.name': '链路跟踪',
     'link.home': '首页',
-    'link.list': '链路列表',
-    'link.detail': '链路详情',
+    'link.list': '链路筛选',
+    'link.detail': '链路搜索',
     'link.star': '收藏列表',
 
     'link.cancel': '取消',
@@ -73,7 +73,11 @@ const LINK_ZH_CN = {
     'link.error.prompt.contentError': '请正确填写表单',
     'link.error.traceId.regex': 'traceId编码为16-32位小写十六进制字符，请重新输入',
 
-    'link.no.data': '没有数据'
+    'link.no.data': '没有数据',
+
+    // link detail页面
+    'link.enter.traceId.prompt': '请输入您要查找的traceId',
+    'link.trace.not.exist': '您要查找的trace不存在'
 };
 
 export default LINK_ZH_CN;

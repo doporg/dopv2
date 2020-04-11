@@ -5,15 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.Serializable;
 import java.util.*;
 
 @RestController
 @CrossOrigin
 public class testController {
 
-    @Autowired
-    RestTemplate restTemplate;
+//    @Autowired
+//    RestTemplate restTemplate;
 
     @GetMapping(value = "/getProjectList")
     public List<Project> getProjectList(String userId) {
@@ -45,11 +44,11 @@ public class testController {
     class Project {
 
         private Long id;
-        private String name;
+        private String title;
 
-        Project(Long id, String name) {
+        Project(Long id, String title) {
             this.id = id;
-            this.name = name;
+            this.title = title;
         }
     }
 
@@ -65,9 +64,9 @@ public class testController {
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public String test(){
         System.out.println("xxxxx");
-        String s =  restTemplate.getForObject(
-                "http://link-server/api/v2/services", String.class);
-        System.err.println(s);
-        return s;
+//        String s =  restTemplate.getForObject(
+//                "http://link-server/api/v2/services", String.class);
+//        System.err.println(s);
+        return "link";
     }
 }

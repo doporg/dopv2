@@ -12,6 +12,7 @@ import Feedback from "@icedesign/base/lib/feedback"
 import Input from "@icedesign/base/lib/input";
 import Icon from "@icedesign/base/lib/icon";
 import IceContainer from '@icedesign/container';
+import IceEllipsis from '@icedesign/ellipsis';
 import Pagination from "@icedesign/base/lib/pagination";
 import Form from "@icedesign/base/lib/form";
 import Grid from "@icedesign/base/lib/grid";
@@ -33,6 +34,8 @@ class LinkList extends Component{
         super(props);
         this.field = new Field(this);
         this.state = {
+            buttonPrompt: this.props.intl.messages['link.choose.project'],
+
             projectList: [],
             currentPageProList: [],
             isLoading: false,
@@ -83,7 +86,8 @@ class LinkList extends Component{
                 chosenProjectID: projectId,
                 chosenProjectName: projectName,
                 displayChooseButton: 'none',
-                displayChangeButton: 'block'
+                displayChangeButton: 'block',
+                buttonPrompt: this.props.intl.messages['link.change.project']
             });
             this.getServiceList();
         }
@@ -128,7 +132,7 @@ class LinkList extends Component{
         // 计算lookback和endTs
         var lookBack, endTs;
         if (values['lookback-type'] !== -1) { //选择列表中的时间选项
-            lookBack = values['lookback-type'] * lookBackBase;
+            lookBack = values['lookback-type'].value * lookBackBase;
             endTs = getCurrentTimestamp();
         } else { // 如果是自定义时间
             let startTs = toTimestamp(values['start-date'], values['start-time']);
@@ -226,6 +230,7 @@ class LinkList extends Component{
             chooseProDialogVisible: false,
             displayChooseButton: 'none',
             displayChangeButton: 'block',
+            buttonPrompt: this.props.intl.messages['link.change.project']
         });
         this.getServiceList();
     };
@@ -367,7 +372,10 @@ class LinkList extends Component{
         };
         // 渲染表格
         const renderTraceId = (value, index, record) => {
-            return <Link to={"/link/detail?traceId=" + value}>{value}</Link>;
+            return <Link to={"/link/detail/" + value}>{value}</Link>;
+        };
+        const renderSpanName = (value, index, record) => {
+            return <IceEllipsis lineLimit={1} text={value} showTooltip={true} />;
         };
         const renderHasError = (hasError) => {
             if (hasError) {
@@ -387,41 +395,18 @@ class LinkList extends Component{
         return (
         <div>
             {/*未选择过项目，显示选择按钮*/}
-            <div style={{display: this.state.displayChooseButton}}>
-                <Button className="choose-button" type="primary" size="medium" onClick={this.onOpenChooseProDialog.bind(this)}>
-                    {this.props.intl.messages['link.choose.project']}
-                </Button>
-            </div>
+            {/*<div style={{display: this.state.displayChooseButton}}>*/}
+                {/*<Button className="choose-button" type="primary" size="medium" onClick={this.onOpenChooseProDialog.bind(this)}>*/}
+                    {/*{this.props.intl.messages['link.choose.project']}*/}
+                {/*</Button>*/}
+            {/*</div>*/}
             {/*更换项目按钮 + 根据traceId查询*/}
-            <div style={{display: this.state.displayChangeButton, marginBottom: '10px'}}>
+            <div style={{marginBottom: '15px', marginTop: '-5px'}}>
                 <Row>
                     <Col span='4'>
                         <Button className="change-button" type="primary" size="medium" onClick={this.onOpenChooseProDialog.bind(this)}>
-                            {this.props.intl.messages['link.change.project']}
+                            {this.state.buttonPrompt}
                         </Button>
-                    </Col>
-                    <Col>
-                        <Search className='search-by-traceid'
-                                searchText={this.props.intl.messages['link.search.submit.search']}
-                                dataSource={this.state.historySearchTraceId}
-                                autoWidth
-                                placeholder={this.props.intl.messages['link.search.by.traceId']}
-                                hasIcon={false}
-                                // value={this.state.searchedTraceId}
-                                size='large'
-                                onSearch={(value)=>{
-                                    console.log("search button: " + JSON.stringify(value));
-                                    let traceId = value.key;
-                                    let pattern = /^[a-f0-9]{16,32}$/;
-                                    if (!new RegExp(pattern).test(traceId)) {
-                                        const Toast = Feedback.toast;
-                                        Toast.error(this.props.intl.messages['link.error.traceId.regex']);
-                                        console.log(traceId);
-                                    } else {
-                                        this.props.history.push("/link/detail?traceId=" + traceId);
-                                    }
-                                }}
-                        />
                     </Col>
                 </Row>
             </div>
@@ -447,18 +432,19 @@ class LinkList extends Component{
             </Dialog>
             {/*未选择项目时，主体的选择提示*/}
             <IceContainer style={{display: this.state.displayChooseButton, margin: '0 auto'}}>
-                <div className="choose-pro-prompt">
-                    <div className='choose-pro-icon-div'>
+                <div className="empty-prompt">
+                    <div className='prompt-icon-div'>
                         <Icon type="add" size='xxxl' style={{opacity:'0.5',cursor:'pointer'}} onClick={this.onOpenChooseProDialog.bind(this)}/>
                     </div>
-                    <div className='choose-pro-h-div'>
+                    <div className='prompt-h-div'>
                         <p className="prompt-p">{this.props.intl.messages['link.please.choose.project']}</p>
                     </div>
                 </div>
             </IceContainer>
             {/*链路主体部分，包括筛选条件和链路列表*/}
             <div style={{display: this.state.displayChangeButton}}>
-                <Card className='search-condition' bodyHeight='auto' title={cardTitle} style={{padding: '15px'}}>
+                <Card className='search-condition' bodyHeight='auto'
+                      title={cardTitle} style={{padding: '15px'}}>
                     <Form labelAlign="top" field={this.field}>
                         {/*服务名，span名，时间选择框*/}
                         <Row>
@@ -629,10 +615,9 @@ class LinkList extends Component{
                        // getRowProps={setRowProps}
                 >
                     <Table.Column title={this.props.intl.messages['link.list.table.traceId']} dataIndex='traceId' cell={renderTraceId} sortable={true} align='center'/>
-                    <Table.Column title={this.props.intl.messages['link.list.table.spanName']} dataIndex='spanName' sortable={true} align='center'/>
                     <Table.Column title={this.props.intl.messages['link.list.table.timestamp']} dataIndex='timestamp' cell={timestampToDate} sortable={true} align='center'/>
+                    <Table.Column title={this.props.intl.messages['link.list.table.spanName']} dataIndex='spanName' cell={renderSpanName} sortable={true} align='center'/>
                     <Table.Column title={this.props.intl.messages['link.list.table.duration']} dataIndex='duration' cell={formatDuration} sortable={true} align='center'/>
-                    {/*<Table.Column title={this.props.intl.messages['link.list.table.spanNum']} dataIndex='spanNum'/>*/}
                     <Table.Column title={this.props.intl.messages['link.list.table.successOrFail']} dataIndex='hasError' cell={renderHasError} sortable={true} align='center'/>
                     <Table.Column title={this.props.intl.messages['link.list.table.detail']} dataIndex='detail' align='center'/>
                 </Table>

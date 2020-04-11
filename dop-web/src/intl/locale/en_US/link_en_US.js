@@ -2,8 +2,8 @@ const LINK_EN_US = {
 
     'link.name': 'Link Trace',
     'link.home': 'Home',
-    'link.list': 'Links List',
-    'link.detail': 'Link Detail',
+    'link.list': 'Link screening',
+    'link.detail': 'Link Search',
     'link.star': 'Favorites list',
 
     'link.cancel': 'Cancel',
@@ -73,7 +73,11 @@ const LINK_EN_US = {
     'link.error.prompt.contentError': 'Please fill in the form correctly.',
     'link.error.traceId.regex': 'TraceId is encoded as 16 or 32 lowercase hex characters, please re-enter',
 
-    'link.no.data': 'No Data'
+    'link.no.data': 'No Data',
+
+    // link detail页面
+    'link.enter.traceId.prompt': 'Please enter the Id of the trace you are looking for.',
+    'link.trace.not.exist': 'The trace you are looking for does not exist'
 };
 
 export default LINK_EN_US;
