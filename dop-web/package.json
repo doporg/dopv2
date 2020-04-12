@@ -93,5 +93,14 @@
     "node": ">=8.0.0"
   },
   "templateType": "react",
-  "title": "Devops Platform"
+  "title": "Devops Platform",
+  "proxy": {
+    "/api":{
+      "target":"localhost:14400",
+      "pathRewrite":{
+        "^/api":""
+      },
+      "changeOrigin":true
+    }
+  }
 }

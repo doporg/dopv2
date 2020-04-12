@@ -31,11 +31,11 @@ public class StrategyService {
 		return strategyDao.getStrategiesByUserId(userId);
 	}
 
-	public void deleteStrategy(String sid) {
-
+	public void deleteStrategy(Long sid) {
+		strategyDao.deleteById(sid);
 	}
 
-	public void modifyStrategy(Strategy strategy) {
-
+	public void updateStrategy(Strategy strategy) {
+		strategyDao.save(strategy);
 	}
 }

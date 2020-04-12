@@ -39,9 +39,9 @@ class GroupTable extends Component {
             },
         };
 
-        this.handlePaginationChange = this.handlePaginationChange.bind(this);
-        this.refreshList(1);
-    }
+    this.handlePaginationChange = this.handlePaginationChange.bind(this);
+    this.refreshList(1);
+}
 
     formChange = (value) => {
         console.log('changed value', value);

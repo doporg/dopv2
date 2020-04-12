@@ -1,4 +1,4 @@
-package com.clsaa.dop.server.alert.controller;
+package com.clsaa.dop.server.alert.service;
 
 /**
  * @ClassName LogService

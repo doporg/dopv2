@@ -11,6 +11,7 @@ import {permissionConfig} from "../pages/Permissions";
 import codeConfig from "../pages/Code";
 import {testConfig} from "../pages/TestCases";
 import {imageConfig} from "../pages/Image";
+import {alertConfig} from "../pages/Alert";
 
 import {demoConfig} from "../pages/Demo";
 
@@ -30,7 +31,8 @@ const baseConfig = [
 
 
 const routerConfig = [
-        ...demoConfig,
+    ...alertConfig,
+    ...demoConfig,
     ...imageConfig,
     ...testConfig,
     ...codeConfig,

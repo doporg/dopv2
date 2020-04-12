@@ -3,6 +3,7 @@ package com.clsaa.dop.server.alert.dao;
 import com.clsaa.dop.server.alert.model.po.Strategy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import reactor.util.annotation.NonNull;
 
 import java.util.ArrayList;
 
@@ -19,4 +20,6 @@ import java.util.ArrayList;
 public interface StrategyDao extends JpaRepository<Strategy , Long>{
 //	Strategy getStrategiesByUserId(int userId);
 	ArrayList<Strategy> getStrategiesByUserId(Long userId);
+	void deleteById(@NonNull Long Id);
+
 }
