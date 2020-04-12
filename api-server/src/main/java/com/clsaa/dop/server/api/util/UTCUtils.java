@@ -2,8 +2,8 @@ package com.clsaa.dop.server.api.util;
 
 
 import java.text.ParseException;
-import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class UTCUtils {
 
@@ -28,5 +28,9 @@ public class UTCUtils {
     public static String dateToString(Date date){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(date);
+    }
+
+    public static Date timeBefore30m(){
+        return new Date(System.currentTimeMillis()- 30 * 60 * 1000);
     }
 }

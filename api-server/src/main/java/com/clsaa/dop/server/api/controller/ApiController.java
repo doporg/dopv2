@@ -1,9 +1,9 @@
 package com.clsaa.dop.server.api.controller;
 
-import com.clsaa.dop.server.api.module.request.lifeCycle.CreateApiParams;
-import com.clsaa.dop.server.api.module.request.lifeCycle.ModifyApiParams;
-import com.clsaa.dop.server.api.module.response.ApiDetail;
-import com.clsaa.dop.server.api.module.response.ResponseResult;
+import com.clsaa.dop.server.api.module.vo.request.lifeCycle.CreateApiParams;
+import com.clsaa.dop.server.api.module.vo.request.lifeCycle.ModifyApiParams;
+import com.clsaa.dop.server.api.module.vo.response.ApiDetail;
+import com.clsaa.dop.server.api.module.vo.response.ResponseResult;
 import com.clsaa.dop.server.api.service.ApiService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -51,7 +51,7 @@ public class ApiController {
     }
 
     @ApiOperation(value = "创建api")
-    @PostMapping("/create")
+    @PostMapping()
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
@@ -78,7 +78,7 @@ public class ApiController {
     }
 
     @ApiOperation(value = "删除api")
-    @DeleteMapping("/delete/{apiId}")
+    @DeleteMapping("/{apiId}")
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
@@ -87,7 +87,7 @@ public class ApiController {
     }
 
     @ApiOperation(value = "修改api")
-    @PatchMapping("/modify")
+    @PatchMapping()
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
@@ -96,7 +96,7 @@ public class ApiController {
     }
 
     @ApiOperation(value = "查看api详情")
-    @GetMapping("/getApiDetail/{apiId}")
+    @GetMapping("/{apiId}")
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
@@ -105,7 +105,7 @@ public class ApiController {
     }
 
     @ApiOperation(value = "查看api列表")
-    @GetMapping("/getApi")
+    @GetMapping()
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })

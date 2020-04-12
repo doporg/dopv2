@@ -1,9 +1,9 @@
 package com.clsaa.dop.server.api.service;
 
-import com.clsaa.dop.server.api.module.request.lifeCycle.CreateApiParams;
-import com.clsaa.dop.server.api.module.request.lifeCycle.ModifyApiParams;
-import com.clsaa.dop.server.api.module.response.ApiDetail;
-import com.clsaa.dop.server.api.module.response.ResponseResult;
+import com.clsaa.dop.server.api.module.vo.request.lifeCycle.CreateApiParams;
+import com.clsaa.dop.server.api.module.vo.request.lifeCycle.ModifyApiParams;
+import com.clsaa.dop.server.api.module.vo.response.ApiDetail;
+import com.clsaa.dop.server.api.module.vo.response.ResponseResult;
 
 
 public interface ApiService {

@@ -7,7 +7,7 @@ import com.clsaa.dop.server.api.module.kong.serviceModule.KongService;
 import com.clsaa.dop.server.api.module.kong.serviceModule.KongServiceList;
 import com.clsaa.dop.server.api.module.kong.targetModule.KongTarget;
 import com.clsaa.dop.server.api.module.kong.upstreamModule.KongUpstream;
-import com.clsaa.dop.server.api.module.request.lifeCycle.FusePolicy;
+import com.clsaa.dop.server.api.module.vo.request.lifeCycle.FusePolicy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;

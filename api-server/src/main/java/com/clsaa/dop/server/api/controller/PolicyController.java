@@ -1,9 +1,9 @@
 package com.clsaa.dop.server.api.controller;
 
-import com.clsaa.dop.server.api.module.request.policy.*;
-import com.clsaa.dop.server.api.module.response.ResponseResult;
-import com.clsaa.dop.server.api.module.response.policyDetail.CurrentLimitPolicyDetail;
-import com.clsaa.dop.server.api.module.response.policyDetail.routingPolicyDetail.RoutingPolicyDetail;
+import com.clsaa.dop.server.api.module.vo.request.policy.*;
+import com.clsaa.dop.server.api.module.vo.response.ResponseResult;
+import com.clsaa.dop.server.api.module.vo.response.policyDetail.CurrentLimitPolicyDetail;
+import com.clsaa.dop.server.api.module.vo.response.policyDetail.routingPolicyDetail.RoutingPolicyDetail;
 import com.clsaa.dop.server.api.service.PolicyService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -28,7 +28,7 @@ public class PolicyController {
     }
 
     @ApiOperation(value = "查看限流策略")
-    @GetMapping("/flowControl/currentLimit/getByService/{serviceId}")
+    @GetMapping("/flowControl/currentLimit/{serviceId}")
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
@@ -37,7 +37,7 @@ public class PolicyController {
     }
 
     @ApiOperation(value = "创建限流策略")
-    @PostMapping("/flowControl/currentLimit/create")
+    @PostMapping("/flowControl/currentLimit")
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
@@ -46,7 +46,7 @@ public class PolicyController {
     }
 
     @ApiOperation(value = "修改限流策略")
-    @PatchMapping("/flowControl/currentLimit/modify/{policyId}")
+    @PatchMapping("/flowControl/currentLimit/{policyId}")
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
@@ -56,7 +56,7 @@ public class PolicyController {
     }
 
     @ApiOperation(value = "删除限流策略")
-    @DeleteMapping("/flowControl/currentLimit/delete/{policyId}")
+    @DeleteMapping("/flowControl/currentLimit/{policyId}")
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
@@ -65,7 +65,7 @@ public class PolicyController {
     }
 
     @ApiOperation(value = "查看路由策略")
-    @GetMapping("/route/get")
+    @GetMapping("/route")
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
@@ -74,7 +74,7 @@ public class PolicyController {
     }
 
     @ApiOperation(value = "查看路由策略详情")
-    @GetMapping("/route/get/{policyId}")
+    @GetMapping("/route/{policyId}")
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
@@ -83,7 +83,7 @@ public class PolicyController {
     }
 
     @ApiOperation(value = "创建权重策略")
-    @PostMapping("/route/addWeightingPolicy")
+    @PostMapping("/route/weightingPolicy")
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
@@ -92,7 +92,7 @@ public class PolicyController {
     }
 
     @ApiOperation(value = "创建服务发现策略")
-    @PostMapping("/route/addServiceDiscoveryPolicy")
+    @PostMapping("/route/serviceDiscoveryPolicy")
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
@@ -103,7 +103,7 @@ public class PolicyController {
 
 
     @ApiOperation(value = "删除路由策略")
-    @DeleteMapping("/route/delete/{policyId}")
+    @DeleteMapping("/route/{policyId}")
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
@@ -112,7 +112,7 @@ public class PolicyController {
     }
 
     @ApiOperation(value = "修改权重策略")
-    @PatchMapping("/route/modifyWeightingPolicy/{policyId}")
+    @PatchMapping("/route/weightingPolicy/{policyId}")
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
@@ -122,7 +122,7 @@ public class PolicyController {
     }
 
     @ApiOperation(value = "修改服务发现策略")
-    @PatchMapping("/route/modifyServiceDiscoveryPolicy/{policyId}")
+    @PatchMapping("/route/serviceDiscoveryPolicy/{policyId}")
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })

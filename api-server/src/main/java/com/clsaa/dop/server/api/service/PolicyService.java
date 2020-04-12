@@ -1,9 +1,9 @@
 package com.clsaa.dop.server.api.service;
 
 import com.clsaa.dop.server.api.module.configuration.WeightingPolicyConfig;
-import com.clsaa.dop.server.api.module.response.ResponseResult;
-import com.clsaa.dop.server.api.module.response.policyDetail.CurrentLimitPolicyDetail;
-import com.clsaa.dop.server.api.module.response.policyDetail.routingPolicyDetail.RoutingPolicyDetail;
+import com.clsaa.dop.server.api.module.vo.response.ResponseResult;
+import com.clsaa.dop.server.api.module.vo.response.policyDetail.CurrentLimitPolicyDetail;
+import com.clsaa.dop.server.api.module.vo.response.policyDetail.routingPolicyDetail.RoutingPolicyDetail;
 
 import java.util.List;
 

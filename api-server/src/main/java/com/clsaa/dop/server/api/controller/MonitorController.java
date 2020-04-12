@@ -1,10 +1,10 @@
 package com.clsaa.dop.server.api.controller;
 
 import com.clsaa.dop.server.api.module.kong.logModule.KongHttpLog;
-import com.clsaa.dop.server.api.module.response.monitor.ApiRequestLog;
-import com.clsaa.dop.server.api.module.response.monitor.ApiRequestLogDetail;
-import com.clsaa.dop.server.api.module.response.monitor.TrafficStatistics;
-import com.clsaa.dop.server.api.module.response.ResponseResult;
+import com.clsaa.dop.server.api.module.vo.response.monitor.ApiRequestLog;
+import com.clsaa.dop.server.api.module.vo.response.monitor.ApiRequestLogDetail;
+import com.clsaa.dop.server.api.module.vo.response.monitor.TrafficStatistics;
+import com.clsaa.dop.server.api.module.vo.response.ResponseResult;
 import com.clsaa.dop.server.api.service.MonitorService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -33,8 +33,8 @@ public class MonitorController {
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
-    public ResponseResult<TrafficStatistics> getTrafficStatistics(@ApiParam(name = "frequency", required = true,allowableValues = "3,24")@RequestParam("frequency")int frequency){
-        return new ResponseResult<>(0,"success");
+    public ResponseResult<TrafficStatistics> getTrafficStatistics(){
+        return monitorService.getTrafficStatistics();
     }
 
     @ApiOperation(value = "接收请求日志")
@@ -58,7 +58,7 @@ public class MonitorController {
     }
 
     @ApiOperation(value = "查看请求日志")
-    @GetMapping("/logAll")
+    @GetMapping("/log/all")
     @ApiResponses({
             @ApiResponse(code = 400,message = "错误参数")
     })
