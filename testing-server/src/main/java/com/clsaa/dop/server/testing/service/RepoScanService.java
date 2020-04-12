@@ -4,6 +4,7 @@ package com.clsaa.dop.server.testing.service;
 import com.clsaa.dop.server.testing.config.SonarConfig;
 import com.clsaa.dop.server.testing.dao.UserProjectMappingRepository;
 import com.clsaa.dop.server.testing.manage.SonarRestService;
+import com.clsaa.dop.server.testing.model.enums.StartType;
 import com.clsaa.dop.server.testing.model.po.UserProjectMapping;
 import com.clsaa.dop.server.testing.util.*;
 import lombok.extern.slf4j.Slf4j;

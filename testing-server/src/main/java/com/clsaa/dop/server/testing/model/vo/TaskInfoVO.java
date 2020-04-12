@@ -1,5 +1,5 @@
 package com.clsaa.dop.server.testing.model.vo;
-import com.clsaa.dop.server.testing.util.StartType;
+import com.clsaa.dop.server.testing.model.enums.StartType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

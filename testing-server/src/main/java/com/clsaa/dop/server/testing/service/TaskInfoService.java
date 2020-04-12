@@ -3,7 +3,10 @@ package com.clsaa.dop.server.testing.service;
 
 import com.clsaa.dop.server.testing.dao.UserProjectMappingRepository;
 import com.clsaa.dop.server.testing.manage.SonarRestService;
+import com.clsaa.dop.server.testing.model.bo.ScanIssuesBO;
+import com.clsaa.dop.server.testing.model.bo.SourcesBO;
 import com.clsaa.dop.server.testing.model.bo.TaskInfoBO;
+import com.clsaa.dop.server.testing.model.bo.TaskMeasuresBO;
 import com.clsaa.dop.server.testing.model.po.UserProjectMapping;
 import com.clsaa.dop.server.testing.model.vo.TaskInfoVO;
 import com.clsaa.dop.server.testing.util.MyBeanUtils;
@@ -44,5 +47,18 @@ public class TaskInfoService {
 
     public void getScanResult(String projectKey){
 
+    }
+
+    public ScanIssuesBO getAllIssues(String projectKey){
+            return sonarRestService.getAllIssues(projectKey);
+    }
+
+
+    public TaskMeasuresBO getGeneralInfo(String projectKey){
+        return sonarRestService.getGeneralScanInfo(projectKey);
+    }
+
+    public SourcesBO getSources(String key){
+        return sonarRestService.getSources(key);
     }
 }

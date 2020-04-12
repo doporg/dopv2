@@ -1,7 +1,7 @@
 package com.clsaa.dop.server.testing.model.po;
 
 
-import com.clsaa.dop.server.testing.util.StartType;
+import com.clsaa.dop.server.testing.model.enums.StartType;
 import lombok.*;
 
 import javax.persistence.*;
