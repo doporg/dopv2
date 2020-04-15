@@ -69,6 +69,9 @@ class CreateForm extends React.Component {
           console.log(response.status);
           if(response.status === 200){
             toast.success(this.props.intl.messages["scan.quick.start.success"]);
+            console.log(response.data)
+            let route = '/scan/result/' + response.data;
+            this.props.history.push(route);
           }else{
             toast.error(this.props.intl.messages['scan.quick.start.fail']);
           }

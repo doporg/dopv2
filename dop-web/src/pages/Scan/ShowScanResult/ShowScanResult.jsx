@@ -3,6 +3,7 @@ import Axios from "axios";
 import { injectIntl } from "react-intl";
 import { Card, Collapse, Descriptions } from "antd";
 import "./SonarqubeCodeStyle.scss";
+import { Loading } from "@icedesign/base";
 import {
   API_GET_ISSUES,
   API_GET_SOURCES,
@@ -25,10 +26,9 @@ class ShowScanResult extends React.Component {
     this.fetchData();
   }
 
-
   fetchData = () => {
     const { projectKey } = this.state;
-    
+
     Axios.get(API_GET_ISSUES, {
       headers: {
         "x-login-user": "123456",
@@ -47,7 +47,7 @@ class ShowScanResult extends React.Component {
       for (const { component } of issues) {
         allSources.set(component, []);
       }
-    
+
       Promise.all(
         [...allSources.keys()].map((eachComponent) =>
           Axios.get(API_GET_SOURCES, {
@@ -67,7 +67,6 @@ class ShowScanResult extends React.Component {
       });
     });
 
-   
     Axios.get(API_GET_GENERALINFO, {
       headers: {
         "x-login-user": "123456",
@@ -112,7 +111,7 @@ class ShowScanResult extends React.Component {
               {issuesTotal}
             </Descriptions.Item>
             <Descriptions.Item
-              label={messages[`${pageIntl}.issues.effort-total`]+'(min)'}
+              label={messages[`${pageIntl}.issues.effort-total`] + "(min)"}
             >
               {issuesEffortTotal}
             </Descriptions.Item>
