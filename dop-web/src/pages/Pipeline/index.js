@@ -11,25 +11,30 @@ const pipelineConfig = [
     {
         path: '/pipeline',
         layout: BasicLayout,
-        component: Pipeline
+        component: Pipeline,
+        isLogin:true
     },
     {
         path: '/pipeline/new',
         layout: BasicLayout,
-        component: PipelineInfo
+        component: PipelineInfo,
+        isLogin:true
     },
     {
         path: '/pipeline/project/:id',
         layout: BasicLayout,
-        component: PipelineProject
+        component: PipelineProject,
+        isLogin:true
     }, {
         path: '/pipeline/edit/:id',
         layout: BasicLayout,
-        component: EditPipelineInfo
+        component: EditPipelineInfo,
+        isLogin:true
     },{
         path: '/pipeline/test',
         layout: BasicLayout,
-        component: PipelineTest
+        component: PipelineTest,
+        isLogin:true
     },
 ];
 

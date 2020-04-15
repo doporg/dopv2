@@ -36,8 +36,6 @@ public class RepoScanService {
     @Autowired
     private UserProjectMappingRepository userProjectMappingRepository;
     @Autowired
-    private EmbeddedScanner scanner;
-    @Autowired
     private SonarRestService sonarRestService;
     public String quickScan(Long userId, String codePath, String projectName, String codeUser, String codePwd) {
         String projectKey = ProjectKeyGenerator.generateProjectKey(projectName);
@@ -71,9 +69,7 @@ public class RepoScanService {
         projectSettingMap.put(ScanProperties.PROJECT_SOURCE_DIRS, "src\\main\\java");
         projectSettingMap.put(ScanProperties.PROJECT_SOURCE_ENCODING, "UTF-8");
         projectSettingMap. put("sonar.java.binaries", "target\\classes");
-        scanner.start();
         try {
-            scanner.execute(projectSettingMap);
             UserProjectMapping userProjectMapping = UserProjectMapping.builder().userId(userId).projectKey(projectKey).build();
             this.userProjectMappingRepository.saveAndFlush(userProjectMapping);
         }catch (Exception e){
@@ -90,7 +86,7 @@ public class RepoScanService {
 
     }
 
-    public String repoScan(Long userId, String codePath, String projectName, String codeUser, String codePwd, LanguageType languageType){
+    public String repoScan(Long userId, String codePath, String projectName, String codeUser, String codePwd, LanguageType languageType,StartType startType){
         String projectKey = ProjectKeyGenerator.generateProjectKey(projectName);
 
         //mkdir
@@ -116,7 +112,7 @@ public class RepoScanService {
 
         try {
             executeScan(projectSettingMap);
-            UserProjectMapping userProjectMapping = UserProjectMapping.builder().userId(userId).projectKey(projectKey).startType(StartType.CI).build();
+            UserProjectMapping userProjectMapping = UserProjectMapping.builder().userId(userId).projectKey(projectKey).startType(startType).build();
             this.userProjectMappingRepository.saveAndFlush(userProjectMapping);
         }finally {
             try {

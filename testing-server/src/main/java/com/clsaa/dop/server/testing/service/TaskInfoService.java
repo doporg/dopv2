@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -42,7 +43,8 @@ public class TaskInfoService {
             taskInfoVO.setStartType(e.getStartType());
             result.add(taskInfoVO);
         });
-        return result;
+         Collections.reverse(result);
+         return result;
     }
 
     public void getScanResult(String projectKey){
