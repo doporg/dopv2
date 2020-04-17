@@ -133,6 +133,11 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.vladmihalcea</groupId>
+            <artifactId>hibernate-types-52</artifactId>
+            <version>2.4.3</version>
+        </dependency>
         <!--result-->
         <dependency>
             <groupId>com.clsaa.rest.result</groupId>

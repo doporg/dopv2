@@ -1,4 +1,4 @@
-package com.clsaa.dop.server.link.model;
+package com.clsaa.dop.server.link.model.vo;
 
 import com.clsaa.dop.server.link.enums.Kind;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Span {
+public class SpanVO {
 
     /**
      * id: "352bff9a74ca9ad2"
@@ -21,11 +21,11 @@ public class Span {
      * timestamp: 1556604172355737
      * duration: 1431
      * kind: "SERVER"
-     * localEndpoint:
+     * localEndpointVO:
      *   serviceName: "backend"
      *   ipv4: "192.168.99.1"
      *   port: 3306
-     * remoteEndpoint:
+     * remoteEndpointVO:
      *   ipv4: "172.19.0.2"
      *   port: 58648
      * tags:
@@ -51,11 +51,11 @@ public class Span {
 
     private boolean shared;
 
-    private Endpoint localEndpoint;
+    private EndpointVO localEndpointVO;
 
-    private Endpoint remoteEndpoint;
+    private EndpointVO remoteEndpointVO;
 
-    private List<Annotation> annotations;
+    private List<AnnotationVO> annotations;
 
     private Map<String, String> tags;
 }

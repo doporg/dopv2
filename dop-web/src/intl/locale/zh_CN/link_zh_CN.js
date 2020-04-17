@@ -77,7 +77,12 @@ const LINK_ZH_CN = {
 
     // link detail页面
     'link.enter.traceId.prompt': '请输入您要查找的traceId',
-    'link.trace.not.exist': '您要查找的trace不存在'
+    'link.trace.not.exist': '您要查找的trace不存在',
+    'link.detail.overview': '概览',
+    'link.detail.duration': '持续时间：',
+    'link.detail.serviceNum': '服务数：',
+    'link.detail.depth': '深度：',
+    'link.detail.spanNum': 'span总数：'
 };
 
 export default LINK_ZH_CN;

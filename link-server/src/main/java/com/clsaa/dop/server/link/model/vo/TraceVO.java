@@ -1,6 +1,6 @@
 package com.clsaa.dop.server.link.model.vo;
 
-import com.clsaa.dop.server.link.model.Span;
+import com.clsaa.dop.server.link.model.po.Span;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,5 +28,5 @@ public class TraceVO {
 
     private boolean hasError; //出现错误了吗
 
-    private Span[] spansList;
+    private SpanVO[] spansList;
 }

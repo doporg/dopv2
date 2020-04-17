@@ -8,8 +8,8 @@ import Feedback from "@icedesign/base/lib/feedback";
 import Grid from "@icedesign/base/lib/grid";
 
 import '../linkStyles.css'
-import IcePanel from '@icedesign/panel';
 import ShowTraceOrNothing from "../components/ShowTraceOrNothing/ShowTraceOrNothing";
+import LinkOverview from "../components/LinkOverview/LinkOverview";
 
 const Toast = Feedback.toast;
 const {Row, Col} = Grid;
@@ -54,16 +54,99 @@ class LinkDetail extends Component{
             isLoading: true
         });
         let getTraceByIdUrl = API.link + "/getTraceById";
-        // let d = await
-        Axios.get(getTraceByIdUrl,{params:{traceId: traceId}}).then(response => {
-            let data = response.data;
-            console.log("data:" + JSON.stringify(data));
-            this.setState({
-                trace: data
-            });
-        }).catch((error) => {
-            console.log("根据Id查询trace失败：", error);
+        // Axios.get(getTraceByIdUrl,{params:{traceId: traceId}}).then(response => {
+        //     let data = response.data;
+        //     console.log("data:" + JSON.stringify(data));
+        //     this.setState({
+        //         trace: data
+        //     });
+        // }).catch((error) => {
+        //     console.log("根据Id查询trace失败：", error);
+        // });
+        let data = [
+            {
+                "traceId": "da1536541887c58c",
+                "name": "get /service2",
+                "parentId": null,
+                "id": "da1536541887c58c",
+                "kind": "SERVER",
+                "timestamp": 1585723339974491,
+                "duration": 56486,
+                "debug": false,
+                "shared": false,
+                "localEndpoint": {
+                    "serviceName": "ribbon-consumer",
+                    "ipv4": "192.168.191.2",
+                    "ipv6": null,
+                    "port": 0
+                },
+                "remoteEndpoint": null,
+                "annotations": null,
+                "tags": {
+                    "http.method": "GET",
+                    "http.path": "/service2",
+                    "mvc.controller.class": "HelloController",
+                    "mvc.controller.method": "getHello"
+                }
+            },
+            {
+                "traceId": "da1536541887c58c",
+                "name": "get /service1",
+                "parentId": "da1536541887c58c",
+                "id": "218ac2fc80901d80",
+                "kind": "CLIENT",
+                "timestamp": 1585723339992948,
+                "duration": 30686,
+                "debug": false,
+                "shared": false,
+                "localEndpoint": {
+                    "serviceName": "ribbon-consumer",
+                    "ipv4": "192.168.191.2",
+                    "ipv6": null,
+                    "port": 0
+                },
+                "remoteEndpoint": null,
+                "annotations": null,
+                "tags": {
+                    "http.method": "GET",
+                    "http.path": "/service1"
+                }
+            },
+            {
+                "traceId": "da1536541887c58c",
+                "name": "get /service1",
+                "parentId": "da1536541887c58c",
+                "id": "218ac2fc80901d80",
+                "kind": "SERVER",
+                "timestamp": 1585723340005384,
+                "duration": 17788,
+                "debug": false,
+                "shared": true,
+                "localEndpoint": {
+                    "serviceName": "ribbon-provider",
+                    "ipv4": "192.168.191.2",
+                    "ipv6": null,
+                    "port": 0
+                },
+                "remoteEndpoint": {
+                    "serviceName": null,
+                    "ipv4": "192.168.191.2",
+                    "ipv6": null,
+                    "port": 0
+                },
+                "annotations": null,
+                "tags": {
+                    "http.method": "GET",
+                    "http.path": "/service1",
+                    "mvc.controller.class": "HelloController",
+                    "mvc.controller.method": "getHello"
+                }
+            }
+        ];
+        this.setState({
+            trace: data
         });
+        console.log("获取data");
         this.setState({
             isLoading: false
         });
@@ -122,16 +205,9 @@ class LinkDetail extends Component{
                 </div>
 
                 <ShowTraceOrNothing traceId={this.state.traceId} trace={this.state.trace}>
-                    <IcePanel>
-                        <IcePanel.Header>概览</IcePanel.Header>
-                        <IcePanel.Body>{this.state.traceId}</IcePanel.Body>
-                    </IcePanel>
-                    <IcePanel>
-                        <IcePanel.Header>详情</IcePanel.Header>
-                        <IcePanel.Body>
-                            这里暂时什么也没有
-                        </IcePanel.Body>
-                    </IcePanel>
+                    <LinkOverview traceInfo={this.state.trace} traceId={this.state.traceId}/>
+                    {/*<SpanShow traceInfo={this.state.trace} traceId={this.state.traceId} />*/}
+                    {/*<LinkDependency traceInfo={this.state.trace} traceId={this.state.traceId} />*/}
                 </ShowTraceOrNothing>
 
             </div>);

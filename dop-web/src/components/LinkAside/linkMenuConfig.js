@@ -21,6 +21,11 @@ const linkAsideMenuConfig=[
         path: '/link/star',
         icon: 'favorite',
     },
+    {
+        name: <FormattedMessage id='link.bind' defaultMessage="监控绑定"/>,
+        path: '/link/notify-setting',
+        icon: 'set'
+    }
 
 ];
 export {linkAsideMenuConfig};

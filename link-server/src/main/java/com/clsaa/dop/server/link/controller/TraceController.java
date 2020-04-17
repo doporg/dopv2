@@ -1,6 +1,6 @@
 package com.clsaa.dop.server.link.controller;
 
-import com.clsaa.dop.server.link.model.Span;
+import com.clsaa.dop.server.link.model.vo.SpanVO;
 import com.clsaa.dop.server.link.model.vo.TraceVO;
 import com.clsaa.dop.server.link.service.ZipkinQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class TraceController {
     private ZipkinQueryService zipkinQueryService;
 
     @GetMapping(value = "/getTraceById")
-    public Span[] getTraceById(@RequestParam(value = "traceId")String traceId) {
+    public SpanVO[] getTraceById(@RequestParam(value = "traceId")String traceId) {
         System.out.println("traceId:" + traceId);
         return zipkinQueryService.getTraceById(traceId);
     }

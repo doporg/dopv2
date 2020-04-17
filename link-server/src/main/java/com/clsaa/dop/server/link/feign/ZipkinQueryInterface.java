@@ -1,6 +1,6 @@
 package com.clsaa.dop.server.link.feign;
 
-import com.clsaa.dop.server.link.model.Span;
+import com.clsaa.dop.server.link.model.vo.SpanVO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface ZipkinQueryInterface {
 
     @GetMapping("/api/v2/trace/{traceId}")
-    Span[] getTraceById(@PathVariable("traceId") String traceId);
+    SpanVO[] getTraceById(@PathVariable("traceId") String traceId);
 
 }

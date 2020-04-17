@@ -1,10 +1,8 @@
 package com.clsaa.dop.server.link.service;
 
-import com.clsaa.dop.server.link.config.BizCodes;
 import com.clsaa.dop.server.link.feign.ZipkinQueryInterface;
-import com.clsaa.dop.server.link.model.Span;
+import com.clsaa.dop.server.link.model.vo.SpanVO;
 import com.clsaa.dop.server.link.model.vo.TraceVO;
-import com.clsaa.rest.result.bizassert.BizAssert;
 import com.clsaa.rest.result.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,8 +22,8 @@ public class ZipkinQueryService {
      * @param traceId traceId
      * @return Trace
      */
-    public Span[] getTraceById(String traceId) {
-        Span[] res;
+    public SpanVO[] getTraceById(String traceId) {
+        SpanVO[] res;
         try {
             res = zipkinQueryInterface.getTraceById(traceId);
         } catch (NotFoundException e) {
@@ -56,7 +54,7 @@ public class ZipkinQueryService {
         return list;
     }
 
-    private TraceVO convertTraceToVo(String traceId, Span[] spanList) {
+    private TraceVO convertTraceToVo(String traceId, SpanVO[] spanList) {
 //        55555具体解析稍后再好好儿写
         if (null == spanList || spanList.length == 0) {
             return null;
@@ -66,8 +64,8 @@ public class ZipkinQueryService {
         traceVO.setSpanNum(spanList.length);
         boolean hasError = Arrays.stream(spanList).anyMatch(
                 span -> span.getTags().containsKey("error"));
-        Span[] rootSpan = Arrays.stream(spanList).filter(
-                span -> (span.getId().equals(traceId) && span.getParentId() == null)).toArray(Span[]::new);
+        SpanVO[] rootSpan = Arrays.stream(spanList).filter(
+                span -> (span.getId().equals(traceId) && span.getParentId() == null)).toArray(SpanVO[]::new);
         if (rootSpan.length == 0) {
             System.out.println("没找到父节点，非常不应该");
         }
