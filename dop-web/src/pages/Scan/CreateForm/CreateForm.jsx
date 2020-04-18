@@ -57,11 +57,7 @@ class CreateForm extends React.Component {
       this.setState({
         visible:true
       })
-      Axios.post(API_CREATE_SCAN, data, {
-        headers: {
-          "x-login-user": "123456",
-        },
-      })
+      Axios.post(API_CREATE_SCAN, data)
         .then((response) => {
           this.setState({
             visible: false,
@@ -180,7 +176,8 @@ class CreateForm extends React.Component {
               <li value="PYTHON">Python</li>
               <li value="GO">Go</li>
               <li value="JAVASCRIPT">JavaScript</li>
-              <li value="CPP">C++</li>
+              <li value="CSHARP">C#</li>
+              <li value="PHP">php</li>
             </Select>
           </FormItem>
           <FormItem wrapperCol={{ span: 16, offset: 6 }}>

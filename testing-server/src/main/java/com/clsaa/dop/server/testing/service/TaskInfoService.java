@@ -3,18 +3,15 @@ package com.clsaa.dop.server.testing.service;
 
 import com.clsaa.dop.server.testing.dao.UserProjectMappingRepository;
 import com.clsaa.dop.server.testing.manage.SonarRestService;
-import com.clsaa.dop.server.testing.model.bo.ScanIssuesBO;
-import com.clsaa.dop.server.testing.model.bo.SourcesBO;
-import com.clsaa.dop.server.testing.model.bo.TaskInfoBO;
-import com.clsaa.dop.server.testing.model.bo.TaskMeasuresBO;
+import com.clsaa.dop.server.testing.model.bo.*;
 import com.clsaa.dop.server.testing.model.po.UserProjectMapping;
 import com.clsaa.dop.server.testing.model.vo.TaskInfoVO;
-import com.clsaa.dop.server.testing.util.MyBeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,16 +36,18 @@ public class TaskInfoService {
         userProjectMappingsByUserId.forEach(e->{
             TaskInfoBO forObject = sonarRestService.getTaskInfo(e.getProjectKey());
             log.info(String.valueOf(forObject));
-            TaskInfoVO taskInfoVO = MyBeanUtils.convertType(forObject.getCurrent(),TaskInfoVO.class);
+            TaskComponent taskComponent = forObject.getCurrent();
+            TaskInfoVO taskInfoVO = new TaskInfoVO();
+            taskInfoVO.setComponentKey(taskComponent.getComponentKey());
+            taskInfoVO.setStatus(taskComponent.getStatus());
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateString = formatter.format(taskComponent.getSubmittedAt());
+            taskInfoVO.setSubmittedAt(dateString);
             taskInfoVO.setStartType(e.getStartType());
             result.add(taskInfoVO);
         });
          Collections.reverse(result);
          return result;
-    }
-
-    public void getScanResult(String projectKey){
-
     }
 
     public ScanIssuesBO getAllIssues(String projectKey){

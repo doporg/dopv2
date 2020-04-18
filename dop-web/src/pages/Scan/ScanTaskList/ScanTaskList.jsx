@@ -31,11 +31,7 @@ class ScanTaskList extends Component {
     getTaskInfo = () => {
         let url = API_GET_TASKS_INFO
         let self = this;
-        Axios.get(url,{
-            headers:{
-                'x-login-user':'123456'
-            }
-        }).then((response) => {
+        Axios.get(url).then((response) => {
             let dataSource = [];
             let data = response.data
             for (let i = 0; i < data.length; i++) {

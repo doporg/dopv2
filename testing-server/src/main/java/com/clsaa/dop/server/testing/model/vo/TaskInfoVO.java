@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -16,6 +15,6 @@ import java.util.Date;
 public class TaskInfoVO implements Serializable {
     private String componentKey;
     private String status;
-    private Date submittedAt;
+    private String submittedAt;
     private StartType startType;
 }

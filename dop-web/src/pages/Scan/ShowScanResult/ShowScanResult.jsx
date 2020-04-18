@@ -30,9 +30,6 @@ class ShowScanResult extends React.Component {
     const { projectKey } = this.state;
 
     Axios.get(API_GET_ISSUES, {
-      headers: {
-        "x-login-user": "123456",
-      },
       params: {
         projectKey: projectKey,
       },
@@ -51,9 +48,6 @@ class ShowScanResult extends React.Component {
       Promise.all(
         [...allSources.keys()].map((eachComponent) =>
           Axios.get(API_GET_SOURCES, {
-            headers: {
-              "x-login-user": "123456",
-            },
             params: { key: eachComponent },
           }).then((sourceResponse) => {
             allSources.set(eachComponent, sourceResponse.data.sources || []);
@@ -68,9 +62,6 @@ class ShowScanResult extends React.Component {
     });
 
     Axios.get(API_GET_GENERALINFO, {
-      headers: {
-        "x-login-user": "123456",
-      },
       params: { projectKey: projectKey },
     }).then((response) => {
       this.setState({
@@ -99,7 +90,7 @@ class ShowScanResult extends React.Component {
                 key={metric}
                 label={messages[`${pageIntl}.measures.${metric}`]}
               >
-                {value}
+                {value==null?'N/A':value}
               </Descriptions.Item>
             ))}
           </Descriptions>
@@ -109,11 +100,6 @@ class ShowScanResult extends React.Component {
           <Descriptions title={messages[`${pageIntl}.issues.title`]}>
             <Descriptions.Item label={messages[`${pageIntl}.issues.total`]}>
               {issuesTotal}
-            </Descriptions.Item>
-            <Descriptions.Item
-              label={messages[`${pageIntl}.issues.effort-total`] + "(min)"}
-            >
-              {issuesEffortTotal}
             </Descriptions.Item>
           </Descriptions>
           <Collapse>
@@ -155,6 +141,13 @@ class ShowScanResult extends React.Component {
                                 messages[
                                   `${pageIntl}.issues.type.${issue.type}`
                                 ]
+                              }
+                            </Descriptions.Item>
+                            <Descriptions.Item
+                              label={messages[`${pageIntl}.issues.effort`]}
+                            >
+                              {
+                                issue.effort
                               }
                             </Descriptions.Item>
                           </Descriptions>

@@ -11,7 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 /**
- * 与SonarWebServer交互
+ * 与Sonar WebServer交互
  * @author Vettel
  */
 @Service
@@ -21,7 +21,7 @@ public class SonarRestService {
     private RestTemplate restTemplate;
 
     public TaskInfoBO getTaskInfo(String projectKey){
-        String uri = SonarConfig.SONAR_SERVER_URL+ "/api/ce/component?component={projectKey}";
+        String uri = SonarConfig.SONAR_SERVER_URL+ "/api/ce/component?componentKey={projectKey}";
         URI build = UriComponentsBuilder.fromUriString(uri).build(projectKey);
         TaskInfoBO forObject = restTemplate.getForObject(build, TaskInfoBO.class);
         return  forObject;
@@ -33,25 +33,31 @@ public class SonarRestService {
         TaskMeasuresBO forObject = restTemplate.getForObject(build, TaskMeasuresBO.class);
         log.info("Measures:{}",forObject);
         return forObject.getMeasures().get(0);
-        /*ParameterizedTypeReference<List<TaskMeasureBO>> responseType = new ParameterizedTypeReference<List<TaskMeasureBO>>() {};
-        Map<String,String> params = new HashMap<>();
-        params.put("projectKey",projectKey);
-        ResponseEntity<List<TaskMeasureBO>> resp = restTemplate.exchange(uri, HttpMethod.GET,null, responseType,params);
-        List<TaskMeasureBO> list = resp.getBody();
-        return list.get(0);*/
     }
     public ScanIssuesBO getAllIssues(String projectKey){
-        String uri = SonarConfig.SONAR_SERVER_URL+"/api/issues/search?componentKeys={projectKey}&types=BUG,CODE_SMELL,SECURITY_HOTSPOT,VULNERABILITY";
+        String uri = SonarConfig.SONAR_SERVER_URL+"/api/issues/search?componentKeys={projectKey}&types=BUG,CODE_SMELL,VULNERABILITY";
         URI build = UriComponentsBuilder.fromUriString(uri).build(projectKey);
         return restTemplate.getForObject(build, ScanIssuesBO.class);
     }
 
     public TaskMeasuresBO getGeneralScanInfo(String projectKey){
-        String uri = SonarConfig.SONAR_SERVER_URL+"/api/measures/search?projectKeys={projectKey}&" +
-                "metricKeys=alert_status,bugs,reliability_rating" +
-                ",vulnerabilities,security_rating,security_hotspots" +
-                ",code_smells,sqale_rating,sqale_index,coverage" +
-                ",duplicated_lines_density,duplicated_blocks,ncloc,ncloc_language_distribution";
+        String uri = SonarConfig.SONAR_SERVER_URL+"/api/measures/search?projectKeys={projectKey}&metricKeys=" +
+                "alert_status," +
+                "bugs," +
+                "new_bugs,"+
+                "vulnerabilities,"+
+                "new_vulnerabilities,"+
+                "reliability_rating," +
+                "code_smells,"+
+                "new_code_smells,"+
+                "security_rating," +
+                "sqale_rating," +
+                "sqale_index," +
+                "coverage," +
+                "duplicated_lines_density," +
+                "duplicated_blocks," +
+                "ncloc," +
+                "ncloc_language_distribution";
         URI build = UriComponentsBuilder.fromUriString(uri).build(projectKey);
         return restTemplate.getForObject(build, TaskMeasuresBO.class);
 

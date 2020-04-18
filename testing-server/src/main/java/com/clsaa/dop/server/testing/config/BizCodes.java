@@ -26,4 +26,9 @@ public interface BizCodes {
      * 数据库更新失败
      */
     BizCode ERROR_UPDATE = new BizCode(1012, "更新失败");
+
+
+    BizCode GIT_OPERATE = new BizCode(14201,"Git操作失败");
+
+    BizCode FILE_OPERATE = new BizCode(14202,"文件操作失败");
 }

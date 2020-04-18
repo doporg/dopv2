@@ -30,7 +30,7 @@ const SCAN_ZH_CN = {
 
 
     'scan.result.issues.title': '缺陷详情',
-    'scan.result.issues.effort-total': '预计修复时间',
+    'scan.result.issues.effort': '预计修复时间',
     'scan.result.issues.total': '缺陷总数',
     'scan.result.issues.severity': '缺陷级别',
     'scan.result.issues.severity.CRITICAL': 'CRITICAL',
@@ -60,7 +60,11 @@ const SCAN_ZH_CN = {
     'scan.result.measures.security_rating': 'security_rating',
     'scan.result.measures.sqale_index': 'sqale_index',
     'scan.result.measures.sqale_rating': 'sqale_rating',
-    'scan.result.measures.vulnerabilities': 'vulnerabilities'
+    'scan.result.measures.vulnerabilities': 'vulnerabilities',
+    'scan.result.measures.new_bugs':'new_bugs',
+    'scan.result.measures.new_code_smells':'new_code_smells',
+    'scan.result.measures.new_security_hotspots':'new_security_hotspots',
+    'scan.result.measures.new_vulnerabilities':'new_vulnerabilities',
 }
 
 export default SCAN_ZH_CN;

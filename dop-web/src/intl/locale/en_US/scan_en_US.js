@@ -30,7 +30,7 @@ const SCAN_EN_US = {
 
 
     'scan.result.issues.title':'Issues Detail',
-    'scan.result.issues.effort-total':'Estimated effort total',
+    'scan.result.issues.effort':'Estimated effort',
     'scan.result.issues.total':'Total issues',
     'scan.result.issues.severity':'severity',
     'scan.result.issues.severity.CRITICAL':'CRITICAL',
@@ -60,7 +60,11 @@ const SCAN_EN_US = {
     'scan.result.measures.security_rating':'security_rating',
     'scan.result.measures.sqale_index':'sqale_index',
     'scan.result.measures.sqale_rating':'sqale_rating',
-    'scan.result.measures.vulnerabilities':'vulnerabilities'
+    'scan.result.measures.vulnerabilities':'vulnerabilities',
+    'scan.result.measures.new_bugs':'new_bugs',
+    'scan.result.measures.new_code_smells':'new_code_smells',
+    'scan.result.measures.new_security_hotspots':'new_security_hotspots',
+    'scan.result.measures.new_vulnerabilities':'new_vulnerabilities',
 }
 
 export default SCAN_EN_US

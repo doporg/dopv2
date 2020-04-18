@@ -1,4 +1,6 @@
-const host_url = 'http://localhost:8888/api/v2/scan'
+import API from '../API'
+
+const host_url = API.scan
 export const API_GET_TASKS_INFO = host_url+'/tasks'
 export const API_CREATE_SCAN = host_url+'/quick'
 export const API_GET_ISSUES = host_url+'/issues'

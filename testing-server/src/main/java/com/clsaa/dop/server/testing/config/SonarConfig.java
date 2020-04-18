@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SonarConfig {
-    public static final String SONAR_SERVER_URL = "http://192.168.31.151:9000";
-    public static final String SONAR_TOKEN = "8aee6a6036c773efe6209370c30e3b7b86e02285";
+    public static final String SONAR_SERVER_URL = "http://115.28.186.77:9000";
+    public static final String SONAR_TOKEN = "0f3f04560a0fb62bf8173fa509f578d1f3cebdd1";
 
     /*@Bean
     public EmbeddedScanner embeddedScanner(){
