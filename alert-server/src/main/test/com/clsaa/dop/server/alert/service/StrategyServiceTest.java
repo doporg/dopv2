@@ -1,9 +1,8 @@
 package com.clsaa.dop.server.alert.service;
 
-import com.clsaa.dop.server.alert.model.po.Contact;
-import com.clsaa.dop.server.alert.model.po.Rule;
-import com.clsaa.dop.server.alert.model.po.Strategy;
-import com.clsaa.dop.server.alert.service.StrategyService;
+import com.clsaa.dop.server.alert.model.po.ContactPo;
+import com.clsaa.dop.server.alert.model.po.RulePo;
+import com.clsaa.dop.server.alert.model.po.StrategyPo;
 import org.junit.Test;
 import org.junit.Before; 
 import org.junit.After;
@@ -38,30 +37,30 @@ public class StrategyServiceTest {
 
 	/**
 	*
-	* Method: addNewStrategy(Strategy strategy)
+	* Method: addNewStrategy(StrategyPo strategy)
 	*
 	*/
 	@Test
 	public void testAddNewStrategy() throws Exception {
 	//TODO: Test goes here...
-		Strategy strategy = new Strategy();
-		strategy.setAlertName("test");
-		strategy.setContactWays(Strategy.ContactWays.EmailAndMessage);
-		strategy.setUserId((long) 11);
-		strategy.setDescription("add test");
-		strategy.setInform_interval(10);
-		strategy.setLevel(Strategy.Level.Normal);
-		strategy.setState(Strategy.State.Off);
+		StrategyPo strategyPo = new StrategyPo();
+		strategyPo.setAlertName("test");
+		strategyPo.setContactWays(StrategyPo.ContactWays.EmailAndMessage);
+		strategyPo.setUserId((long) 11);
+		strategyPo.setDescription("add test");
+		strategyPo.setInform_interval(10);
+		strategyPo.setLevel(StrategyPo.Level.Normal);
+		strategyPo.setState(StrategyPo.State.Off);
 
-		ArrayList<Rule> rules = new ArrayList<>();
-		rules.add(new Rule("rule1",50, Rule.Relation.smaller,10));
+		ArrayList<RulePo> rulePOS = new ArrayList<>();
+		rulePOS.add(new RulePo("rule1",50, RulePo.Relation.smaller,10));
 
-		ArrayList<Contact> contacts = new ArrayList<>();
-		contacts.add(new Contact((long) 1,"c11","123123","123@123"));
+		ArrayList<ContactPo> contacts = new ArrayList<>();
+//		contacts.add(new ContactPo((long) 1,"c11","123123","123@123"));
 
-		strategy.setRuleList(rules);
-		strategy.setContactList(contacts);
-		strategyService.addNewStrategy(strategy);
+		strategyPo.setRulePOList(rulePOS);
+		strategyPo.setContactList(contacts);
+		strategyService.addNewStrategy(strategyPo);
 
 	}
 
@@ -87,7 +86,7 @@ public class StrategyServiceTest {
 
 	/**
 	*
-	* Method: modifyStrategy(Strategy strategy)
+	* Method: modifyStrategy(StrategyPo strategy)
 	*
 	*/
 	@Test

@@ -1,16 +1,15 @@
 package com.clsaa.dop.server.alert.model.po;
 
-import jdk.nashorn.internal.objects.annotations.Constructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * @ClassName Strategy
+ * @ClassName StrategyPo
  * @Author 洪铨健
  * @Version 1.0
  * @Describtion 告警策略类
@@ -21,7 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "Strategy")
-public class Strategy implements Serializable{
+public class StrategyPo implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,9 +36,9 @@ public class Strategy implements Serializable{
 	/**
 	 * 告警规则列表
 	 */
-	@JoinColumn(name = "ruleList")
+	@JoinColumn(name = "rulePOList")
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<Rule> ruleList;
+	private List<RulePo> rulePOList;
 
 	/**
 	 * 告警名称
@@ -84,7 +83,7 @@ public class Strategy implements Serializable{
 	 */
 	@Column(name = "contactList")
 	@ManyToMany
-	private List<Contact> contactList;
+	private List<ContactPo> contactList;
 
 	/**
 	 * 告警联系方式：邮箱，短信，邮箱和短信
@@ -103,7 +102,38 @@ public class Strategy implements Serializable{
 		}
 	}
 
-	public Strategy() {
+	/**
+	 * 创建时间
+	 */
+	@Column(name = "ctime")
+	private LocalDateTime ctime;
+
+	/**
+	 * 修改时间
+	 */
+	@Column(name = "mtime")
+	private LocalDateTime mtime;
+
+	/**
+	 * 创建人
+	 */
+	@Column(name = "cuser")
+	private Long cuser;
+
+	/**
+	 * 修改人
+	 */
+	@Column(name = "muser")
+	private Long muser;
+
+	/**
+	 * 删除标记
+	 */
+	@Column(name = "is_deleted")
+	private Boolean deleted;
+
+
+	public StrategyPo() {
 	}
 
 

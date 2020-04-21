@@ -6,6 +6,7 @@
     <file url="file://$PROJECT_DIR$/discovery-server" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/example-server" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/example-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/gateway-server" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/link-server" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/link-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/monitoring-server" charset="UTF-8" />

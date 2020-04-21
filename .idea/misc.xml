@@ -12,6 +12,7 @@
         <option value="$PROJECT_DIR$/alert-server/pom.xml" />
         <option value="$PROJECT_DIR$/example-server/pom.xml" />
         <option value="$PROJECT_DIR$/discovery-server/pom.xml" />
+        <option value="$PROJECT_DIR$/gateway-server/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

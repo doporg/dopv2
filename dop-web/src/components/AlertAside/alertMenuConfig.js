@@ -15,6 +15,11 @@ const alertMenuConfig=[
         name: <FormattedMessage id="alert.menu.alertLog" defaultMessage="告警日志"/>,
         path: '/alert/alertLog',
         icon: 'history',
-    }
+    },
+    {
+        name: <FormattedMessage id="alert.menu.Contact" defaultMessage="告警联系人"/>,
+        path: '/alert/Contact',
+        icon: 'person',
+    },
 ];
 export {alertMenuConfig};

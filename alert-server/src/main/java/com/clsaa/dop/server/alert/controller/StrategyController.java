@@ -1,16 +1,11 @@
 package com.clsaa.dop.server.alert.controller;
 
-import com.clsaa.dop.server.alert.model.po.Strategy;
 import com.clsaa.dop.server.alert.service.StrategyService;
-import com.clsaa.rest.result.Pagination;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 
 /**
  * @ClassName StrategyController
@@ -22,7 +17,7 @@ import java.util.ArrayList;
  **/
 
 @CrossOrigin
-@Controller
+@RestController
 @RequestMapping("/alert")
 public class StrategyController {
 
@@ -34,6 +29,10 @@ public class StrategyController {
 		System.out.println(id);
 	}
 
+	@PostMapping("/test2")
+	public void testpost() {
+		System.out.println("!!!!");
+	}
 
 	@ApiOperation(value = "创建一个新策略",notes = "")
 	@PostMapping("/strategy")

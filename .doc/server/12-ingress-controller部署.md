@@ -62,7 +62,7 @@ metadata:
   labels:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-rules:
+rulePOS:
   - apiGroups:
       - ""
     resources:
@@ -121,7 +121,7 @@ metadata:
   labels:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-rules:
+rulePOS:
   - apiGroups:
       - ""
     resources:
@@ -357,7 +357,7 @@ metadata:
  name: gateway-server
  namespace: dop
 spec:
- rules:
+ rulePOS:
    - host: open.dop.clsaa.com
      http:
        paths:
@@ -371,7 +371,7 @@ metadata:
  name: dop-web
  namespace: dop
 spec:
- rules:
+ rulePOS:
    - host: www.dop.clsaa.com
      http:
        paths:

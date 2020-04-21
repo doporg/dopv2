@@ -1,7 +1,7 @@
 package com.clsaa.dop.server.alert.service;
 
 import com.clsaa.dop.server.alert.dao.StrategyDao;
-import com.clsaa.dop.server.alert.model.po.Strategy;
+import com.clsaa.dop.server.alert.model.po.StrategyPo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,11 +23,11 @@ public class StrategyService {
 	@Autowired
 	StrategyDao strategyDao;
 
-	public void addNewStrategy(Strategy strategy) {
-		strategyDao.save(strategy);
+	public void addNewStrategy(StrategyPo strategyPo) {
+		strategyDao.save(strategyPo);
 	}
 
-	public ArrayList<Strategy> getStrategyById(Long userId) {
+	public ArrayList<StrategyPo> getStrategyById(Long userId) {
 		return strategyDao.getStrategiesByUserId(userId);
 	}
 
@@ -35,7 +35,7 @@ public class StrategyService {
 		strategyDao.deleteById(sid);
 	}
 
-	public void updateStrategy(Strategy strategy) {
-		strategyDao.save(strategy);
+	public void updateStrategy(StrategyPo strategyPo) {
+		strategyDao.save(strategyPo);
 	}
 }

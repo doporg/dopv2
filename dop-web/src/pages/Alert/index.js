@@ -1,9 +1,9 @@
 import Alert from './Alert'
-import BasicLayout from "../../layouts/BasicLayout";
 import Strategy from "./Strategy/Strategy";
 import AlertLog from "./AlertLog/AlertLog";
 import AlertLayout from "../../layouts/AlertLayout/AlertLayout";
 import NewStrategy from "./NewStrategy/NewStrategy";
+import Contact from "./Contact/Contact";
 
 const alertConfig = [
     {
@@ -27,6 +27,12 @@ const alertConfig = [
     {
         path: '/alert/NewStrategy',
         component: NewStrategy,
+        layout: AlertLayout,
+        isLogin: true
+    },
+    {
+        path: '/alert/Contact',
+        component: Contact,
         layout: AlertLayout,
         isLogin: true
     }

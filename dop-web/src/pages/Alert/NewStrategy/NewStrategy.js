@@ -61,16 +61,15 @@ class NewStrategy extends React.Component {
 
 
     addStrategy() {
-        let url=API.alert+"/test";
+        let url=API.alert+"/alert/test";
         Axios({
             method:"POST",
-            // headers:{
-            //     'Content-Type':'application/json;charset=utf-8',
-            //     HttpHeaders:{
-            //         'X_LOGIN_USER':'111',
-            //         "x-login-token":"1",
-            //     },
-            // },
+            headers:{
+                'Content-Type':'application/x-www-form-urlencoded',
+                'x-login-user':2,
+
+            },
+
             url:url,
             data:{},
             params:{
