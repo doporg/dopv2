@@ -1,13 +1,11 @@
 package com.clsaa.dop.server.link.model.po;
 
+import com.clsaa.dop.server.link.enums.MonitorState;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -29,13 +27,16 @@ public class Bind {
 
     private String cuserName;//创建者的name
 
-    private long notifiedUid; //被通知者的id
+    private String notifiedUid; //被通知者的id,可以有多个人，用逗号分隔
 
-    private long notifiedName; //被通知者的name
+    private String notifiedName; //被通知者的name，同notifiedUid
 
-    private String notifiedEmail; //被通知者的邮箱
+    private String notifiedEmail; //被通知者的邮箱，同上
 
     private String services;//这个监控要关注的微服务，不选默认all, 微服务之间用逗号隔开
 
     private double threshold;// 阈值 单位时间内调用链n次调用>=m次出错通知
+
+    @Enumerated(EnumType.STRING)
+    private MonitorState state; //
 }

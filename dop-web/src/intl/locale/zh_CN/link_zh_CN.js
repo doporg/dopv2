@@ -5,6 +5,7 @@ const LINK_ZH_CN = {
     'link.list': '链路筛选',
     'link.detail': '链路搜索',
     'link.star': '收藏列表',
+    'link.bind': '监控绑定',
 
     'link.cancel': '取消',
     'link.confirm': '确定',
@@ -82,7 +83,20 @@ const LINK_ZH_CN = {
     'link.detail.duration': '持续时间：',
     'link.detail.serviceNum': '服务数：',
     'link.detail.depth': '深度：',
-    'link.detail.spanNum': 'span总数：'
+    'link.detail.spanNum': 'span总数：',
+
+    // 监控绑定模块
+    'link.bind.create': '创建链路监控',
+    'link.bind.tabletitle.id': 'Id',
+    'link.bind.tabletitle.title': '名称',
+    'link.bind.tabletitle.projectName': '项目名',
+    'link.bind.tabletitle.microservice': '微服务',
+    'link.bind.tabletitle.threshold': '阈值',
+    'link.bind.tabletitle.state': '当前状态',
+    'link.bind.tabletitle.notifier': '通知人员',
+
+    'link.bind.form.title': '标题',
+    'link.choose.service': '选择微服务',
 };
 
 export default LINK_ZH_CN;

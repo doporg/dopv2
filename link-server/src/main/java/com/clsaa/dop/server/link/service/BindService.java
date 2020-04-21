@@ -24,7 +24,15 @@ public class BindService {
 
     }
 
-    public void delById(long bid) {
+    public void stop(long nid) {
+
+    }
+
+    public void start(long nid) {
+
+    }
+
+    public void delete(long bid) {
         bindDao.deleteById(bid);
     }
 

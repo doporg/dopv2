@@ -5,12 +5,10 @@ import com.clsaa.dop.server.link.feign.ProjectInterface;
 import com.clsaa.dop.server.link.model.dto.ProjectVO;
 import com.clsaa.rest.result.Pagination;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin
 public class OtherApplicationController {
 
     @Autowired

@@ -5,6 +5,7 @@ const LINK_EN_US = {
     'link.list': 'Link screening',
     'link.detail': 'Link Search',
     'link.star': 'Favorites list',
+    'link.bind': 'Bind and Notify',
 
     'link.cancel': 'Cancel',
     'link.confirm': 'Confirm',
@@ -82,7 +83,19 @@ const LINK_EN_US = {
     'link.detail.duration': 'Duration: ',
     'link.detail.serviceNum': 'Number of services: ',
     'link.detail.depth': 'Depth: ',
-    'link.detail.spanNum': 'Number of spans: '
+    'link.detail.spanNum': 'Number of spans: ',
+
+    // 监控绑定模块
+    'link.bind.create': 'Create Monitor',
+    'link.bind.tabletitle.id': 'Id',
+    'link.bind.tabletitle.title': 'Title',
+    'link.bind.tabletitle.projectName': 'Project Name',
+    'link.bind.tabletitle.microservice': 'Microservices',
+    'link.bind.tabletitle.threshold': 'Threshold',
+    'link.bind.tabletitle.state': 'State',
+    'link.bind.tabletitle.notifier': 'Notifier',
+
+    'link.choose.service': 'Select a service'
 };
 
 export default LINK_EN_US;

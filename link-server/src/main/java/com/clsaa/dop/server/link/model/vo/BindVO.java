@@ -1,5 +1,6 @@
 package com.clsaa.dop.server.link.model.vo;
 
+import com.clsaa.dop.server.link.enums.MonitorState;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,13 +18,15 @@ public class BindVO {
 
     private String projectTitle;
 
-    private long notifiedUid; //被通知者的id
+    private long[] notifiedUid; //被通知者的id
 
-    private long notifiedName; //被通知者的name
+    private String[] notifiedName; //被通知者的name
 
-    private String notifiedEmail; //被通知者的邮箱
+    private String[] notifiedEmail; //被通知者的邮箱
 
-    private String[] services;//这个监控要关注的微服务，不选默认all, 微服务之间用逗号隔开
+    private String service;//这个监控要关注的微服务，每条数据只能绑定一个微服务
 
     private double threshold;// 阈值 单位时间内调用链n次调用>=m次出错通知
+
+    private MonitorState state;
 }

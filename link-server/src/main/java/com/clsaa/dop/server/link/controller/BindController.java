@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 public class BindController {
+
+    // 监控流水线，可以创建、删除、停止、开始、编辑、查看列表
 
     @Autowired
     private BindService service;
@@ -18,8 +21,30 @@ public class BindController {
         return service.getList(cUserId);
     }
 
-    @PostMapping(value = "/newBind")
+    @PostMapping(value = "/bind/new")
     public void newBind(@RequestBody BindVO bindVO) {
-
+        service.add(bindVO);
     }
+
+    @DeleteMapping(value = "/bind/delete")
+    public void deleteBind(@RequestParam(name = "bid")Long bid) {
+        service.delete(bid);
+    }
+
+    @PutMapping(value = "/bind/modify")
+    public void modifyBind(@RequestBody BindVO bindVO) {
+        service.modify(bindVO);
+    }
+
+    @PostMapping(value = "/bind/stop")
+    public void stopBind(@RequestParam(name = "bid")Long bid) {
+        service.stop(bid);
+    }
+
+    @PostMapping(value = "/bind/start")
+    public void startBind(@RequestParam(name = "bid")Long bid) {
+        service.start(bid);
+    }
+
+
 }
