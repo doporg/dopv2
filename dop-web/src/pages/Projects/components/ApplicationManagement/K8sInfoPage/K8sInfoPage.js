@@ -55,11 +55,11 @@ class K8sInfoPage extends Component {
     * 获取集群内所有命名空间
     */
     getNameSpaceData() {
-        let _this = this;
-        let namespaceUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/cluster/allNamespaces";
+        let _this = this
+        let namespaceUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/cluster/allNamespaces"
         Axios.get(namespaceUrl)
             .then((response) => {
-                console.log("nameSpace", response);
+                console.log("nameSpace", response)
                 _this.setState({
                     nameSpaceData: response.data
                 })
@@ -77,7 +77,7 @@ class K8sInfoPage extends Component {
             })
         } else {
             let _this = this;
-            let namespaceUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/cluster/allServices";
+            let namespaceUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/cluster/allServices"
             Axios.get(namespaceUrl, {
                 params: {
                     namespace: namespace,
@@ -103,7 +103,7 @@ class K8sInfoPage extends Component {
             })
         } else {
             let _this = this;
-            let namespaceUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/cluster/allDeployment";
+            let namespaceUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/cluster/allDeployment"
             Axios.get(namespaceUrl, {
                 params: {
                     namespace: _this.field.getValue("nameSpace"),
@@ -129,8 +129,8 @@ class K8sInfoPage extends Component {
         let _this = this;
         this.setState({
             loading: true
-        });
-        let url = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/yaml";
+        })
+        let url = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/yaml"
         Axios.get(url)
             .then((response) => {
                 // console.log("yaml", response);
@@ -141,9 +141,9 @@ class K8sInfoPage extends Component {
                     _this.setState({
                         editMode: true,
                         yamlData: []
-                    });
+                    })
                     //获取所有命名空间
-                    _this.getNameSpaceData();
+                    _this.getNameSpaceData()
                     _this.setState({loading: false})
                 } else {
                     //判断是否使用yaml文件路径 分别赋值
@@ -165,10 +165,10 @@ class K8sInfoPage extends Component {
                             yamlData: response.data,
                             yamlMode: 'profile',
 
-                        });
-                        _this.getNameSpaceData();
-                        _this.getServiceData(this.state.yamlData.nameSpace);
-                        _this.yamlEditorfield.setValue("deploymentYaml", response.data.deploymentEditableYaml);
+                        })
+                        _this.getNameSpaceData()
+                        _this.getServiceData(this.state.yamlData.nameSpace)
+                        _this.yamlEditorfield.setValue("deploymentYaml", response.data.deploymentEditableYaml)
                         _this.setState({loading: false})
                     }
 
@@ -191,9 +191,9 @@ class K8sInfoPage extends Component {
                 _this.setState({
                     editMode: true,
                     yamlData: []
-                });
+                })
                 //获取所有命名空间
-                _this.getNameSpaceData();
+                _this.getNameSpaceData()
                 _this.setState({loading: false})
             })
     }
@@ -210,8 +210,8 @@ class K8sInfoPage extends Component {
 
     componentWillReceiveProps(nextProps, nextContext) {
         if (nextProps.refreshK8sInfo) {
-            console.log("will", nextProps);
-            this.getYamlData();
+            console.log("will", nextProps)
+            this.getYamlData()
             // this.getNameSpaceData()
             // this.getServiceData(this.state.yamlData.nameSpace)
             nextProps.refreshFinished()
@@ -228,22 +228,22 @@ class K8sInfoPage extends Component {
     };
 
     onNamespaceInputUpdate(e, value) {
-        this.field.setValue("nameSpace", value.value);
+        this.field.setValue("nameSpace", value.value)
         this.getServiceData(value.value)
 
     }
 
     onInputBlur(e, value) {
-        console.log("inputUpdate", value);
+        console.log("inputUpdate", value)
         this.field.setValue("service", value)
 
     }
 
     onServiceChange(e, value) {
-        console.log("onserviceChanged");
-        this.field.setValue("service", value.value);
-        this.field.setValue("deployment", "");
-        this.field.setValue("container", "");
+        console.log("onserviceChanged")
+        this.field.setValue("service", value.value)
+        this.field.setValue("deployment", "")
+        this.field.setValue("container", "")
         if (!this.state.createService) {
             this.getDeploymentData()
         }
@@ -260,15 +260,15 @@ class K8sInfoPage extends Component {
     }
 
     toggleCreateService() {
-        console.log("toggleCreateService");
+        console.log("toggleCreateService")
         this.setState({
             createService: !this.state.createService
         })
     }
 
     switchYamlMode(e, values) {
-        console.log(values);
-        let value = values.value;
+        console.log(values)
+        let value = values.value
         if (value === 'profile') {
             this.getNameSpaceData()
         }
@@ -293,16 +293,16 @@ class K8sInfoPage extends Component {
         //先判断是否使用yaml路径
         if (this.state.yamlMode === 'path') {
             this.yamlPathField.validate((errors, values) => {
-                console.log(errors);
+                console.log(errors)
                 if (errors === null) {
                     this.setState({
                         loading: true
-                    });
+                    })
                     //再判断数据库中是否有yaml信息
-                    let existUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/yamlStatus";
+                    let existUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/yamlStatus"
                     Axios.get(existUrl)
                         .then((response) => {
-                            console.log("responsssss", response);
+                            console.log("responsssss", response)
                             //有则更新
                             if (response.data) {
                                 let url = API.application + '/app/env/' + this.state.appEnvId + '/yaml';
@@ -314,10 +314,10 @@ class K8sInfoPage extends Component {
                                         }
                                     }
                                 ).then((response) => {
-                                    Toast.success(_this.props.intl.messages['projects.text.updateSuccessful']);
+                                    Toast.success(_this.props.intl.messages['projects.text.updateSuccessful'])
                                     _this.setState({
                                         loading: false
-                                    });
+                                    })
                                     //提交完成后刷新当前页面
                                     _this.getYamlData()
                                 })
@@ -338,10 +338,10 @@ class K8sInfoPage extends Component {
                                         }
                                     }
                                 ).then((response) => {
-                                    Toast.success(_this.props.intl.messages['projects.text.updateSuccessful']);
+                                    Toast.success(_this.props.intl.messages['projects.text.updateSuccessful'])
                                     _this.setState({
                                         loading: false
-                                    });
+                                    })
                                     //提交完成后刷新当前页面
                                     _this.getYamlData()
                                 }).catch((response) => {
@@ -377,8 +377,8 @@ class K8sInfoPage extends Component {
                                 //如果是则新建服务
                                 this.setState({
                                     loading: true
-                                });
-                                let createServiceUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/cluster/service";
+                                })
+                                let createServiceUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/cluster/service"
                                 if (this.state.useIngress === "ingress") {
                                     Axios.post(createServiceUrl, {}, {
                                         params: {
@@ -389,15 +389,15 @@ class K8sInfoPage extends Component {
                                         }
                                     })
                                         .then(() => {
-                                            Toast.success(_this.props.intl.messages['projects.text.createServiceSuccessful']);
+                                            Toast.success(_this.props.intl.messages['projects.text.createServiceSuccessful'])
 
                                             //然后判断是否存在yaml属性
                                             let url = API.application + '/app/env/' + this.state.appEnvId + "/yaml";
 
-                                            let existUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/yamlStatus";
+                                            let existUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/yamlStatus"
                                             Axios.get(existUrl)
                                                 .then((response) => {
-                                                    console.log("responsssss", response);
+                                                    console.log("responsssss", response)
                                                     if (response.data) {
                                                         //存在则更新
                                                         Axios.put(url, {}, {
@@ -413,10 +413,10 @@ class K8sInfoPage extends Component {
                                                             }
                                                         )
                                                             .then(function (response) {
-                                                                Toast.success(_this.props.intl.messages['projects.text.updateSuccessful']);
+                                                                Toast.success(_this.props.intl.messages['projects.text.updateSuccessful'])
                                                                 _this.setState({
                                                                     loading: false
-                                                                });
+                                                                })
                                                                 //提交完成后刷新当前页面
                                                                 _this.getYamlData()
                                                             })
@@ -442,10 +442,10 @@ class K8sInfoPage extends Component {
                                                             }
                                                         )
                                                             .then(function (response) {
-                                                                Toast.success(_this.props.intl.messages['projects.text.updateSuccessful']);
+                                                                Toast.success(_this.props.intl.messages['projects.text.updateSuccessful'])
                                                                 _this.setState({
                                                                     loading: false
-                                                                });
+                                                                })
                                                                 //提交完成后刷新当前页面
                                                                 _this.getYamlData()
                                                             })
@@ -470,15 +470,15 @@ class K8sInfoPage extends Component {
                                         }
                                     })
                                         .then(() => {
-                                            Toast.success(_this.props.intl.messages['projects.text.createServiceSuccessful']);
+                                            Toast.success(_this.props.intl.messages['projects.text.createServiceSuccessful'])
 
                                             //然后判断是否存在yaml属性
                                             let url = API.application + '/app/env/' + this.state.appEnvId + "/yaml";
 
-                                            let existUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/yamlStatus";
+                                            let existUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/yamlStatus"
                                             Axios.get(existUrl)
                                                 .then((response) => {
-                                                    console.log("responsssss", response);
+                                                    console.log("responsssss", response)
                                                     if (response.data) {
                                                         //存在则更新
                                                         Axios.put(url, {}, {
@@ -494,10 +494,10 @@ class K8sInfoPage extends Component {
                                                             }
                                                         )
                                                             .then(function (response) {
-                                                                Toast.success(_this.props.intl.messages['projects.text.updateSuccessful']);
+                                                                Toast.success(_this.props.intl.messages['projects.text.updateSuccessful'])
                                                                 _this.setState({
                                                                     loading: false
-                                                                });
+                                                                })
                                                                 //提交完成后刷新当前页面
                                                                 _this.getYamlData()
                                                             })
@@ -523,10 +523,10 @@ class K8sInfoPage extends Component {
                                                             }
                                                         )
                                                             .then(function (response) {
-                                                                Toast.success(_this.props.intl.messages['projects.text.updateSuccessful']);
+                                                                Toast.success(_this.props.intl.messages['projects.text.updateSuccessful'])
                                                                 _this.setState({
                                                                     loading: false
-                                                                });
+                                                                })
                                                                 //提交完成后刷新当前页面
                                                                 _this.getYamlData()
                                                             })
@@ -558,21 +558,21 @@ class K8sInfoPage extends Component {
     }
 
     postYamlInfo() {
-        let _this = this;
+        let _this = this
         _this.setState({
             loading: true
-        });
+        })
         this.field.validate((errors, values) => {
 
             console.log(errors, values);
 
             // 没有异常则提交表单
             if (errors === null) {
-                let url = API.application + '/app/env/' + this.state.appEnvId + '/yaml';
-                let existUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/yamlStatus";
+                let url = API.application + '/app/env/' + this.state.appEnvId + '/yaml'
+                let existUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/yamlStatus"
                 Axios.get(existUrl)
                     .then((response) => {
-                        console.log(response);
+                        console.log(response)
                         if (response.data) {
                             Axios.put(url, {}, {
                                     params: {
@@ -588,10 +588,10 @@ class K8sInfoPage extends Component {
                                 }
                             )
                                 .then(function (response) {
-                                    Toast.success(_this.props.intl.messages['projects.text.updateSuccessful']);
+                                    Toast.success(_this.props.intl.messages['projects.text.updateSuccessful'])
                                     _this.setState({
                                         loading: false
-                                    });
+                                    })
                                     //提交完成后刷新当前页面
                                     _this.getYamlData()
                                 })
@@ -615,10 +615,10 @@ class K8sInfoPage extends Component {
                                 }
                             )
                                 .then(function (response) {
-                                    Toast.success(_this.props.intl.messages['projects.text.updateSuccessful']);
+                                    Toast.success(_this.props.intl.messages['projects.text.updateSuccessful'])
                                     _this.setState({
                                         loading: false
-                                    });
+                                    })
                                     //提交完成后刷新当前页面
                                     _this.getYamlData()
                                 })
@@ -635,7 +635,7 @@ class K8sInfoPage extends Component {
 
 
     yamlInfoRender() {
-        const {init} = this.field;
+        const {init} = this.field
         if (!this.state.loading) {
             if (this.state.yamlMode === "profile") {
                 return (
@@ -911,14 +911,14 @@ class K8sInfoPage extends Component {
     }
 
     yamlEditorSubmit() {
-        let _this = this;
+        let _this = this
         _this.setState({
             loading: true
-        });
-        let url = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/deploymentYaml";
+        })
+        let url = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/deploymentYaml"
         Axios.put(url, {deploymentEditableYaml: _this.yamlEditorfield.getValue("deploymentYaml")}
         ).then((response) => {
-            Toast.success(_this.props.intl.messages['projects.text.updateSuccessful']);
+            Toast.success(_this.props.intl.messages['projects.text.updateSuccessful'])
             _this.setState({
                 loading: false
             })
@@ -927,7 +927,7 @@ class K8sInfoPage extends Component {
                 _this.setState({
                     loading: false
                 })
-            });
+            })
         this.toggleYamlEditor()
 
     }
@@ -939,7 +939,7 @@ class K8sInfoPage extends Component {
     }
 
     yamlEditorRender() {
-        const {init} = this.yamlEditorfield;
+        const {init} = this.yamlEditorfield
         if (!this.state.loading && this.state.yamlData.length !== 0 && this.state.yamlData.deploymentEditableYaml !== "") {
             return <Form className="yaml-editor-form">
                 <FormItem label="Deployment Yaml:"
@@ -988,10 +988,10 @@ class K8sInfoPage extends Component {
     }
 
     k8sBasicRender() {
-        const {init} = this.field;
-        console.log("yamlData", this.state.yamlData, this.state.yamlData !== []);
+        const {init} = this.field
+        console.log("yamlData", this.state.yamlData, this.state.yamlData !== [])
         if (!this.state.loading) {
-            console.log(this.state.yamlData.yamlFilePath === "");
+            console.log(this.state.yamlData.yamlFilePath === "")
             return (
                 <div>
                     <FormItem label={this.props.intl.messages['projects.text.releaseStrategy']}

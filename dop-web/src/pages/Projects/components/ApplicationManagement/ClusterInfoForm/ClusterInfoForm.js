@@ -61,18 +61,18 @@ class ClusterInfoForm extends Component {
             if (errors === null) {
                 this.setState({
                     loading: true
-                });
-                let postUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/cluster";
+                })
+                let postUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/cluster"
                 Axios.post(postUrl, {
                     targetClusterUrl: _this.field.getValue("targetClusterUrl"),
                     targetClusterToken: _this.field.getValue("targetClusterToken")
                 })
                     .then((response) => {
-                        Toast.success(_this.props.intl.messages['projects.text.submitSuccessful']);
+                        Toast.success(_this.props.intl.messages['projects.text.submitSuccessful'])
                         _this.setState({
                             loading: false,
                             refreshK8sInfo: true
-                        });
+                        })
                             _this.getClusterData()
                         }
                     )
@@ -87,17 +87,17 @@ class ClusterInfoForm extends Component {
             }
 
         })
-    };
+    }
 
     getClusterData() {
-        let _this = this;
-        let urlUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/clusterUrl";
+        let _this = this
+        let urlUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/clusterUrl"
         _this.setState({
             loading: true
-        });
+        })
         Axios.get(urlUrl)
             .then((response) => {
-                console.log("cluster", response);
+                console.log("cluster", response)
                 if (response.data.targetClusterUrl === "") {
                     _this.setState({
                         clusterData: "",
