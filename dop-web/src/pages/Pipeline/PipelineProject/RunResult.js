@@ -29,7 +29,7 @@ export default class RunResult extends Component {
                 this.stage(nextProps.runs._links.self.href + 'nodes/').then((stages) => {
                     self.step(stages[self.state.currentStage])
                 }).catch(()=>{
-                    self.props.notRunning();
+                    self.props.notRunning()
                     toast.show({
                         type: "error",
                         content: "流水线阶段为空，启动运行失败",

@@ -245,7 +245,7 @@ class NamespacePagination extends Component {
     onSearch(value) {
         this.setState({
             queryKey:value
-        });
+        })
         this.refreshList(1,value,this.state.select);
     }
 

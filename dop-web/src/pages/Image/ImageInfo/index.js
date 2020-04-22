@@ -38,7 +38,7 @@ class ImageInfo extends Component{
                     namespaceId:response.data.pageList[0].projectId
                 })
             }
-        );
+        )
         let url = API.image+"/v1/repositories/"+this.state.namespace+"/"+this.state.repoName+"/images/"+this.state.tag;
         Axios.get(url, {})
             .then(function (response) {
@@ -54,9 +54,9 @@ class ImageInfo extends Component{
 
     }
     onCopy=()=>{
-        console.log(this.props.intl);
+        console.log(this.props.intl)
         Toast.success(this.props.intl.messages["image.copySuccess"])
-    };
+    }
 
     pullRender=(value,index,record)=>{
         let pull = "docker pull registry.dop.clsaa.com/" + this.state.namespace + "/" + this.state.repoName + ":" + record.name;
@@ -67,7 +67,7 @@ class ImageInfo extends Component{
                 <span>{pull}</span>
             </div>
         </CopyToClipboard>
-    };
+    }
 
     componentWillMount() {
         this.init();

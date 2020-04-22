@@ -41,15 +41,15 @@ class ProjectBasicInfo extends Component {
     getData() {
         this.setState({
             loading: true
-        });
-        let _this = this;
+        })
+        let _this = this
         let url = API.application + '/project/' + this.state.projectId;
 
         //获取应用基本信息
         Axios.get(url)
             .then(function (response) {
-                console.log(response);
-                let projectData = response.data;
+                console.log(response)
+                let projectData = response.data
                 //获取用户基本信息
                 let userUrl = API.application + "/userInfo";
                 Axios.get(userUrl, {
@@ -58,7 +58,7 @@ class ProjectBasicInfo extends Component {
                     }
                 })
                     .then(function (response) {
-                        console.log(response);
+                        console.log(response)
                         _this.setState({
                             projectData: projectData,
                             userData: response.data,
@@ -67,7 +67,7 @@ class ProjectBasicInfo extends Component {
 
                     })
                     .catch((response) => {
-                        console.log(response);
+                        console.log(response)
                         _this.setState({
                                 loading: false
                             }
@@ -77,7 +77,7 @@ class ProjectBasicInfo extends Component {
 
             })
             .catch((response) => {
-                    console.log(response);
+                    console.log(response)
                 _this.setState({
                     loading: false
                 })

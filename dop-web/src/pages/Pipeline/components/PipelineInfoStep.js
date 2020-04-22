@@ -135,7 +135,7 @@ class PipelineInfoStep extends Component {
     }
 
     buildDockerUserName(value) {
-        console.log(value);
+        console.log(value)
         let findIndex = this.state.stage.steps.findIndex((item) => {
             return item.taskName === this.state.chosenStep.taskName
         });
@@ -144,7 +144,7 @@ class PipelineInfoStep extends Component {
         this.setState({
             stage
         });
-        this.props.onChangeDockerUserName(value);
+        this.props.onChangeDockerUserName(value)
         this.props.onChange(this.state.stage)
 
     }
@@ -158,7 +158,7 @@ class PipelineInfoStep extends Component {
         this.setState({
             stage
         });
-        this.props.onChangeRepository(value);
+        this.props.onChangeRepository(value)
         this.props.onChange(this.state.stage)
     }
 

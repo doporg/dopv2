@@ -97,16 +97,16 @@ export class DataRules extends Component
 
     //每次访问的刷新
     componentDidMount() {
-        this.setState({isLoading:true});
+        this.setState({isLoading:true})
         let getRoleUrl=API.permission+"/v1/roles/roles";
             let url = API.permission + "/v1/userRules" ;
             let params=
                 {
                     pageNo:this.state.pageNo,
                     pageSize:this.state.pageSize
-                };
+                }
             Axios.get(url,{params:(params)}).then((response) => {
-                console.log(response.data.pageList);
+                console.log(response.data.pageList)
                 this.setState({
                     pageNo:response.data.pageNo,
                     totalCount:response.data.totalCount,
@@ -123,13 +123,13 @@ export class DataRules extends Component
     }
     //翻页
     onChange=currentPage=> {
-        this.setState({isLoading:true});
+        this.setState({isLoading:true})
         let url = API.permission + "/v1/userRules" ;
         let params=
             {
                 pageNo:currentPage,
                 pageSize:this.state.pageSize
-            };
+            }
         // console.log(params)
         Axios.get(url,{params:(params)}).then((response) => {
             // handle success
@@ -144,18 +144,18 @@ export class DataRules extends Component
             console.log(error);
         });
         console.log(this.state.pageNo)
-    };
+    }
 
 //改变页码
     onUserChange=currentPage=> {
 
-        this.setState({userIsLoading:true});
+        this.setState({userIsLoading:true})
         let url = API.user + "/v1/users/search" ;
         let params=
             {
                 pageNo:currentPage,
                 pageSize:this.state.userPageSize
-            };
+            }
         Axios.get(url,{params:(params)}).then((response) => {
             // handle success
             this.setState({
@@ -169,7 +169,7 @@ export class DataRules extends Component
             // handle error
             console.log(error);
         });
-    };
+    }
 
     //选择角色
     onSelectChange(role) {
@@ -199,13 +199,13 @@ export class DataRules extends Component
             if(errors){
                 console.log("Errors in form!!!");
                 return;}
-            console.log(values);
-            let roleId=this.state.rowSelection.selectedRoleId[0];
-            console.log(roleId);
+            console.log(values)
+            let roleId=this.state.rowSelection.selectedRoleId[0]
+            console.log(roleId)
 
-            let createUserRuleUrl=API.permission+"/v1/userRules";
+            let createUserRuleUrl=API.permission+"/v1/userRules"
 
-            let RuleParams={fieldName: values.fieldName,rule:values.rule,roleId:roleId};
+            let RuleParams={fieldName: values.fieldName,rule:values.rule,roleId:roleId}
 
             this.setState({
                 ruleVisible: false
@@ -227,7 +227,7 @@ export class DataRules extends Component
             this.setState({roleList:response.data})
         }).catch(error=>{
             console.log(error)
-        });
+        })
 
         this.setState({
             ruleVisible: true
@@ -247,11 +247,11 @@ export class DataRules extends Component
 
         const { dataSource } = this.state;
         let url = API.permission + "/v1/userRules/{id}" ;
-        let params= {id:id};
+        let params= {id:id}
         Axios.delete(url,{params:(params)}
         )
             .then((response)=>{
-                Feedback.toast.success(this.props.intl.messages[ 'permission.successDelete']);
+                Feedback.toast.success(this.props.intl.messages[ 'permission.successDelete'])
                 this.onChange(this.state.currentPage)
             }).catch((error)=> {
             console.log(error);
@@ -262,13 +262,13 @@ export class DataRules extends Component
         console.log('取消删除');
         Feedback.toast.error(this.props.intl.messages[ 'permission.cancelDelete'])
 
-    };
+    }
 
     //弹出添加用户数据窗口
     addUserData=record=>{
-        console.log(record);
+        console.log(record)
         //获取当前选择的规则ID并填入
-        this.setState({currentRuleId:record.id});
+        this.setState({currentRuleId:record.id})
 
         //获取用户列表
         let url = API.user + "/v1/users/search" ;
@@ -276,7 +276,7 @@ export class DataRules extends Component
             {
                 pageNo:1,
                 pageSize:this.state.userPageSize
-            };
+            }
         Axios.get(url,{params:(params)}).then((response) => {
             this.setState({
                 userList:response.data.pageList,
@@ -293,16 +293,16 @@ export class DataRules extends Component
 
 
         //将用户列表填入下拉选项中
-        let tmpList=[];
+        let tmpList=[]
         this.state.userList.forEach(item=>{
             tmpList.push({label:item.name,value:item.id})
-        });
+        })
         this.setState({
             dataVisible: true,
             userSelectList:tmpList,
         });
         console.log(this.state.userSelectList)
-    };
+    }
     //关闭添加用户数据窗口
     onDataClose = reason => {
         console.log(reason);
@@ -324,9 +324,9 @@ export class DataRules extends Component
             if(errors){
                 console.log("Errors in form!!!");
                 return;}
-            this.setState({dataVisible: false});
-            let url=API.permission+"/v1/userData";
-            let params={ruleId:this.state.currentRuleId,userId:this.state.rowUserSelection.selectedUserId[0],fieldValue:values.fieldValue};
+            this.setState({dataVisible: false})
+            let url=API.permission+"/v1/userData"
+            let params={ruleId:this.state.currentRuleId,userId:this.state.rowUserSelection.selectedUserId[0],fieldValue:values.fieldValue}
 
             Axios.post(url,{},{params:(params)}).then(response=>{
                 Feedback.toast.success(this.props.intl.messages[ 'permission.successCreateData'])
@@ -340,7 +340,7 @@ export class DataRules extends Component
         const initData=this.dataField.init;
         const dialogStyle= {
             width: "60%" ,height:"70"
-        };
+        }
 
         const formItemLayout = {
             labelCol: {
@@ -376,7 +376,7 @@ export class DataRules extends Component
                         className="button"> {this.props.intl.messages[ 'permission.delete']}</Button>
                 </BalloonConfirm>
             );
-        };
+        }
 
         //添加用户数据
         const addUserData = (value, index, record) => {
@@ -388,7 +388,7 @@ export class DataRules extends Component
                     className="button"
                     onClick={this.addUserData.bind(this,record)}> {this.props.intl.messages[ 'permission.add']}</Button>
             );
-        };
+        }
         return (
         <div>
             <Button type="primary"

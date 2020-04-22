@@ -5,12 +5,12 @@ import API from "../../../../API";
 import {injectIntl} from "react-intl";
 import "./AddMemberList.scss"
 
-const Toast = Feedback.toast;
+const Toast = Feedback.toast
 
 class AddMemberList extends Component {
     constructor(props) {
         super(props);
-        console.log("props", props);
+        console.log("props", props)
         this.state = {
             visible: props.visible,
             loading: true,
@@ -30,7 +30,7 @@ class AddMemberList extends Component {
                 selectedRowKeys: [],
                 getProps: (record) => {
                     for (let i = 0; i < this.state.memberList.length; i++) {
-                        console.log("item", this.state.memberList[i]);
+                        console.log("item", this.state.memberList[i])
                         if (record.id === this.state.memberList[i].id)
                             return {disabled: true}
                     }
@@ -45,7 +45,7 @@ class AddMemberList extends Component {
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-        console.log(nextProps);
+        console.log(nextProps)
         this.setState({
             memberList: nextProps.memberList,
             visible: nextProps.visible,
@@ -56,9 +56,9 @@ class AddMemberList extends Component {
     getData(current, queryKey) {
         this.setState({
             loading: true
-        });
-        let url = API.application + "/all_users";
-        let _this = this;
+        })
+        let url = API.application + "/all_users"
+        let _this = this
         Axios.get(url, {
             params: {
                 key: queryKey,
@@ -68,7 +68,7 @@ class AddMemberList extends Component {
         })
             .then((response) => {
 
-                console.log("datasource", response);
+                console.log("datasource", response)
                 _this.setState({
                     current: current,
                     queryKey: queryKey,
@@ -86,7 +86,7 @@ class AddMemberList extends Component {
 
     popupConfirm() {
 
-        console.log();
+        console.log()
         Dialog.confirm({
             content: this.props.intl.messages["projects.text.addConfirm"],
             title: this.props.intl.messages["projects.text.titleAddConfirm"],
@@ -105,21 +105,21 @@ class AddMemberList extends Component {
         this.setState({
             visible: true,
             loading: true
-        });
-        let addUrl = API.application + "/project/" + this.state.projectId + "/members?";
-        let param = "organizationId=" + 1;
+        })
+        let addUrl = API.application + "/project/" + this.state.projectId + "/members?"
+        let param = "organizationId=" + 1
         let userListParam = "";
         for (let id in this.state.rowSelection.selectedRowKeys) {
 
             userListParam = userListParam + ("&userIdList=" + this.state.rowSelection.selectedRowKeys[id])
         }
 
-        addUrl = addUrl + param + userListParam;
-        console.log(userListParam, addUrl);
-        let _this = this;
-        let row = this.state.rowSelection;
-        row.selectedRowKeys = [];
-        console.log(this.state.rowSelection.selectedRowKeys);
+        addUrl = addUrl + param + userListParam
+        console.log(userListParam, addUrl)
+        let _this = this
+        let row = this.state.rowSelection
+        row.selectedRowKeys = []
+        console.log(this.state.rowSelection.selectedRowKeys)
         Axios.post(addUrl
             , {}, {
                 dataType: "json",
@@ -129,12 +129,12 @@ class AddMemberList extends Component {
             }
         )
             .then((response) => {
-                Toast.success(_this.props.intl.messages['projects.text.addSuccessful']);
+                Toast.success(_this.props.intl.messages['projects.text.addSuccessful'])
                 _this.setState({
                     loading: false,
                     visible: false,
                     rowSelection: row
-                });
+                })
                 _this.state.getMemberData()
             })
             .catch((response) => {
@@ -207,7 +207,7 @@ class AddMemberList extends Component {
         });
     };
     onOk = () => {
-        this.popupConfirm();
+        this.popupConfirm()
         this.setState({
             visible: false
         });

@@ -35,7 +35,7 @@ class CreateNamespaceDialog extends Component {
             isSubmit: true
             // visible: false
         });
-    };
+    }
 
 
     onOpen = () => {
@@ -60,7 +60,7 @@ class CreateNamespaceDialog extends Component {
             visible: false,
             createDialogVisible: true,
             isSubmit: false
-        });
+        })
 
         this.state.refreshProjectList();
         console.log("finished");

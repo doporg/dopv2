@@ -30,10 +30,10 @@ class K8sInfoPage extends Component {
 
     constructor(props) {
         super(props);
-        this.field = new Field(this);
-        this.editField = new Field(this);
-        this.yamlPathField = new Field(this);
-        this.yamlEditorfield = new Field(this);
+        this.field = new Field(this)
+        this.editField = new Field(this)
+        this.yamlPathField = new Field(this)
+        this.yamlEditorfield = new Field(this)
         this.state = {
             appEnvId: props.appEnvId,
             nameSpaceData: [],

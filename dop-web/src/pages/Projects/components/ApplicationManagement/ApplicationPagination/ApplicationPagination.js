@@ -36,8 +36,8 @@ class ApplicationPagination extends Component {
     refreshList(currentPage, searchKey) {
         this.setState({
             loading: true
-        });
-        let url = API.application + '/pagedapp';
+        })
+        let url = API.application + '/pagedapp'
         let _this = this;
         Axios.get(url, {
             params: {
@@ -48,7 +48,7 @@ class ApplicationPagination extends Component {
             }
         })
             .then(function (response) {
-                console.log(response);
+                console.log(response)
                 _this.setState({
                     current: currentPage,
                     pageSize: response.data.pageSize,

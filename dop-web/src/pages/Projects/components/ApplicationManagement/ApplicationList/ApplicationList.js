@@ -23,7 +23,7 @@ class ApplicationList extends Component {
     constructor(props) {
         super(props);
 
-        console.log("applicationList", props);
+        console.log("applicationList", props)
         //接受来自分页器的参数即当前页数据
         this.state = {
             projectId: props.projectId,
@@ -44,7 +44,7 @@ class ApplicationList extends Component {
     }
 
     popupConfirm = (id) => {
-        console.log(id);
+        console.log(id)
         Dialog.confirm({
             language:'en-us',
             content: this.props.intl.messages['projects.text.deleteConfirmApplication'],
@@ -59,7 +59,7 @@ class ApplicationList extends Component {
         let _this = this;
         Axios.delete(url)
             .then(function (response) {
-                    Toast.success(_this.props.intl.messages['projects.text.deleteSuccessful']);
+                    Toast.success(_this.props.intl.messages['projects.text.deleteSuccessful'])
                     _this.state.deletedCallRefresh();
                 }
             )
@@ -68,24 +68,24 @@ class ApplicationList extends Component {
             });
 
 
-    };
+    }
 
     //渲染表格中的ID项，添加超链接至该项目ID下的应用ID列表
     nameRender(value, index, record) {
-        let _this = this;
+        let _this = this
         return <Link to={"/applicationDetail?appId=" + record.id + "&projectId=" + _this.state.projectId}
         >{value}</Link>
     }
 
     render() {
         const renderOpr = (value, index, record) => {
-            console.log("record:", record, value);
+            console.log("record:", record, value)
 
             return <div>{record.ctime}
                 <Icon onClick={this.popupConfirm.bind(this, record.id)} type="ashbin" className="delete-icon"/>
 
             </div>
-        };
+        }
 
         return (
             <Row wrap gutter="20">

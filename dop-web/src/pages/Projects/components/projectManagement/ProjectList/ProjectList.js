@@ -21,7 +21,7 @@ class ProjectList extends Component {
     constructor(props) {
         super(props);
 
-        console.log(props.currentData);
+        console.log(props.currentData)
         //接受来自分页器的参数即当前页数据
         this.state = {
             currentData: props.currentData
@@ -47,7 +47,7 @@ class ProjectList extends Component {
     nameRender = function (value, index, record) {
         return <Link to={"/projectDetail?projectId=" + record.id}
         >{value}</Link>
-    };
+    }
     render() {
         return (
             <Row wrap gutter="20">

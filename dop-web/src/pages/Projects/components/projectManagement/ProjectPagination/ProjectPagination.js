@@ -36,7 +36,7 @@ class ProjectPagination extends Component {
     refreshList(current, key) {
         this.setState({
             loading: true
-        });
+        })
 
 
         let url = API.application + '/paged-project';
@@ -50,7 +50,7 @@ class ProjectPagination extends Component {
             }
         })
             .then(function (response) {
-                console.log(response);
+                console.log(response)
                 _this.setState({
                     current: current,
                     pageSize: response.data.pageSize,

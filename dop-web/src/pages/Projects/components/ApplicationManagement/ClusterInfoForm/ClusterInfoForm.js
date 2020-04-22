@@ -15,8 +15,8 @@ const formItemLayout = {
 
 class ClusterInfoForm extends Component {
     constructor(props) {
-        super(props);
-        this.field = new Field(this);
+        super(props)
+        this.field = new Field(this)
         this.state = {
             editMode: false,
             clusterData: "",

@@ -36,7 +36,7 @@ const Toast = Feedback.toast;
         this.setState({
             isSubmit: true
         });
-    };
+    }
 
 
     onOpen = () => {
@@ -57,13 +57,13 @@ const Toast = Feedback.toast;
                 visible: false,
                 createDialogVisible: true,
                 isSubmit: false
-            });
+            })
 
             this.state.refreshMemberList();
         }else {
             this.setState({
                 isSubmit: false
-            });
+            })
             Toast.error(this.props.intl.messages["image.member.addFailed"])
         }
 

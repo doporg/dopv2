@@ -34,7 +34,7 @@ class ApplicationDetail extends Component {
     }
 
     switchPage(page, id) {
-        console.log("id", id);
+        console.log("id", id)
         this.setState({
             showPage: page,
             envId: id === undefined ? "" : id
@@ -42,7 +42,7 @@ class ApplicationDetail extends Component {
     }
 
     envRender() {
-        console.log(this.state.showPage, this.state.showPage === "envList");
+        console.log(this.state.showPage, this.state.showPage === "envList")
         if (this.state.showPage === "envList") {
             return (<ApplicationEnvironment
                 projectId={this.state.projectId}

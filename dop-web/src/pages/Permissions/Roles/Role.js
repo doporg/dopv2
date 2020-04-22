@@ -96,14 +96,14 @@ export class Role extends Component {
     }
     //每次访问的刷新
     componentDidMount() {
-        this.setState({isLoading:true});
+        this.setState({isLoading:true})
         let url = API.permission + "/v1/roles" ;
         let params=
             {
                 pageNo:this.state.pageNo,
                 pageSize:this.state.pageSize,
 
-            };
+            }
         Axios.get(url,{params:(params)}).then((response) => {
             this.setState({
                 currentData:response.data.pageList,
@@ -119,13 +119,13 @@ export class Role extends Component {
     }
     //翻页
     onChange=currentPage=> {
-        this.setState({isLoading:true});
+        this.setState({isLoading:true})
         let url = API.permission + "/v1/roles" ;
         let params=
             {
                 pageNo:currentPage,
                 pageSize:this.state.pageSize
-            };
+            }
         // console.log(params)
         Axios.get(url,{params:(params)}).then((response) => {
             // handle success
@@ -141,7 +141,7 @@ export class Role extends Component {
             console.log(error);
         });
         console.log(this.state.pageNo)
-    };
+    }
     //重置
     handleReset(e) {
         e.preventDefault();
@@ -155,15 +155,15 @@ export class Role extends Component {
             if(errors){
                 console.log("Errors in form!!!");
                 return;}
-            console.log(values);
-            let idList=this.state.rowSelection.selectedRowKeys;
-            console.log(idList);
+            console.log(values)
+            let idList=this.state.rowSelection.selectedRowKeys
+            console.log(idList)
 
-            let createRoleUrl=API.permission+"/v1/roles";
-            let byNameUrl=API.permission+"/v1/roles/byName";
+            let createRoleUrl=API.permission+"/v1/roles"
+            let byNameUrl=API.permission+"/v1/roles/byName"
 
-            let RoleParam={parentId: values.parentId,name:values.name};
-            let byNameParams={name:values.name};
+            let RoleParam={parentId: values.parentId,name:values.name}
+            let byNameParams={name:values.name}
 
             //先检测是否重复
             Axios.get(byNameUrl,{params:(byNameParams)}
@@ -187,14 +187,14 @@ export class Role extends Component {
                             {Feedback.toast.success( this.props.intl.messages[ 'permission.successCreateMessage'] +response.data)}
                             else
                             {Feedback.toast.error( this.props.intl.messages[ 'permission.failCreateMessage'])}
-                            console.log(typeof (response.data));
-                            this.componentDidMount();
+                            console.log(typeof (response.data))
+                            this.componentDidMount()
                             //插入关联关系
-                            let createMapUrl=API.permission+"/v1/roles/permissionmap";
+                            let createMapUrl=API.permission+"/v1/roles/permissionmap"
                             idList.forEach(permissionid=>{
                                 let param={
                                     roleId:response.data,
-                                    permissionId:permissionid};
+                                    permissionId:permissionid}
                                 Axios.post(createMapUrl,{},{params:(param)}).then(
                                     (response)=>{
                                         console.log("插入关联关系成功")
@@ -213,14 +213,14 @@ export class Role extends Component {
     //弹出创建角色窗
     onOpen = () => {
 
-        let roleUrl=API.permission+"/v1/roles/roles";
+        let roleUrl=API.permission+"/v1/roles/roles"
         Axios.get(roleUrl).then(response=>{
 
-            let tmpList=[];
+            let tmpList=[]
             response.data.forEach(item=>{
                 tmpList.push({label:item.name,value:item.id
-            });
-            this.setState({roleSelectList:tmpList});
+            })
+            this.setState({roleSelectList:tmpList})
             let url=API.permission+"/v1/roles/permissions";
 
             Axios.get(url).then(response=>{
@@ -231,13 +231,13 @@ export class Role extends Component {
             }).catch(error=>{
                 console.log(error)
             })
-        });
+        })
 
         this.setState({
             visible: true
         });
     })
-    };
+    }
     //关闭创建角色弹窗
     onClose = reason => {
         console.log(reason);
@@ -266,21 +266,21 @@ export class Role extends Component {
     editRoleOpen=id=>{
 
 
-        console.log("ID是"+id);
+        console.log("ID是"+id)
             //获取当前角色功能点
-        this.setState({currentRoleId:id ,permissionPageNo:1});
-            let getPermissionUrl=API.permission+"/v1/roles/permissions/{id}";
-            let param={roleId:id};
+        this.setState({currentRoleId:id ,permissionPageNo:1})
+            let getPermissionUrl=API.permission+"/v1/roles/permissions/{id}"
+            let param={roleId:id}
             Axios.get(getPermissionUrl,{params:(param)}).then(response=>
             {
-                this.setState({currentPermission:response.data});
-                console.log(this.state.currentPermission);
+                this.setState({currentPermission:response.data})
+                console.log(this.state.currentPermission)
                 //获取全部功能点
                 let url=API.permission+"/v1/permissions";
                 let params={
                     pageNo:this.state.permissionPageNo,
                     pageSize:this.state.permissionPageSize
-                };
+                }
                 Axios.get(url,{params:(params)}).then(response=>{
                     this.setState({
                         permissionList:response.data.pageList,
@@ -289,20 +289,20 @@ export class Role extends Component {
                     })
                 })
 
-            });
+            })
 
         this.setState({
             permissionVisible: true
         });
-    };
+    }
 
     //功能点页数变更
     onPermissionChange=currentPermissionPage=>{
-        let url=API.permission+"/v1/permissions";
+        let url=API.permission+"/v1/permissions"
         let params={
             pageNo:currentPermissionPage,
             pageSize:this.state.permissionPageSize
-        };
+        }
         Axios.get(url,{params:(params)}).then(response=>{
             this.setState({
                 permissionList:response.data.pageList,
@@ -310,7 +310,7 @@ export class Role extends Component {
                 permissionTotalCount:response.data.totalCount
             })
         })
-    };
+    }
 
     //确认删除操作以及
     //删除功能点
@@ -318,11 +318,11 @@ export class Role extends Component {
 
         const { dataSource } = this.state;
         let url = API.permission + "/v1/roles/{id}" ;
-        let params= {id:id};
+        let params= {id:id}
         Axios.delete(url,{params:(params)}
         )
             .then((response)=>{
-                Feedback.toast.success( this.props.intl.messages[ 'permission.successDelete']);
+                Feedback.toast.success( this.props.intl.messages[ 'permission.successDelete'])
                 this.onChange(this.state.currentPage)
             }).catch((error)=> {
             console.log(error);
@@ -333,49 +333,49 @@ export class Role extends Component {
         console.log('取消删除');
         Feedback.toast.error( this.props.intl.messages[ 'permission.cancelDelete'])
 
-    };
+    }
 
     removePermission=id=>{
-        console.log("功能点ID"+id);
-        let url=API.permission+"/v1/roles/permissions";
+        console.log("功能点ID"+id)
+        let url=API.permission+"/v1/roles/permissions"
         let param={roleId:this.state.currentRoleId,
-                    permissionId:id};
-        let getPermissionUrl=API.permission+"/v1/roles/permissions/{id}";
-        let roleId={roleId:this.state.currentRoleId};
+                    permissionId:id}
+        let getPermissionUrl=API.permission+"/v1/roles/permissions/{id}"
+        let roleId={roleId:this.state.currentRoleId}
          Axios.delete(url,{params:(param)}).then(response=>
              //再次获取该角色功能点
 
             Axios.get(getPermissionUrl,{params:(roleId)}).then(response=>
         {
-            Feedback.toast.success( this.props.intl.messages[ 'permission.successDelete']);
+            Feedback.toast.success( this.props.intl.messages[ 'permission.successDelete'])
             this.setState({currentPermission:response.data})
         })
          )
-    };
+    }
     addPermission=id=>{
-        let url =API.permission+"/v1/roles/permissionmap";
+        let url =API.permission+"/v1/roles/permissionmap"
         let param={roleId:this.state.currentRoleId,
-            permissionId:id};
-        let getPermissionUrl=API.permission+"/v1/roles/permissions/{id}";
-        let roleId={roleId:this.state.currentRoleId};
+            permissionId:id}
+        let getPermissionUrl=API.permission+"/v1/roles/permissions/{id}"
+        let roleId={roleId:this.state.currentRoleId}
         Axios.post(url,{},{params:(param)}).then(response=>
             Axios.get(getPermissionUrl,{params:(roleId)}).then(response1=>
             {
-                Feedback.toast.success( this.props.intl.messages[ 'permission.successAdd']);
-                console.log(response);
+                Feedback.toast.success( this.props.intl.messages[ 'permission.successAdd'])
+                console.log(response)
                 this.setState({currentPermission:response1.data})
             })
         )
-    };
+    }
 
     //为角色添加功能点时的搜索功能
     onSearchChange=key=>{
-        let url=API.permission+"/v1/permissions";
+        let url=API.permission+"/v1/permissions"
         let params={
             pageNo:1,
             pageSize:this.state.permissionPageSize,
             key:key
-        };
+        }
         Axios.get(url,{params:(params)}).then(response=>{
             this.setState({
                 permissionList:response.data.pageList,
@@ -383,18 +383,18 @@ export class Role extends Component {
                 permissionTotalCount:response.data.totalCount
             })
         })
-    };
+    }
 
     //角色的搜索功能
     onRoleSearchChange=key=>{
 
-        this.setState({isLoading:true});
-        let url=API.permission+"/v1/roles";
+        this.setState({isLoading:true})
+        let url=API.permission+"/v1/roles"
         let params={
             pageNo:1,
             pageSize:this.state.pageSize,
             key:key
-        };
+        }
         Axios.get(url,{params:(params)}).then(response=>{
             this.setState({
                 currentData:response.data.pageList,
@@ -404,12 +404,12 @@ export class Role extends Component {
             })
         })
 
-    };
+    }
     render() {
         const { init } = this.field;
         const dialogStyle= {
                 width: "60%" ,height:"7000"
-            };
+            }
         //form样式定义
         const formItemLayout = {
             labelCol: {
@@ -426,10 +426,10 @@ export class Role extends Component {
             </a>
         );
         const footer2=(
-            <a onClick={this.onPermissionClose} href="javascript:">
+            <a onClick={this.onPermissionClose} href="javascript:;">
                 {this.props.intl.messages[ 'permission.cancel']}
             </a>
-        );
+        )
 
         const showPermission =(value, index, record)=>{
             return(
@@ -439,7 +439,7 @@ export class Role extends Component {
                         className="button"
                         onClick={this.editRoleOpen.bind(this,record.id)}>{this.props.intl.messages[ 'permission.editRole']}</Button>
             )
-        };
+        }
 
         //删除操作定义
         const renderDelete = (value, index, record) => {
@@ -458,7 +458,7 @@ export class Role extends Component {
                 </BalloonConfirm>
 
             );
-        };
+        }
         //删除角色功能点对应按钮
         const deletePermissionMap=(value, index, record)=>{
             return (
@@ -468,7 +468,7 @@ export class Role extends Component {
                     size="medium"
                     onClick={this.removePermission.bind(this, record.id)}>{this.props.intl.messages[ 'permission.delete']}</Button>
             );
-        };
+        }
         //添加角色功能点对应按钮
         const addPermissionMap=(value, index, record)=>{
             return (
@@ -478,7 +478,7 @@ export class Role extends Component {
                     size="medium"
                     onClick={this.addPermission.bind(this, record.id)}>{this.props.intl.messages[ 'permission.add']}</Button>
             );
-        };
+        }
 
         return(
 

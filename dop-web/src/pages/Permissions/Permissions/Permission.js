@@ -94,7 +94,7 @@ export  class Permission extends Component {
     onCancel = () => {
         console.log('取消删除');
         Feedback.toast.error(this.props.intl.messages['permission.cancelDelete'])
-    };
+    }
 
     //弹出创建功能点弹窗
     onOpen = () => {
@@ -113,20 +113,20 @@ export  class Permission extends Component {
 
     //每次访问的刷新
     componentDidMount() {
-        this.setState({isLoading:true});
-        let getPermissionUrl=API.permission+"/v1/users/permissions/ByCurrent";
+        this.setState({isLoading:true})
+        let getPermissionUrl=API.permission+"/v1/users/permissions/ByCurrent"
         Axios.get(getPermissionUrl).then(response=>
         {
-            let permissionTmp= response.data.map(x=>{return x.name});
+            let permissionTmp= response.data.map(x=>{return x.name})
             this.setState({userPermissionList:permissionTmp})
-        });
+        })
 
         let url = API.permission + "/v1/permissions" ;
         let params=
             {
                 pageNo:this.state.pageNo,
                 pageSize:this.state.pageSize
-            };
+            }
         Axios.get(url,{params:(params)}).then((response) => {
             this.setState({
                 currentData:response.data.pageList,
@@ -143,13 +143,13 @@ export  class Permission extends Component {
     }
     onChange=currentPage=> {
 
-        this.setState({isLoading:true});
+        this.setState({isLoading:true})
         let url = API.permission + "/v1/permissions" ;
         let params=
             {
                 pageNo:currentPage,
                 pageSize:this.state.pageSize
-            };
+            }
         // console.log(params)
         Axios.get(url,{params:(params)}).then((response) => {
             // handle success
@@ -165,7 +165,7 @@ export  class Permission extends Component {
             console.log(error);
         });
         console.log(this.state.pageNo)
-    };
+    }
 
     //创建功能点
     handleSubmit(e) {
@@ -177,9 +177,9 @@ export  class Permission extends Component {
                 return;
             }
             //检测重复的url以及参数
-            let byNameUrl=API.permission+"/v1/permissions/byName";
+            let byNameUrl=API.permission+"/v1/permissions/byName"
             let byNameParams=
-                {name:values.name};
+                {name:values.name}
 
             //创建的url
             let url= API.permission + "/v1/permissions";
@@ -189,7 +189,7 @@ export  class Permission extends Component {
                     isPrivate: values.isPrivate,
                     name:values.name,
                     parentId: 0,
-                };
+                }
 
 
              //先检测是否重复
@@ -209,7 +209,7 @@ export  class Permission extends Component {
                         Axios.post(url, {},{params:(params)}
                         )
                             .then((response)=>{
-                                console.log("创建时的response："+response);
+                                console.log("创建时的response："+response)
                                 this.componentDidMount()
 
                             }).catch((error)=> {
@@ -232,11 +232,11 @@ export  class Permission extends Component {
 
         const { dataSource } = this.state;
         let url = API.permission + "/v1/permissions/{id}" ;
-        let params= {id:id};
+        let params= {id:id}
         Axios.delete(url,{params:(params)}
         )
             .then((response)=>{
-                Feedback.toast.success(this.props.intl.messages['permission.successDelete']);
+                Feedback.toast.success(this.props.intl.messages['permission.successDelete'])
                 this.onChange(this.state.currentPage)
             }).catch((error)=> {
             console.log(error);
@@ -245,13 +245,13 @@ export  class Permission extends Component {
 
     //功能点的搜索功能
     onSearchChange=key=>{
-        this.setState({isLoading:true});
-        let url=API.permission+"/v1/permissions";
+        this.setState({isLoading:true})
+        let url=API.permission+"/v1/permissions"
         let params={
             pageNo:1,
             pageSize:this.state.permissionPageSize,
             key:key
-        };
+        }
         Axios.get(url,{params:(params)}).then(response=>{
             this.setState({
                 currentData:response.data.pageList,
@@ -260,13 +260,13 @@ export  class Permission extends Component {
                 isLoading:false
             })
         })
-    };
+    }
     render() {
         const { init, getError, getState } = this.field;
         const { Item } = Nav;
         const dialogStyle= {
             width: "50%" ,height:"7000"
-        };
+        }
         //form样式定义
         const formItemLayout = {
             labelCol: {
@@ -301,7 +301,7 @@ export  class Permission extends Component {
                 </BalloonConfirm>
         </AuthRequire>
             );
-        };
+        }
         return (
         <div>
             <AuthRequire permissionList={this.state.userPermissionList} permissionName="创建功能点">

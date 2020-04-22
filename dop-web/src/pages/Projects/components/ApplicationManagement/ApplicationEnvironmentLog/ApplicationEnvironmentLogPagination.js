@@ -35,8 +35,8 @@ class ApplicationEnvironmentLogPagination extends Component {
     refreshList(currentPage, searchKey) {
         this.setState({
             loading: true
-        });
-        let url = API.application + '/app/env/' + this.state.appEnvId + "/log";
+        })
+        let url = API.application + '/app/env/' + this.state.appEnvId + "/log"
         let _this = this;
         Axios.get(url, {
             params: {
@@ -45,7 +45,7 @@ class ApplicationEnvironmentLogPagination extends Component {
             }
         })
             .then(function (response) {
-                console.log(response);
+                console.log(response)
                 _this.setState({
                     current: currentPage,
                     pageSize: response.data.pageSize,

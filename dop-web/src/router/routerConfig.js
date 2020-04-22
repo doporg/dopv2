@@ -37,9 +37,6 @@ const routerConfig = [
     ...testConfig,
     ...codeConfig,
     ...projectConfig,
-    ...permissionConfig,
-    ...pipelineConfig,
-    ...loginConfig,
-    ...baseConfig];
+    ...permissionConfig, ...pipelineConfig, ...loginConfig, ...baseConfig];
 
 export default routerConfig;

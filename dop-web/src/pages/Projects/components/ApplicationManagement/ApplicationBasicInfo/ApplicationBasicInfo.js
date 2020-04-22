@@ -25,9 +25,9 @@ class ApplicationBasicInfo extends Component {
 
     constructor(props) {
         super(props);
-        console.log(props);
+        console.log(props)
         this.field = new Field(this);
-        console.log(props);
+        console.log(props)
         this.urlField = new Field(this);
         this.state = {
             urlEditMode: false,
@@ -44,7 +44,7 @@ class ApplicationBasicInfo extends Component {
 
     //加载应用基本信息
     componentDidMount() {
-        this.getData();
+        this.getData()
         this.getUrlData()
     }
 
@@ -52,19 +52,19 @@ class ApplicationBasicInfo extends Component {
     getUrlData() {
         this.setState({
             loading: true
-        });
-        let projectUrl = API.application + "/project/" + this.state.projectId;
+        })
+        let projectUrl = API.application + "/project/" + this.state.projectId
         Axios.get(projectUrl)
             .then((response) => {
 
-                let projectData = response.data;
-                let _this = this;
-                let gitUrl = API.application + "/git_url_list";
+                let projectData = response.data
+                let _this = this
+                let gitUrl = API.application + "/git_url_list"
                 Axios.get(gitUrl).then((response) => {
                     _this.setState({
                         gitUrlData: response.data
-                    });
-                    let imageUrl = API.application + "/image_url_list";
+                    })
+                    let imageUrl = API.application + "/image_url_list"
                     Axios.get(imageUrl, {
                         params: {
                             projectName: projectData.title
@@ -77,7 +77,7 @@ class ApplicationBasicInfo extends Component {
                             })
                         })
                         .catch((response => {
-                            console.log(response);
+                            console.log(response)
                             _this.setState({
                                 loading: false
                             })
@@ -94,14 +94,14 @@ class ApplicationBasicInfo extends Component {
     getData() {
         this.setState({
             loading: true
-        });
+        })
         let _this = this;
         let url = API.application + '/app/' + _this.state.appId + "/urlInfo";
 
         //获取应用基本信息
         Axios.get(url)
             .then(function (response) {
-                console.log(response);
+                console.log(response)
 
                 //获取用户基本信息
                 let userUrl = API.gateway + '/user-server/v1/users/' + response.data.ouser;
@@ -181,7 +181,7 @@ class ApplicationBasicInfo extends Component {
             if (errors === null) {
                 this.setState({
                     loading: true
-                });
+                })
                 console.log("noerros");
                 let url = API.application + '/app/' + this.state.appId;
                 Axios.put(url, {}, {
@@ -194,8 +194,8 @@ class ApplicationBasicInfo extends Component {
                     .then(function (response) {
                         _this.setState({
                             loading: false
-                        });
-                        _this.getData();
+                        })
+                        _this.getData()
                         Toast.success(_this.props.intl.messages['projects.text.updateSuccessful'])
                     })
                     .catch(function (error) {
@@ -216,14 +216,14 @@ class ApplicationBasicInfo extends Component {
         this.urlField.validate((errors, values) => {
 
             console.log(errors, values);
-            let _this = this;
+            let _this = this
             // 没有异常则提交表单
             if (errors === null) {
                 console.log("noerros");
-                let url = API.application + '/app/' + this.state.appId + "/urlInfo";
+                let url = API.application + '/app/' + this.state.appId + "/urlInfo"
                 this.setState({
                     loading: true
-                });
+                })
                 Axios.put(url, {}, {
                         params: {
                             warehouseUrl: this.urlField.getValue("gitUrl"),
@@ -238,9 +238,9 @@ class ApplicationBasicInfo extends Component {
                     .then(function (response) {
                         _this.setState({
                             loading: false
-                        });
+                        })
                         //提交完成后刷新当前页面
-                        _this.getData();
+                        _this.getData()
                         Toast.success(_this.props.intl.messages['projects.text.updateSuccessful'])
                     })
                     .catch(function (error) {
@@ -254,12 +254,12 @@ class ApplicationBasicInfo extends Component {
     }
 
     onGitUrlChange(e, value) {
-        console.log("value0", value);
+        console.log("value0", value)
         this.urlField.setValue("gitUrl", value)
     }
 
     onImageUrlChange(e, value) {
-        console.log("value0", value);
+        console.log("value0", value)
         this.urlField.setValue("imageUrl", value)
     }
 
@@ -285,7 +285,7 @@ class ApplicationBasicInfo extends Component {
                                placeholder={this.props.intl.messages['projects.placeholder.applicationName']}/>)
             }
 
-        };
+        }
         const opr = () => {
             const {init} = this.field;
             if (!this.state.basicEditMode) {
@@ -300,11 +300,11 @@ class ApplicationBasicInfo extends Component {
                         defaultValue={this.state.appBasicData.description} {...init('description')}
                         placeholder={this.props.intl.messages['projects.text.applicationDescription']}/>)
             }
-        };
+        }
 
         const urlFormRender = () => {
             const {init} = this.urlField;
-            console.log((this.state.appBasicData));
+            console.log((this.state.appBasicData))
             if (this.state.urlEditMode) {
                 return (
                     <div>
@@ -444,7 +444,7 @@ class ApplicationBasicInfo extends Component {
                     </div>
                 )
             }
-        };
+        }
 
 
         return (

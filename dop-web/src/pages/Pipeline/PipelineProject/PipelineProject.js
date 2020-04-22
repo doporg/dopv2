@@ -106,7 +106,7 @@ class PipelineProject extends Component {
                         self.setState({
                             notRunning: false
                         });
-                        console.log(response.data[0]);
+                        console.log(response.data[0])
                         if (response.data[0].state === 'FINISHED') {
                             self.clear();
                             if (self.state.resultStatus === "BUILD") {

@@ -53,7 +53,7 @@ class Register extends Component {
             duration: 5000
         });
         PublicKey().then((publicKey) => {
-            console.log(data.passwd);
+            console.log(data.passwd)
             data.password = Encryption(data.passwd, publicKey);
             delete data.passwd;
             console.log(data);
@@ -88,7 +88,7 @@ class Register extends Component {
     }
 
     userExists(rule, value, callback) {
-        let self = this;
+        let self = this
         let reg = /^(?!.*?_$)[a-zA-Z0-9_]+$/;
         if (reg.test(value)) {
             callback();

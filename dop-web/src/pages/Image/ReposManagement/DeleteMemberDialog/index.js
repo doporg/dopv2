@@ -46,7 +46,7 @@ class DeleteMemberDialog extends Component{
             deleteDialogVisible: false
         })
 
-    };
+    }
 
 
     onOpen = () => {

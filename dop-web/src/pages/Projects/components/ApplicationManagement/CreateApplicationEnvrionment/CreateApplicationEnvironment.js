@@ -27,7 +27,7 @@ class CreateApplicationEnvironmentDialog extends Component {
             isSubmit: true
             // visible: false
         });
-    };
+    }
 
 
     onOpen = () => {
@@ -64,7 +64,7 @@ class CreateApplicationEnvironmentDialog extends Component {
             visible: false,
             createDialogVisible: true,
             isSubmit: false
-        });
+        })
 
         this.state.refreshApplicationEnvironmentList();
         console.log("finished");

@@ -37,7 +37,7 @@ class CreateApplicationDialog extends Component {
             isSubmit: true
             // visible: false
         });
-    };
+    }
 
 
     onOpen = () => {
@@ -61,7 +61,7 @@ class CreateApplicationDialog extends Component {
             visible: false,
             createDialogVisible: true,
             isSubmit: false
-        });
+        })
 
         this.state.refreshApplicationList();
         console.log("finished");

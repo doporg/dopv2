@@ -423,7 +423,7 @@ class NamespaceLogList extends Component{
         this.setState({
             beginTime:start,
             endTime:end
-        });
+        })
         this.refreshList(this.state.current,this.state.queryKey,this.state.select,start,end);
 
     }
@@ -435,7 +435,7 @@ class NamespaceLogList extends Component{
         }
         this.setState({
             beginTime:start,
-        });
+        })
         this.refreshList(this.state.current,this.state.queryKey,this.state.select,start,this.state.endTime);
     }
 

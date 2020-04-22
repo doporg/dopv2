@@ -74,7 +74,7 @@ class EditPipelineInfo extends Component {
         });
         Axios.get(url).then((response) => {
             if (response.status === 200) {
-                console.log(response);
+                console.log(response)
                 // if(response.data.stages === null){
                 //     response.data.stages = []
                 // }
@@ -196,7 +196,7 @@ class EditPipelineInfo extends Component {
     }
 
     copy(data) {
-        const input = document.createElement('input');
+        const input = document.createElement('input')
         document.body.appendChild(input);
         input.setAttribute('value', API.pipeline + '/v1/jenkins/build/' + data);
         input.select();

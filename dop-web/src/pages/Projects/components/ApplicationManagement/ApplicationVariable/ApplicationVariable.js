@@ -40,7 +40,7 @@ class ApplicationVariable extends Component {
     getApplicationVariableData() {
         this.setState({
             loading: true
-        });
+        })
         let getUrl = API.gateway + "/application-server/app/" + this.state.appId + "/variable";
         let _this = this;
         Axios.get(getUrl)
@@ -51,12 +51,12 @@ class ApplicationVariable extends Component {
                     loading: false,
 
 
-                });
-                let list = {};
+                })
+                let list = {}
                 list = response.data.map((item) => {
 
                     return list[item.varKey] = false
-                });
+                })
                 _this.setState({
                     editMode: list
                 })
@@ -75,7 +75,7 @@ class ApplicationVariable extends Component {
     }
 
     deleteConfirm = (id) => {
-        console.log(id);
+        console.log(id)
         Dialog.confirm({
             content: this.props.intl.messages['projects.text.deleteConfirmVar'],
             title: this.props.intl.messages['projects.text.deleteConfirm'],
@@ -89,14 +89,14 @@ class ApplicationVariable extends Component {
         let _this = this;
         this.setState({
             loading: true
-        });
+        })
 
         Axios.delete(deleteUrl)
             .then(function (response) {
                 _this.setState({
                     loading: false
-                });
-                Toast.success(_this.props.intl.messages['projects.text.deleteSuccessful']);
+                })
+                Toast.success(_this.props.intl.messages['projects.text.deleteSuccessful'])
                 _this.refreshApplicationVariableList();
             })
             .catch((response) => {
@@ -107,7 +107,7 @@ class ApplicationVariable extends Component {
     }
 
     submitConfirm = (id) => {
-        console.log(id);
+        console.log(id)
         Dialog.confirm({
             content: this.props.intl.messages['projects.text.confirmSave'],
             title: this.props.intl.messages['projects.title.confirmSave'],
@@ -121,15 +121,15 @@ class ApplicationVariable extends Component {
         let _this = this;
         this.setState({
             loading: true
-        });
+        })
         Axios.put(putUrl, {
             varValue: _this.field.getValue(id)
         })
             .then(function (response) {
                 _this.setState({
                     loading: false
-                });
-                Toast.success(_this.props.intl.messages['projects.text.updateSuccessful']);
+                })
+                Toast.success(_this.props.intl.messages['projects.text.updateSuccessful'])
                 _this.refreshApplicationVariableList();
             })
             .catch((response) => {
@@ -141,8 +141,8 @@ class ApplicationVariable extends Component {
 
     //{this.props.intl.messages['projects.button.cancel']}按钮响应函数
     onCancel(name) {
-        let temp = this.state.editMode;
-        temp[name] = false;
+        let temp = this.state.editMode
+        temp[name] = false
         this.setState({
             editMode: temp
         })
@@ -150,8 +150,8 @@ class ApplicationVariable extends Component {
 
     //编辑图标响应函数
     onEdit(name) {
-        let temp = this.state.editMode;
-        temp[name] = true;
+        let temp = this.state.editMode
+        temp[name] = true
         this.setState({
             editMode: temp
         })
@@ -170,7 +170,7 @@ class ApplicationVariable extends Component {
                       type="ashbin"
                 />
             </div>
-        };
+        }
         const valueRender = (value, index, record) => {
             console.log(record);
 
@@ -196,7 +196,7 @@ class ApplicationVariable extends Component {
                     />
                 </div>
             }
-        };
+        }
 
         return (
             <Loading visible={this.state.loading} shape="dot-circle" color="#2077FF"

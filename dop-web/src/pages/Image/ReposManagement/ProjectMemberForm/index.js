@@ -52,7 +52,7 @@ class ProjectMemberForm extends Component {
                         console.log(response);
                         _this.setState({
                             loading: false
-                        });
+                        })
                         props.finished("success");
                     })
                     .catch(function (error) {
