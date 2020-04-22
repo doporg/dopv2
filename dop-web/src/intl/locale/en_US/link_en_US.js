@@ -90,10 +90,15 @@ const LINK_EN_US = {
     'link.bind.tabletitle.id': 'Id',
     'link.bind.tabletitle.title': 'Title',
     'link.bind.tabletitle.projectName': 'Project Name',
-    'link.bind.tabletitle.microservice': 'Microservices',
+    'link.bind.tabletitle.service': 'Microservice',
     'link.bind.tabletitle.threshold': 'Threshold',
     'link.bind.tabletitle.state': 'State',
     'link.bind.tabletitle.notifier': 'Notifier',
+    'link.bind.tabletitle.operate': 'Operate',
+    'link.bind.free': 'Free',
+    'link.bind.running': 'Running',
+    'link.bind.stop': 'Stop',
+    'link.bind.delete': 'Delete',
 
     'link.choose.service': 'Select a service'
 };

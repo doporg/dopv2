@@ -14,15 +14,19 @@ public class BindVO {
 
     private String title; // 给这个监控起个名字，做个简单说明
 
+    private long cuser;// 创建者的id
+
+    private String cuserName;//创建者的name
+
     private long projectId;
 
     private String projectTitle;
 
-    private long[] notifiedUid; //被通知者的id
+    private String notifiedUid; //被通知者的id
 
-    private String[] notifiedName; //被通知者的name
+    private String notifiedName; //被通知者的name
 
-    private String[] notifiedEmail; //被通知者的邮箱
+    private String notifiedEmail; //被通知者的邮箱
 
     private String service;//这个监控要关注的微服务，每条数据只能绑定一个微服务
 

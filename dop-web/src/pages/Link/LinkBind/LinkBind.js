@@ -10,6 +10,7 @@ import API from "../../API";
 import Axios from "axios";
 import Input from "@icedesign/base/lib/input";
 import Feedback from "@icedesign/base/lib/feedback";
+import Tag from "@icedesign/base/lib/tag";
 
 const Toast = Feedback.toast;
 
@@ -31,6 +32,25 @@ class LinkBind extends Component{
         }
     }
 
+    componentDidMount() {
+        this.setState({
+            isLoading: true
+        });
+        let getBindListUrl = API.link + '/binds';
+        let param = {
+            cuser: window.sessionStorage.getItem('user-id')
+        };
+        Axios.get(getBindListUrl, {params: param}).then(response => {
+            let list = response.data;
+            this.setState({
+                bindList: list,
+                isLoading: false
+            })
+        }).catch((error)=>{
+            console.log("获取绑定列表失败", error)
+        })
+    }
+
     submitCreateBind = () => {
         this.field.validate((errors, values) => {
             if (errors) {
@@ -38,13 +58,59 @@ class LinkBind extends Component{
                 return;
             }
             console.log(values);
-
+            this.setState({
+                isLoading: true
+            });
+            let project = this.state.projectList[values.projectIndex];
+            let mList = this.state.memberList;
+            let notifierId = [], notifierName = [], notifierEmail = [];
+            values.notifierIndex.map((item) => {
+                // console.log("arr: " + item);
+                notifierId.push(mList[item].id);
+                notifierName.push(mList[item].name);
+                notifierEmail.push(mList[item].email);
+            });
+            let param = {
+                title: values.bindTitle,
+                cuser: window.sessionStorage.getItem('user-id'),
+                cuserName: window.sessionStorage.getItem('user-name'),
+                projectId: project.id,
+                projectTitle: project.title,
+                notifiedUid: notifierId.join(","),
+                notifiedName: notifierName.join(","),
+                notifiedEmail: notifierEmail.join(","),
+                service: values.serviceName,
+                threshold: values.threshold
+            };
+            // console.log("submit param: " + JSON.stringify(param));
+            let newBindUrl = API.link + "/bind/new";
+            Axios.post(newBindUrl, param).then(response => {
+                this.setState({
+                    isLoading: false
+                });
+            }).catch((errors) => {
+                console.log("创建绑定失败，" + errors)
+            });
         })
+    };
+
+    operateBind = (bid, opt) => {
+        switch (opt) {
+            case 'DELETE':
+                alert("delete " + bid);
+                break;
+            case 'STOP':
+                alert("stop " + bid);
+                break;
+            case 'START':
+                alert("start " + bid);
+                break;
+        }
     };
 
     // 获得项目列表
     getProjectList = () => {
-        console.log("展开选择框");
+        // console.log("展开选择框");
         let getProjectListUrl = API.link + "/getProjectList";
         let param = {};
         this.setState({
@@ -53,12 +119,10 @@ class LinkBind extends Component{
         Axios.get(getProjectListUrl, {params: param}).then(response=>
         {
             let projectListTmp = response.data;
-            // console.log("AAAAAAAAAAAAAA:" + JSON.stringify(projectListTmp));
             projectListTmp.map((item, index)=>{
-                item.value = item.id;
+                item.value = index;
                 item.label = item.title;
             });
-            // console.log("BBBBBBBBBBBBBBBBB:" + JSON.stringify(projectListTmp));
             this.setState({
                 projectList: projectListTmp,
                 isLoading: false,
@@ -67,7 +131,9 @@ class LinkBind extends Component{
         });
     };
 
-    getServiceList = () => {
+    getServiceList = (projectId) => {
+        // let projectId = getValue("projectIndex");
+        // console.log("-----------getServiceList project: " + projectId);
         let getLinkListUrl = API.link + '/api/v2/services';
         Axios.get(getLinkListUrl).then(response => {
             let serviceListTmp = response.data;
@@ -75,11 +141,34 @@ class LinkBind extends Component{
         });
     };
 
-    getMemberList = () => {
-        this.setState({
-            memberList: ['worker1', 'worker2', 'worker3'],
-            selectDisable: false
-        })
+    getMemberList = (projectId) => {
+        let getMemberUrl = API.link + '/project/members';
+        let param = {
+            "user-id": window.sessionStorage.getItem("user-id"),
+            "projectId": projectId,
+            "organizationId" : 9
+        };
+        console.log("param: " + JSON.stringify(param));
+        Axios.get(getMemberUrl,{params: param}).then(response => {
+            let memberRes = response.data;
+            memberRes.map((item, index) => {
+                item.value = index;
+                item.label = item.name;
+            });
+            this.setState({
+                memberList: memberRes,
+            });
+        }).catch((error)=>{
+            console.error("查询成员列表出错：", error);
+        });
+    };
+
+    chooseProAndQueryInfo = (projectIndex) => {
+        // console.log("value: " + projectIndex);
+        // console.log("choose project: " + JSON.stringify(this.state.projectList[projectIndex]));
+        let projectId = this.state.projectList[projectIndex].id;
+        this.getServiceList(projectId);
+        this.getMemberList(projectId);
     };
 
     createNewBind = () => {
@@ -123,11 +212,38 @@ class LinkBind extends Component{
             }
         };
 
+        const renderState = (state) => {
+            switch (state) {
+                case 'RUNNING':
+                    return <Tag shape='readonly' style={{margin:'0',width:'86px',backgroundColor: '#cfefdf', color: '#00a854'}}>
+                        {this.props.intl.messages['link.bind.running']}
+                    </Tag>;
+                case 'FREE':
+                    return <Tag shape='readonly' style={{color:'#333333',margin:'0',width:'86px',backgroundColor: '#ebecf0'}}>
+                        {this.props.intl.messages['link.bind.free']}
+                    </Tag>
+            }
+        };
+        const renderOperate = (value, index, record) => {
+            console.log(record);
+            switch (record.state) {
+                case 'RUNNING':
+                    return <Button onClick={this.operateBind.bind(this, record.bid, 'STOP')}>{this.props.intl.messages['link.bind.stop']}</Button>;
+                case 'FREE':
+                    return <Button onClick={this.operateBind.bind(this, record.bid, 'DELETE')}>{this.props.intl.messages['link.bind.delete']}</Button>;
+            }
+        };
         return (
             <div>
-                <Button type='primary' size='medium' style={{marginBottom: '10px'}} onClick={this.createNewBind.bind(this)}>
-                    {this.props.intl.messages['link.bind.create']}
-                </Button>
+                <div style={{marginBottom: '10px'}}>
+                    <Button type='primary' size='medium' onClick={this.createNewBind.bind(this)}>
+                        {this.props.intl.messages['link.bind.create']}
+                    </Button>
+
+                    {/*<Button type='primary' size='medium' onClick={this.createNewBind.bind(this)}>*/}
+                        {/*{this.props.intl.messages['link.bind.create']}*/}
+                    {/*</Button>*/}
+                </div>
                 <Dialog
                     visible={this.state.dialogVisible}
                     footer={createDialogFooter}
@@ -141,7 +257,7 @@ class LinkBind extends Component{
                             <Input placeholder='请填写标题'
                                    defaultValue=''
                                    maxLength={25} hasLimitHint cutString={true}
-                                   {...init('bind-title', {
+                                   {...init('bindTitle', {
                                        rules: [
                                            {
                                                required: true,
@@ -161,13 +277,18 @@ class LinkBind extends Component{
                                     autoWidth={true}
                                     onOpen={this.getProjectList.bind(this)}
                                     className='search-select'
-                                    {...init("project-title", {
+                                    {...init("projectIndex", {
                                         rules: [
                                             {
                                                 required: true,
                                                 message: "请选择项目"
                                             }
-                                        ]
+                                        ],
+                                        props: {
+                                            onChange: (v) => {
+                                                this.chooseProAndQueryInfo(v);
+                                            }
+                                        }
                                     })}/>
                         </Form.Item>
                         <Form.Item label={this.props.intl.messages['link.choose.service']} required {...formItemLayout}>
@@ -177,8 +298,8 @@ class LinkBind extends Component{
                                     showSearch={true}
                                     autoWidth={true}
                                     className='search-select'
-                                    onOpen={this.getServiceList.bind(this)}
-                                    {...init('service-name', {
+                                    // onOpen={this.getServiceList.bind(this)}
+                                    {...init('serviceName', {
                                         rules: [
                                             {
                                                 required: true,
@@ -206,9 +327,9 @@ class LinkBind extends Component{
                                     showSearch={true}
                                     autoWidth={true}
                                     multiple={true}
-                                    onOpen={this.getMemberList.bind(this)}
+                                    // onOpen={this.getMemberList.bind(this)}
                                     disabled={this.state.selectDisable}
-                                    {...init('notifier',{
+                                    {...init('notifierIndex',{
                                         rules: [
                                             {
                                                 required: true,
@@ -223,13 +344,14 @@ class LinkBind extends Component{
                        isLoading={this.state.isLoading}
                        locale={{"empty": this.props.intl.messages['link.no.data']}}
                 >
-                    <Table.Column title={this.props.intl.messages['link.bind.tabletitle.id']} dataIndex='bid' align='center'/>
-                    <Table.Column title={this.props.intl.messages['link.bind.tabletitle.title']} dataIndex='title' align='center'/>
+                    <Table.Column title={this.props.intl.messages['link.bind.tabletitle.id']} dataIndex='bid' align='center' width='10%'/>
+                    {/*<Table.Column title={this.props.intl.messages['link.bind.tabletitle.title']} dataIndex='title' align='center' width='20%'/>*/}
                     <Table.Column title={this.props.intl.messages['link.bind.tabletitle.projectName']} dataIndex='projectTitle' align='center'/>
-                    <Table.Column title={this.props.intl.messages['link.bind.tabletitle.microservice']} dataIndex='service' align='center'/>
+                    <Table.Column title={this.props.intl.messages['link.bind.tabletitle.service']} dataIndex='service' align='center'/>
                     <Table.Column title={this.props.intl.messages['link.bind.tabletitle.threshold']} dataIndex='threshold' align='center'/>
-                    <Table.Column title={this.props.intl.messages['link.bind.tabletitle.state']} dataIndex='state' align='center'/>
+                    <Table.Column title={this.props.intl.messages['link.bind.tabletitle.state']} cell={renderState} dataIndex='state' align='center'/>
                     <Table.Column title={this.props.intl.messages['link.bind.tabletitle.notifier']} dataIndex='notifiedName' align='center'/>
+                    <Table.Column title={this.props.intl.messages['link.bind.tabletitle.operate']} cell={renderOperate} align='center'/>
                 </Table>
             </div>
         );

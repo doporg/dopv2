@@ -17,12 +17,14 @@ public class BindController {
     private BindService service;
 
     @GetMapping(value = "/binds")
-    public List<BindVO> getBindById(@RequestParam(name = "cuser")long cUserId) {
-        return service.getList(cUserId);
+    public List<BindVO> getBindById(@RequestParam(name = "cuser")long cuser) {
+        System.out.println("cuser: " + cuser);
+        return service.getList(cuser);
     }
 
     @PostMapping(value = "/bind/new")
     public void newBind(@RequestBody BindVO bindVO) {
+        System.out.println(bindVO.toString());
         service.add(bindVO);
     }
 
