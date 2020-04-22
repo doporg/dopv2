@@ -41,10 +41,10 @@ class ApplicationEnvironmentLogList extends Component {
         // https://github.com/zhangfuli/simple-maven-pipeline/dee981ce6640e3a0b115c8e784b78357f8f1ad15
         // github.com/clsaa/dop/commit/011fd4191f7c9b3e92539eb63152b8670b003253
         // console.log(url.split("/"))
-        let infoList = url.split("/")
-        let userName = infoList[3]
-        let projectName = infoList[4]
-        let commitId = infoList[infoList.length - 1]
+        let infoList = url.split("/");
+        let userName = infoList[3];
+        let projectName = infoList[4];
+        let commitId = infoList[infoList.length - 1];
         ///code/:username/:projectname/commit/:sha
         return <Link to={"/code/" + userName + "/" + projectName + "/commit/" + commitId}
         >{commitId}</Link>
@@ -58,10 +58,10 @@ class ApplicationEnvironmentLogList extends Component {
     imageIdRender(imageUrl) {
         let _this = this;
         // registry.dop.clsaa.com/dop/dop-web:201904131311d357d70
-        let buildTag = imageUrl.split(":")[1]
-        let projectName = imageUrl.split("/")[1]
+        let buildTag = imageUrl.split(":")[1];
+        let projectName = imageUrl.split("/")[1];
         // console.log("repoName", imageUrl.split("/"))
-        let repoName = imageUrl.split("/")[2].split(":")[0]
+        let repoName = imageUrl.split("/")[2].split(":")[0];
         return <Link to={"/repos/" + projectName + "/" + repoName + "/images/" + buildTag}
         >{buildTag}</Link>
     }
@@ -82,7 +82,7 @@ class ApplicationEnvironmentLogList extends Component {
         };
         const runningIdRender = (runningId) => {
             return <PipelineLogDialog runningId={runningId}/>
-        }
+        };
         const envRender = (envData) => {
             // console.log("envData", envData)
             return (<Balloon align="rt" trigger={defaultTrigger} closable={false}>

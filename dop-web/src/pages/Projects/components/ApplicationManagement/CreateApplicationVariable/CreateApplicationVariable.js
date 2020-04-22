@@ -31,7 +31,7 @@ class CreateApplicationVariableDialog extends Component {
             isSubmit: true
             // visible: false
         });
-    }
+    };
 
 
     onOpen = () => {
@@ -69,7 +69,7 @@ class CreateApplicationVariableDialog extends Component {
             visible: false,
             createDialogVisible: true,
             isSubmit: false
-        })
+        });
 
         this.state.refreshApplicationVariableList();
         console.log("finished");

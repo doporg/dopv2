@@ -119,7 +119,7 @@ class ModifyPwd extends Component {
 
     checkPass(rule, value, callback) {
         const {validate} = this.field;
-        let self = this
+        let self = this;
         let reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#.$%=-]).{8,20}$/;
         if (reg.test(value)) {
             validate(["rePasswd"]);
@@ -131,7 +131,7 @@ class ModifyPwd extends Component {
     }
 
     checkPass2(rule, value, callback) {
-        let self = this
+        let self = this;
         const {getValue} = this.field;
         if (value && value !== getValue("passwd")) {
             callback(self.props.intl.messages["login.forget.password.same"]);

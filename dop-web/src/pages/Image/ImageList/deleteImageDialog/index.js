@@ -54,7 +54,7 @@ class DeleteImageDialog extends Component{
             deleteDialogVisible: false
         })
 
-    }
+    };
 
 
     onOpen = () => {

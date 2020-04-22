@@ -26,12 +26,12 @@ class ApplicationEnvironment extends Component {
     getAppEnvData() {
         this.setState({
             loading: true
-        })
-        let url = API.gateway + "/application-server/app/" + this.state.appId + "/allEnv"
+        });
+        let url = API.gateway + "/application-server/app/" + this.state.appId + "/allEnv";
         let _this = this;
         Axios.get(url)
             .then(function (response) {
-                console.log(response)
+                console.log(response);
                 _this.setState({
 
                     appEnvData: response.data,
@@ -50,7 +50,7 @@ class ApplicationEnvironment extends Component {
     }
 
     popupConfirm = (id) => {
-        console.log(id)
+        console.log(id);
         Dialog.confirm({
             content: this.props.intl.messages['projects.text.deleteConfirmEnv'],
             title: this.props.intl.messages['projects.text.deleteConfirm'],
@@ -60,11 +60,11 @@ class ApplicationEnvironment extends Component {
     };
 
     onDelete(id) {
-        let deleteUrl = API.gateway + "/application-server/app/env/" + id
+        let deleteUrl = API.gateway + "/application-server/app/env/" + id;
         let _this = this;
         this.setState({
             loading: true
-        })
+        });
         Axios.delete(deleteUrl)
             .then(function (response) {
                 _this.getAppEnvData();
@@ -90,19 +90,19 @@ class ApplicationEnvironment extends Component {
     }
 
     showEnvLog(id) {
-        console.log(id)
+        console.log(id);
         this.state.switchPage("envLog", id)
     }
 
     showEnvDetailFun(id) {
-        console.log(id)
+        console.log(id);
         this.state.switchPage("envDetail", id)
     }
 
     getYaml(id) {
 
 
-        let url = API.gateway + "/application-server/app/env/" + {id} + "/yamlFile"
+        let url = API.gateway + "/application-server/app/env/" + {id} + "/yamlFile";
         Axios.get(url)
             .then((response) => {
                 console.log(response)///yaml
@@ -120,7 +120,7 @@ class ApplicationEnvironment extends Component {
 
             <Row wrap gutter="20">
                 {this.state.appEnvData.map((item, index) => {
-                    console.log(item)
+                    console.log(item);
                     return (
                         <Col key={index}>
                             <Card style={{height: "70%"}}>

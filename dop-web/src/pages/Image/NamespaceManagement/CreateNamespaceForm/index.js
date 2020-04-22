@@ -49,7 +49,7 @@ class NamespaceForm extends Component {
                         console.log(response);
                         _this.setState({
                             loading: false
-                        })
+                        });
                         props.finished();
                     })
                     .catch(function (error) {

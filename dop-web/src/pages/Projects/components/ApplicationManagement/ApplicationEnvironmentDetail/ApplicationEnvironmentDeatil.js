@@ -24,8 +24,8 @@ class ApplicationEnvironmentDetail extends Component {
 
     constructor(props) {
         super(props);
-        console.log(props)
-        this.field = new Field(this)
+        console.log(props);
+        this.field = new Field(this);
         this.state = {
             appId: props.appId,
             appEnvId: props.appEnvId,
@@ -40,7 +40,7 @@ class ApplicationEnvironmentDetail extends Component {
         let url = API.gateway + "/application-server/app/env/" + this.state.appEnvId;
         Axios.get(url)
             .then((response) => {
-                console.log(response)
+                console.log(response);
                 if (response.data === "") {
                     this.setState({
                         envData: [],

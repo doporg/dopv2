@@ -7,17 +7,17 @@
 
 </body>
 <script type="text/javascript">
-	let URL = "http://open.dop.clsaa.com/monitoring-server/actuator/health"
+	let URL = "http://open.dop.clsaa.com/monitoring-server/actuator/health";
 	// let URL = "http://localhost:8888/monitoring-server/actuator/health"
-	let xhr = new XMLHttpRequest()
-	xhr.open("get", URL, false) 
+	let xhr = new XMLHttpRequest();
+	xhr.open("get", URL, false);
 	xhr.setRequestHeader('Authorization', 
-		"Bearer cSBT-4suJrB8Z15Nwtfr8rnRGMJ0IWHQ5zqvHj9B6kNaayOP80kXNhVJGgcMn2PSqF9XLvwiu35v9LIjRpa8Eg==")
-	xhr.send(null) 
+		"Bearer cSBT-4suJrB8Z15Nwtfr8rnRGMJ0IWHQ5zqvHj9B6kNaayOP80kXNhVJGgcMn2PSqF9XLvwiu35v9LIjRpa8Eg==");
+	xhr.send(null);
 	if((xhr.status>=200 && xhr.status <300) || xhr.status == 304){ 
 		console.log(xhr.responseText)
 	}
-	let resp = JSON.parse(xhr.responseText) 
+	let resp = JSON.parse(xhr.responseText);
 	console.log(resp)
 
 

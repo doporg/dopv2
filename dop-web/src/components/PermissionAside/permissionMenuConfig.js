@@ -28,5 +28,5 @@ const permissionAsideMenuConfig=[
         icon: 'filter',
     },
 
-]
+];
 export {permissionAsideMenuConfig};

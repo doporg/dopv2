@@ -17,7 +17,7 @@ export default class Log extends Component {
     }
 
     componentWillMount() {
-        let title = this.hide(this.state.title)
+        let title = this.hide(this.state.title);
         this.setState({
             title
         })

@@ -5,7 +5,7 @@ import {injectIntl} from "react-intl";
 
 class PipelineInfoStage extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             currentStage: 0,
             stages: [],

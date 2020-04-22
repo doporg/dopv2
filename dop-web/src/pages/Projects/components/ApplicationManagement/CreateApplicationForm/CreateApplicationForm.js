@@ -34,16 +34,16 @@ class ApplicationForm extends Component {
     getData() {
         this.setState({
             loading: true
-        })
-        let projectUrl = API.application + "/project/" + this.state.projectId
+        });
+        let projectUrl = API.application + "/project/" + this.state.projectId;
         Axios.get(projectUrl)
             .then((response) => {
                 _this.setState({
                     projectData: response.data
                 })
-            })
-        let _this = this
-        let gitUrl = API.application + "/git_url_list"
+            });
+        let _this = this;
+        let gitUrl = API.application + "/git_url_list";
         Axios.get(gitUrl).then((response) => {
             _this.setState({
                 gitUrlData: response.data
@@ -51,8 +51,8 @@ class ApplicationForm extends Component {
         })
             .catch((response => {
                 console.log(response)
-            }))
-        let imageUrl = API.application + "/image_url_list"
+            }));
+        let imageUrl = API.application + "/image_url_list";
         Axios.get(imageUrl, {
             params: {
                 projectName: _this.state.projectData.title
@@ -65,7 +65,7 @@ class ApplicationForm extends Component {
                 })
             })
             .catch((response => {
-                console.log(response)
+                console.log(response);
                 _this.setState({
                     loading: false
                 })
@@ -77,7 +77,7 @@ class ApplicationForm extends Component {
      *
      * */
     handleSubmit(props) {
-        let _this = this
+        let _this = this;
         // 校验表单数据
         this.field.validate((errors, values) => {
             console.log(errors, values);
@@ -87,7 +87,7 @@ class ApplicationForm extends Component {
                 console.log("noerros");
                 this.setState({
                     loading: true
-                })
+                });
                 let url = API.application + '/app/' + this.state.projectId;
                 Axios.post(url, {}, {
                         params: {
@@ -103,7 +103,7 @@ class ApplicationForm extends Component {
                         console.log(response);
                         _this.setState({
                             loading: false
-                        })
+                        });
                         props.finished();
                     })
                     .catch(function (error) {
@@ -125,22 +125,22 @@ class ApplicationForm extends Component {
     }
 
     onGitUrlChange(e, value) {
-        console.log("value0", value)
+        console.log("value0", value);
         this.field.setValue("gitUrl", value.value)
     }
 
     onGitUrlInputBlur(e, value) {
-        console.log("value", value)
+        console.log("value", value);
         this.field.setValue("gitUrl", value)
     }
 
     onImageUrlChange(e, value) {
-        console.log("value0", value)
+        console.log("value0", value);
         this.field.setValue("imageUrl", value.value)
     }
 
     onImageUrlInputBlur(e, value) {
-        console.log("value", value)
+        console.log("value", value);
         this.field.setValue("imageUrl", value)
     }
     componentWillReceiveProps(nextProps, nextContext) {

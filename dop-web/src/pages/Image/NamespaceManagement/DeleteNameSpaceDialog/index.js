@@ -46,7 +46,7 @@ class DeleteNameSpaceDialog extends Component{
             deleteDialogVisible: false
         })
 
-    }
+    };
 
 
     onOpen = () => {

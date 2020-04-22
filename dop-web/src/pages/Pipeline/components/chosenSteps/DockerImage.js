@@ -104,13 +104,13 @@ class DockerImage extends Component {
                     };
                     environments.push(environment);
                     if (self.props.selectEnvId === response.data[i].id) {
-                        self.selectEnv(response.data[i].id)
+                        self.selectEnv(response.data[i].id);
                         self.setState({
                             selectedEnv: response.data[i].title
                         });
                     }
                     if (self.props.appEnvId === response.data[i].id) {
-                        self.selectEnv(response.data[i].id)
+                        self.selectEnv(response.data[i].id);
                         self.setState({
                             selectedEnv: response.data[i].title
                         });
@@ -197,7 +197,7 @@ class DockerImage extends Component {
         for (let i = 0; i < dockerUser.length; i++) {
             if (value === dockerUser[i].id) {
                 self.props.onUserNameChange(dockerUser[i].identifier);
-                self.props.onDockerPasswordChange(dockerUser[i].credential)
+                self.props.onDockerPasswordChange(dockerUser[i].credential);
                 console.log(dockerUser[i].identifier)
             }
         }

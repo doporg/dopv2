@@ -33,7 +33,7 @@ class CreateApplicationVariableForm extends Component {
         let _this = this;
         this.setState({
             loading: true
-        })
+        });
         this.field.validate((errors, values) => {
             console.log(errors, values);
 
@@ -50,7 +50,7 @@ class CreateApplicationVariableForm extends Component {
                         console.log(response);
                         _this.setState({
                             loading: false
-                        })
+                        });
                         props.finished();
                     })
                     .catch(function (error) {

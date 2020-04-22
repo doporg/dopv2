@@ -42,14 +42,14 @@ class ApplicationEnvironmentForm extends Component {
 
         this.field.validate((errors, values) => {
             console.log(errors, values);
-            console.log(_this.field.getValue('environmentLevel'))
-            console.log(_this.field.getValue('deploymentStrategy'))
+            console.log(_this.field.getValue('environmentLevel'));
+            console.log(_this.field.getValue('deploymentStrategy'));
 
             // 没有异常则提交表单
             if (errors === null) {
                 this.setState({
                     loading: true
-                })
+                });
                 console.log("noerros");
                 let postUrl = API.gateway + "/application-server/app/" + this.state.appId + "/env/";
                 Axios.post(postUrl, {}, {
@@ -64,7 +64,7 @@ class ApplicationEnvironmentForm extends Component {
                         console.log(response);
                         _this.setState({
                             loading: false
-                        })
+                        });
                         props.finished();
                     })
                     .catch(function (error) {

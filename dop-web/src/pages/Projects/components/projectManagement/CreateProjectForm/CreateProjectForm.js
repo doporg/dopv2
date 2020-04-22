@@ -38,7 +38,7 @@ class ProjectForm extends Component {
         // 校验表单数据
         this.field.validate((errors, values) => {
             console.log(errors, values);
-            let _this = this
+            let _this = this;
 
 
             // 没有异常则提交表单
@@ -46,8 +46,8 @@ class ProjectForm extends Component {
                 console.log("noerros");
                 this.setState({
                     loading: true
-                })
-                let url = API.application + '/project'
+                });
+                let url = API.application + '/project';
                 Axios.post(url, {}, {
                         params: {
                             organizationId: "123",
@@ -61,7 +61,7 @@ class ProjectForm extends Component {
                         console.log(response);
                         _this.setState({
                             loading: false
-                        })
+                        });
                         props.finished();
                     })
                     .catch(function (error) {
@@ -89,7 +89,7 @@ class ProjectForm extends Component {
     render() {
         const {init} = this.field;
         // const {init, getValue} = this.field;
-        console.log(this.props.intl)
+        console.log(this.props.intl);
         return (
             <Loading visible={this.state.loading} shape="dot-circle" color="#2077FF" className="form-loading">
                 <div className="form-container">

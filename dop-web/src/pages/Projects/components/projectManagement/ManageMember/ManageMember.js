@@ -22,8 +22,8 @@ class ManageMember extends Component {
     }
 
     nameRender(value, index, record) {
-        console.log("nameRender", value, index, record)
-        console.log(String(record.id) === String(window.sessionStorage.getItem("user-id")) ? "delete-icon hide" : "delete-icon")
+        console.log("nameRender", value, index, record);
+        console.log(String(record.id) === String(window.sessionStorage.getItem("user-id")) ? "delete-icon hide" : "delete-icon");
         return (
 
             <div className="name-render-div">{value}
@@ -38,16 +38,16 @@ class ManageMember extends Component {
     getMemberData() {
         this.setState({
             memberDataLoading: true
-        })
-        let _this = this
-        let url = API.application + "/project/" + this.state.projectId + "/members"
+        });
+        let _this = this;
+        let url = API.application + "/project/" + this.state.projectId + "/members";
         Axios.get(url, {
             params: {
                 organizationId: "1"
             }
         })
             .then((response) => {
-                console.log("then", response)
+                console.log("then", response);
                 _this.setState({
                     memberData: response.data,
                     memberDataLoading: false,
@@ -55,7 +55,7 @@ class ManageMember extends Component {
                 })
             })
             .catch((response) => {
-                console.log("catch", response)
+                console.log("catch", response);
                 _this.setState({
                     memberDataLoading: false,
                     addMemberListVisible: false
@@ -64,8 +64,8 @@ class ManageMember extends Component {
     }
 
     onDelete(id) {
-        let _this = this
-        let deleteUrl = API.application + "/project/" + this.state.projectId + "/members"
+        let _this = this;
+        let deleteUrl = API.application + "/project/" + this.state.projectId + "/members";
         Axios.delete(deleteUrl, {
             params: {
                 userId: id,
@@ -74,7 +74,7 @@ class ManageMember extends Component {
             }
         })
             .then((response) => {
-                    Toast.success("删除成功")
+                    Toast.success("删除成功");
                 _this.getMemberData()
                 }
             )
@@ -86,7 +86,7 @@ class ManageMember extends Component {
 
     popupConfirm(id) {
 
-        console.log(id)
+        console.log(id);
         Dialog.confirm({
             content: "你确定要删除该成员吗？",
             title: "确认删除",

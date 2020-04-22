@@ -36,7 +36,7 @@ class RegisterTransfer extends Component {
                 });
             }
         }).catch((error)=>{
-            console.log(error.response)
+            console.log(error.response);
             toast.show({
                 type: "error",
                 content: error.response.data.message,

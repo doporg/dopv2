@@ -50,7 +50,7 @@ const Toast = Feedback.toast;
             deleteDialogVisible: false
         })
 
-    }
+    };
 
 
     onOpen = () => {

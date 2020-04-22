@@ -18,18 +18,18 @@ class PipelineLogDialog extends Component {
 
 
     getData() {
-        let url = API.application + "/pipelineLog/" + this.state.runningId
-        let _this = this
+        let url = API.application + "/pipelineLog/" + this.state.runningId;
+        let _this = this;
         Axios.get(url)
             .then((response) => {
-                console.log(response)
+                console.log(response);
                 _this.setState({
                     isLoading: false,
                     logData: response.data.result
                 })
             })
             .catch((response) => {
-                console.log(response)
+                console.log(response);
                 _this.setState({
                     isLoading: false
                 })
@@ -38,8 +38,8 @@ class PipelineLogDialog extends Component {
     }
 
     toggleVisible() {
-        console.log("toogle")
-        this.getData()
+        console.log("toogle");
+        this.getData();
         this.setState({
             visible: true
         })

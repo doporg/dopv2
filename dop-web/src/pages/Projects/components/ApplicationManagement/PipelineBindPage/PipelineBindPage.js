@@ -10,12 +10,12 @@ const formItemLayout = {
     labelCol: {span: 8},
     wrapperCol: {span: 16}
 };
-const FormItem = Form.Item
+const FormItem = Form.Item;
 
 class PipelineBindPage extends Component {
     constructor(props) {
         super(props);
-        this.field = new Field(this)
+        this.field = new Field(this);
         this.state = {
             appEnvId: props.appEnvId,
             // editMode: false,
@@ -64,15 +64,15 @@ class PipelineBindPage extends Component {
     // }
 
     getPipelineData() {
-        let _this = this
-        console.log(this.state.appEnvId)
-        let getUrl = API.application + "/app/env/" + this.state.appEnvId + "/pipeline"
+        let _this = this;
+        console.log(this.state.appEnvId);
+        let getUrl = API.application + "/app/env/" + this.state.appEnvId + "/pipeline";
         this.setState({
             loading: true
-        })
+        });
         Axios.get(getUrl)
             .then((response) => {
-                console.log("pipelineId", response)
+                console.log("pipelineId", response);
                 if (response.data === "") {
                     _this.setState({
                         editMode: true,

@@ -33,7 +33,7 @@ class ImagePagination extends Component{
         let url = API.image + '/v1/repositories/'+this.state.repoName+"/images";
         let _this = this;
         if (queryKey!==""){
-            console.log(queryKey)
+            console.log(queryKey);
             Axios.get(url, {
                 params:{
                     pageNo:current,
@@ -109,7 +109,7 @@ class ImagePagination extends Component{
     onSearch(value){
         this.setState({
             queryKey: value
-        })
+        });
         this.refreshImageList(1,value);
     }
     handleChange(current,e){
@@ -120,18 +120,18 @@ class ImagePagination extends Component{
     }
     onCopy=()=>{
         Toast.success(this.props.intl.messages["image.copySuccess"]);
-    }
+    };
     pullRender=(value,index,record)=>{
         let pull = <CopyToClipboard onCopy={this.onCopy}
                                     text={"docker pull registry.dop.clsaa.com/" + this.state.repoName + ":" + record.name}>
                          <img className={"imgStyle"} src={require('../../img/copy.png')} alt="" />
-                    </CopyToClipboard>
+                    </CopyToClipboard>;
         return(
             <Balloon trigger={pull} triggerType="hover">
                 {"docker pull registry.dop.clsaa.com/" + this.state.repoName + ":" + record.name}
             </Balloon>
         );
-    }
+    };
     digestRender=(value)=> {
         let digest = <CopyToClipboard className="copyDigest" onCopy={this.onCopy} text={value}>
             <span>
@@ -144,7 +144,7 @@ class ImagePagination extends Component{
                 {value}
             </Balloon>
         )
-    }
+    };
     //image列表
     render() {
         return (

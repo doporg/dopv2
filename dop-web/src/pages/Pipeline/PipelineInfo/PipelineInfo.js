@@ -170,7 +170,7 @@ class PipelineInfo extends Component {
     }
 
     copy(data){
-        const input = document.createElement('input')
+        const input = document.createElement('input');
         document.body.appendChild(input);
         input.setAttribute('value', API.pipeline + '/v1/jenkins/build/' + data);
         input.select();

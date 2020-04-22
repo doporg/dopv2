@@ -72,7 +72,7 @@ export const getCurrentTimestamp = () => {
 export const formatDuration = (value) => {
     let ms = value/1000;
     if (ms > 1000) { //>1s了
-        return new Number(ms / 1000).toFixed(3) + "s";
+        return Number(ms / 1000).toFixed(3) + "s";
     } else {
         return ms + "ms";
     }
