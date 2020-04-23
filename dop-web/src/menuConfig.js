@@ -34,6 +34,11 @@ const asideMenuConfig = [
         icon: 'ol-list',
     },
     {
+        name: <FormattedMessage id="gateway.name" defaultMessage="API管理"/>,
+        path: '/gateway',
+        icon: 'ol-list',
+    },
+    {
         name: <FormattedMessage id="test.name" defaultMessage="测试管理"/>,
         path: '/testCases',
         icon: 'repair',
