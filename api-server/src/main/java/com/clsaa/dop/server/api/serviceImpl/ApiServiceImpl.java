@@ -3,6 +3,7 @@ package com.clsaa.dop.server.api.serviceImpl;
 import com.clsaa.dop.server.api.dao.RouteRepository;
 import com.clsaa.dop.server.api.dao.ServiceRepository;
 import com.clsaa.dop.server.api.dao.ServiceRouteRepository;
+import com.clsaa.dop.server.api.module.kong.upstreamModule.UpstreamHealth;
 import com.clsaa.dop.server.api.module.po.*;
 import com.clsaa.dop.server.api.module.kong.routeModule.KongRoute;
 import com.clsaa.dop.server.api.module.kong.serviceModule.KongService;
@@ -11,7 +12,9 @@ import com.clsaa.dop.server.api.module.vo.request.lifeCycle.CreateApiParams;
 import com.clsaa.dop.server.api.module.vo.request.lifeCycle.FusePolicy;
 import com.clsaa.dop.server.api.module.vo.request.lifeCycle.ModifyApiParams;
 import com.clsaa.dop.server.api.module.vo.response.ApiDetail;
+import com.clsaa.dop.server.api.module.vo.response.ApiList;
 import com.clsaa.dop.server.api.module.vo.response.ResponseResult;
+import com.clsaa.dop.server.api.module.vo.response.policyDetail.ApiInfo;
 import com.clsaa.dop.server.api.module.vo.response.policyDetail.routingPolicyDetail.RoutingPolicyDetail;
 import com.clsaa.dop.server.api.restTemplate.ApiRestTemplate;
 import com.clsaa.dop.server.api.service.ApiService;
@@ -40,24 +43,31 @@ public class ApiServiceImpl implements ApiService {
 
         //查看是否有同名service
         if (serviceRepository.findByName(createApiParams.getName())==null){
-            String upstreamId = createApiParams.getRoutingPolicyId()[0];
+            String upstreamId = createApiParams.getRoutingPolicyId();
             ServiceRoute serviceRoute = serviceRouteRepository.findServiceRouteById(upstreamId);
             FusePolicy fusePolicy = createApiParams.getFusePolicy();
             //查看负载均衡策略是否存在
             if(serviceRoute !=null){
                 KongService kongService = apiRestTemplate.createService(serviceRoute.getHost(),createApiParams.getName(),createApiParams.getTimeout(),"http", serviceRoute.getPort(),serviceRoute.getPath());
                 KongUpstream kongUpstream = apiRestTemplate.modifyFusePolicy(serviceRoute.getHost(),fusePolicy);
+
                 if (kongService!=null&&kongUpstream!=null){
+
                     //更新数据库
                     Service service = new Service(kongService.getId(),createApiParams.getName(),createApiParams.getDescription(),
-                            createApiParams.getTimeout(),createApiParams.isCaching(),createApiParams.getCachingTime(),fusePolicy.isEnable(),
+                            createApiParams.getTimeout(),fusePolicy.isEnable(),
                             fusePolicy.getFuseDetectionRing(),fusePolicy.getCriticalFusingFailureRate(),fusePolicy.getFuseDuration(),
                             fusePolicy.getReplyDetectionRingSize(), serviceRoute);
                     serviceRepository.saveAndFlush(service);
                     Route route = new Route(false,createApiParams.getRequestMethod(),createApiParams.getRequestPath(),service);
                     routeRepository.saveAndFlush(route);
 
-                    return new ResponseResult<>(0,"success",service.getId());
+                    //更新缓存策略
+                    if (updateCachePolicy(createApiParams.isCaching(),createApiParams.getCachingTime().intValue(),service)){
+                        return new ResponseResult<>(0,"success",service.getId());
+                    }else {
+                        return new ResponseResult<>(4,"cache policy update error",service.getId());
+                    }
                 }else {
                     return new ResponseResult<>(3,"fail");
                 }
@@ -114,7 +124,7 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public ResponseResult deleteApi(String apiId) {
+    public ResponseResult  deleteApi(String apiId) {
         Route route = routeRepository.findRouteByServiceId(apiId);
         if (route!=null){
             if (!route.isOnline()){
@@ -134,40 +144,48 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public ResponseResult modifyApi(ModifyApiParams modifyApiParams) {
+    public ResponseResult modifyApi(String apiId,ModifyApiParams modifyApiParams) {
         //查看service是否存在
-        String apiId = modifyApiParams.getApiId();
+        Service service = serviceRepository.findServiceById(apiId);
         Route route = routeRepository.findRouteByServiceId(apiId);
-        if (serviceRepository.findServiceById(apiId)!=null&&route!=null){
-            String upstreamId = modifyApiParams.getRoutingPolicyId()[0];
+        if (service!=null&&route!=null){
+            String upstreamId = modifyApiParams.getRoutingPolicyId();
             ServiceRoute serviceRoute = serviceRouteRepository.findServiceRouteById(upstreamId);
             FusePolicy fusePolicy = modifyApiParams.getFusePolicy();
 
-            //查看路由策略、限流策略是否存在
+            //查看路由策略是否存在
             if(serviceRoute !=null){
                 //更新kong
                 KongService kongService = apiRestTemplate.modifyService(apiId, serviceRoute.getHost(),modifyApiParams.getName(),modifyApiParams.getTimeout(),"http", 80L,serviceRoute.getPath());
                 KongUpstream kongUpstream = apiRestTemplate.modifyFusePolicy(serviceRoute.getHost(),fusePolicy);
                 if (kongService!=null&&kongUpstream!=null){
                     //更新数据库
-                    Service service = new Service(apiId,modifyApiParams.getName(),modifyApiParams.getDescription(),
-                            modifyApiParams.getTimeout(),modifyApiParams.isCaching(),modifyApiParams.getCachingTime(),fusePolicy.isEnable(),
-                            fusePolicy.getFuseDetectionRing(),fusePolicy.getCriticalFusingFailureRate(),fusePolicy.getFuseDuration(),
-                            fusePolicy.getReplyDetectionRingSize(), serviceRoute);
+                    service.setName(modifyApiParams.getName());
+                    service.setDescription(modifyApiParams.getDescription());
+                    service.setTimeout(modifyApiParams.getTimeout());
+                    service.setFuse(fusePolicy.isEnable());
+                    service.setFuseDetectionRing(fusePolicy.getFuseDetectionRing());
+                    service.setCriticalFusingFailureRate(fusePolicy.getCriticalFusingFailureRate());
+                    service.setFuseDuration(fusePolicy.getFuseDuration());
+                    service.setReplyDetectionRingSize(fusePolicy.getReplyDetectionRingSize());
                     serviceRepository.saveAndFlush(service);
 
                     route.setRequestMethod(modifyApiParams.getRequestMethod());
                     route.setRequestPath(modifyApiParams.getRequestPath());
                     routeRepository.saveAndFlush(route);
 
-                    if (route.isOnline()){
-                        if (apiRestTemplate.modifyRoute(route.getKongRouteId(),route.getRequestMethod(),route.getRequestPath(),apiId)!=null){
-                            return new ResponseResult<>(0,"success");
+                    if (updateCachePolicy(modifyApiParams.isCaching(),modifyApiParams.getCachingTime().intValue(),service)){
+                        if (!route.isOnline()){
+                            if (apiRestTemplate.modifyRoute(route.getKongRouteId(),route.getRequestMethod(),route.getRequestPath(),apiId)!=null){
+                                return new ResponseResult<>(0,"success");
+                            }else {
+                                return new ResponseResult<>(4,"route modify error");
+                            }
                         }else {
-                            return new ResponseResult<>(4,"kong error");
+                            return new ResponseResult<>(0,"success");
                         }
                     }else {
-                        return new ResponseResult<>(0,"success");
+                        return new ResponseResult<>(4,"cache policy update error",service.getId());
                     }
                 }else {
                     return new ResponseResult<>(3,"fail");
@@ -186,11 +204,13 @@ public class ApiServiceImpl implements ApiService {
         if(route!=null){
             Service service = route.getService();
             ServiceRoute serviceRoute = service.getServiceRoute();
+            Upstream upstream = serviceRoute.getUpstream();
             FusePolicy fusePolicy = new FusePolicy(service.isFuse(),service.getFuseDetectionRing(),service.getCriticalFusingFailureRate(),
                     service.getFuseDuration(),service.getReplyDetectionRingSize());
             RoutingPolicyDetail[] routingPolicies = new RoutingPolicyDetail[1];
             routingPolicies[0] = new RoutingPolicyDetail(serviceRoute.getId(),serviceRoute.getName(),serviceRoute.getDescription(),serviceRoute.getType());
-            return new ResponseResult<>(0,"success",new ApiDetail(apiId,service.getName(),service.getDescription(),
+            UpstreamHealth upstreamHealth = apiRestTemplate.getUpstreamHealth(upstream.getId());
+            return new ResponseResult<>(0,"success",new ApiDetail(apiId,service.getName(),service.getDescription(),upstreamHealth.getHealthData(),
                     route.isOnline(),route.getRequestMethod(),route.getRequestPath(),service.getTimeout(),service.isCaching(),
                     service.getCachingTime(),fusePolicy,routingPolicies,null));
         }else{
@@ -199,18 +219,56 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public ResponseResult<ApiDetail[]> getApiList() {
-        List<Route> routes = routeRepository.findAll();
-        ApiDetail[] apiDetailList = new ApiDetail[routes.size()];
-        for(int i = 0;i < routes.size();i++){
+    public ResponseResult<ApiList> getApiList(int pageNo, int pageSize, String apiType) {
+        List<Route> routes;
+        switch (apiType) {
+            case "online":
+                routes = routeRepository.findByOnline(true);
+                break;
+            case "offline":
+                routes = routeRepository.findByOnline(false);
+                break;
+            default:
+                routes = routeRepository.findAll();
+                break;
+        }
+        if (pageSize == 0) throw new AssertionError();
+        int num = routes.size();
+        int pageNum = (num-1)/pageSize+1;
+        int current = pageNo<pageNum?pageNo:pageNum;
+        ApiList apiList = new ApiList(num,current);
+        for(int i = (current-1)*pageSize;i < pageSize&&i<num;i++){
             Route route = routes.get(i);
             Service service = route.getService();
-            FusePolicy fusePolicy = new FusePolicy(service.isFuse(),service.getFuseDetectionRing(),service.getCriticalFusingFailureRate(),
-                    service.getFuseDuration(),service.getReplyDetectionRingSize());
-            apiDetailList[i] = new ApiDetail(service.getId(),service.getName(),service.getDescription(),
-                    route.isOnline(),route.getRequestMethod(),route.getRequestPath(),service.getTimeout(),service.isCaching(),
-                    service.getCachingTime(),fusePolicy,null,null);
+            Upstream upstream = service.getServiceRoute().getUpstream();
+            UpstreamHealth upstreamHealth = apiRestTemplate.getUpstreamHealth(upstream.getId());
+            apiList.addApiInfo(new ApiInfo(service.getId(),service.getName(),service.getDescription(),route.getRequestPath(),"user",upstreamHealth.getHealthData(),route.isOnline()));
         }
-        return new ResponseResult<>(0,"success",apiDetailList);
+        return new ResponseResult<>(0,"success",apiList);
+    }
+
+    private boolean updateCachePolicy(boolean enable,int ttl,Service service){
+        if (enable){
+            String pluginId = service.getProxyCachePluginId();
+            if (pluginId.equals("")){
+                pluginId = apiRestTemplate.createCachePolicy(service.getId(),ttl);
+                if (pluginId!=null){
+                    service.setProxyCachePluginId(pluginId);
+                }else {
+                    return false;
+                }
+            }else {
+                if (!apiRestTemplate.updateCachePolicy(pluginId,service.getId(),ttl)){
+                    return false;
+                }
+            }
+            service.setCachingTime((long) ttl);
+        }else {
+            apiRestTemplate.deletePlugin(service.getProxyCachePluginId());
+            service.setProxyCachePluginId("");
+        }
+        service.setCaching(enable);
+        serviceRepository.saveAndFlush(service);
+        return true;
     }
 }

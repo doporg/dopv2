@@ -6,8 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "创建api参数类")
 public class ModifyApiParams {
-    @ApiModelProperty(value = "apiId",example = "123",dataType = "String",required = true)
-    private String apiId;
 
     @ApiModelProperty(value = "name",example = "test api",dataType = "String")
     private String name;
@@ -34,14 +32,14 @@ public class ModifyApiParams {
     private FusePolicy fusePolicy;
 
     @ApiModelProperty(value = "routingPolicyId",dataType = "String[]")
-    private String[] routingPolicyId;
+    private String routingPolicyId;
 
 
     public ModifyApiParams() {
     }
 
     public ModifyApiParams(String name, String description, String requestMethod, String requestPath,
-                           Long timeout, boolean caching, Long cachingTime, FusePolicy fusePolicy, String[] routingPolicyId, CurrentLimitPolicyParam[] currentLimitPolicyParams) {
+                           Long timeout, boolean caching, Long cachingTime, FusePolicy fusePolicy, String routingPolicyId, CurrentLimitPolicyParam[] currentLimitPolicyParams) {
         this.name = name;
         this.description = description;
         this.requestMethod = requestMethod;
@@ -51,14 +49,6 @@ public class ModifyApiParams {
         this.cachingTime = cachingTime;
         this.fusePolicy = fusePolicy;
         this.routingPolicyId = routingPolicyId;
-    }
-
-    public String getApiId() {
-        return apiId;
-    }
-
-    public void setApiId(String apiId) {
-        this.apiId = apiId;
     }
 
     public String getName() {
@@ -125,11 +115,11 @@ public class ModifyApiParams {
         this.fusePolicy = fusePolicy;
     }
 
-    public String[] getRoutingPolicyId() {
+    public String getRoutingPolicyId() {
         return routingPolicyId;
     }
 
-    public void setRoutingPolicyId(String[] routingPolicyId) {
+    public void setRoutingPolicyId(String routingPolicyId) {
         this.routingPolicyId = routingPolicyId;
     }
 }

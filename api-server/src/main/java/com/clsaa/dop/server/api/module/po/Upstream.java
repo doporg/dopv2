@@ -18,6 +18,9 @@ public class Upstream {
     private String name;
 
     @Column(nullable = false)
+    private boolean healthy;
+
+    @Column(nullable = false)
     private String algorithm;
 
     @Column(nullable = false)
@@ -35,6 +38,7 @@ public class Upstream {
         this.algorithm = "round-robin";
         this.hash_on = "";
         this.header = "";
+        this.healthy = true;
     }
 
 
@@ -44,5 +48,6 @@ public class Upstream {
         this.algorithm = algorithm;
         this.hash_on = hash_on;
         this.header = header;
+        this.healthy = true;
     }
 }

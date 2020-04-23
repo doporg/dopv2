@@ -23,6 +23,9 @@ public class Service {
     private String rateLimitingPluginId;
 
     @Column(nullable = false)
+    private String proxyCachePluginId;
+
+    @Column(nullable = false)
     private Long timeout;
 
     @Column(nullable = false)
@@ -54,14 +57,14 @@ public class Service {
     private List<CurrentLimitPolicy> currentLimitPolicies;
 
 
-    public Service(String id, String name, String description, Long timeout, boolean caching, Long cachingTime,
+    public Service(String id, String name, String description, Long timeout,
                    boolean fuse, Long fuseDetectionRing, Long criticalFusingFailureRate, Long fuseDuration, Long replyDetectionRingSize, ServiceRoute serviceRoute) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.timeout = timeout;
-        this.caching = caching;
-        this.cachingTime = cachingTime;
+        this.caching = false;
+        this.cachingTime = 300L;
         this.fuse = fuse;
         this.fuseDetectionRing = fuseDetectionRing;
         this.criticalFusingFailureRate = criticalFusingFailureRate;
@@ -69,5 +72,6 @@ public class Service {
         this.replyDetectionRingSize = replyDetectionRingSize;
         this.serviceRoute = serviceRoute;
         this.rateLimitingPluginId = "";
+        this.proxyCachePluginId = "";
     }
 }

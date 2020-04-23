@@ -1,6 +1,6 @@
-package com.clsaa.dop.server.api.module.kong.pluginModule;
+package com.clsaa.dop.server.api.module.kong.pluginModule.currentLimiting;
 
-public class Config {
+public class CurrentLimitConfig {
     private String policy;
     private int second;
     private int minute;
@@ -17,10 +17,10 @@ public class Config {
     private boolean hide_client_headers;
     private boolean fault_tolerant;
 
-    public Config() {
+    public CurrentLimitConfig() {
     }
 
-    public Config(String policy, int second, int minute, int hour, int day, int mouth, int year, int redis_timeout, int redis_database, int redis_port, String redis_password, String limit_by, String redis_host, boolean hide_client_headers, boolean fault_tolerant) {
+    public CurrentLimitConfig(String policy, int second, int minute, int hour, int day, int mouth, int year, int redis_timeout, int redis_database, int redis_port, String redis_password, String limit_by, String redis_host, boolean hide_client_headers, boolean fault_tolerant) {
         this.policy = policy;
         this.second = second;
         this.minute = minute;

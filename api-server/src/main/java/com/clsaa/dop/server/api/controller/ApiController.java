@@ -3,6 +3,7 @@ package com.clsaa.dop.server.api.controller;
 import com.clsaa.dop.server.api.module.vo.request.lifeCycle.CreateApiParams;
 import com.clsaa.dop.server.api.module.vo.request.lifeCycle.ModifyApiParams;
 import com.clsaa.dop.server.api.module.vo.response.ApiDetail;
+import com.clsaa.dop.server.api.module.vo.response.ApiList;
 import com.clsaa.dop.server.api.module.vo.response.ResponseResult;
 import com.clsaa.dop.server.api.service.ApiService;
 import io.swagger.annotations.ApiOperation;
@@ -53,63 +54,65 @@ public class ApiController {
     @ApiOperation(value = "创建api")
     @PostMapping()
     @ApiResponses({
-            @ApiResponse(code = 400,message = "错误参数")
+            @ApiResponse(code = 400, message = "错误参数")
     })
-    public ResponseResult<String> createApi(@ApiParam(name = "创建api设置参数", required = true) @RequestBody CreateApiParams createApiParams){
+    public ResponseResult<String> createApi(@ApiParam(name = "创建api设置参数", required = true) @RequestBody CreateApiParams createApiParams) {
         return apiService.createApi(createApiParams);
     }
 
     @ApiOperation(value = "上线api")
     @PutMapping("/online/{apiId}")
     @ApiResponses({
-            @ApiResponse(code = 400,message = "错误参数")
+            @ApiResponse(code = 400, message = "错误参数")
     })
-    public ResponseResult onlineApi(@ApiParam(name = "api Id", required = true) @PathVariable("apiId") String apiId){
+    public ResponseResult onlineApi(@ApiParam(name = "api Id", required = true) @PathVariable("apiId") String apiId) {
         return apiService.onlineApi(apiId);
     }
 
     @ApiOperation(value = "下线api")
     @PutMapping("/offline/{apiId}")
     @ApiResponses({
-            @ApiResponse(code = 400,message = "错误参数")
+            @ApiResponse(code = 400, message = "错误参数")
     })
-    public ResponseResult offlineApi(@ApiParam(name = "api Id", required = true) @PathVariable("apiId") String apiId){
+    public ResponseResult offlineApi(@ApiParam(name = "api Id", required = true) @PathVariable("apiId") String apiId) {
         return apiService.offlineApi(apiId);
     }
 
     @ApiOperation(value = "删除api")
     @DeleteMapping("/{apiId}")
     @ApiResponses({
-            @ApiResponse(code = 400,message = "错误参数")
+            @ApiResponse(code = 400, message = "错误参数")
     })
-    public ResponseResult deleteApi(@ApiParam(name = "api Id", required = true) @PathVariable("apiId") String apiId){
+    public ResponseResult deleteApi(@ApiParam(name = "api Id", required = true) @PathVariable("apiId") String apiId) {
         return apiService.deleteApi(apiId);
     }
 
     @ApiOperation(value = "修改api")
-    @PatchMapping()
+    @PatchMapping("/{apiId}")
     @ApiResponses({
-            @ApiResponse(code = 400,message = "错误参数")
+            @ApiResponse(code = 400, message = "错误参数")
     })
-    public ResponseResult modifyApi(@ApiParam(name = "修改api设置参数", required = true) @RequestBody ModifyApiParams modifyApiParams){
-        return apiService.modifyApi(modifyApiParams);
+    public ResponseResult modifyApi(@ApiParam(name = "api Id", required = true) @PathVariable("apiId") String apiId,@ApiParam(name = "修改api设置参数", required = true) @RequestBody ModifyApiParams modifyApiParams) {
+        return apiService.modifyApi(apiId,modifyApiParams);
     }
 
     @ApiOperation(value = "查看api详情")
     @GetMapping("/{apiId}")
     @ApiResponses({
-            @ApiResponse(code = 400,message = "错误参数")
+            @ApiResponse(code = 400, message = "错误参数")
     })
-    public ResponseResult<ApiDetail> getApiDetail(@ApiParam(name = "api Id", required = true) @PathVariable("apiId") String apiId){
+    public ResponseResult<ApiDetail> getApiDetail(@ApiParam(name = "api Id", required = true) @PathVariable("apiId") String apiId) {
         return apiService.getApi(apiId);
     }
 
     @ApiOperation(value = "查看api列表")
     @GetMapping()
     @ApiResponses({
-            @ApiResponse(code = 400,message = "错误参数")
+            @ApiResponse(code = 400, message = "错误参数")
     })
-    public ResponseResult<ApiDetail[]> getApi(){
-        return apiService.getApiList();
+    public ResponseResult<ApiList> getApi(@ApiParam(name = "pageNo", required = true) @RequestParam("pageNo") int pageNo,
+                                          @ApiParam(name = "pageSize", required = true) @RequestParam("pageSize") int pageSize,
+                                          @ApiParam(name = "apiType", required = true) @RequestParam("apiType") String apiType) {
+        return apiService.getApiList(pageNo,pageSize,apiType);
     }
 }

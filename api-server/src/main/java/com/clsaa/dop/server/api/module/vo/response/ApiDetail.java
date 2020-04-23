@@ -17,6 +17,9 @@ public class ApiDetail {
     @ApiModelProperty(value = "description",example = "this is a api",dataType = "String")
     private String description;
 
+    @ApiModelProperty(value = "health",example = "HEALTHY",dataType = "String")
+    private String health;
+
     @ApiModelProperty(value = "state",example = "false",dataType = "boolean")
     private boolean state;
 
@@ -48,11 +51,12 @@ public class ApiDetail {
     public ApiDetail() {
     }
 
-    public ApiDetail(String apiId, String name, String description, boolean state, String requestMethod, String requestPath,
+    public ApiDetail(String apiId, String name, String description,String health, boolean state, String requestMethod, String requestPath,
                      Long timeout, boolean caching, Long cachingTime, FusePolicy fusePolicy, RoutingPolicyDetail[] routingPolicies, CurrentLimitPolicyDetail[] currentLimitPolicies) {
         this.apiId = apiId;
         this.name = name;
         this.description = description;
+        this.health = health;
         this.state = state;
         this.requestMethod = requestMethod;
         this.requestPath = requestPath;
@@ -78,6 +82,10 @@ public class ApiDetail {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getHealth() {
+        return health;
     }
 
     public String getDescription() {

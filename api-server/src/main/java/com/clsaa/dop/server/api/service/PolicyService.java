@@ -2,6 +2,7 @@ package com.clsaa.dop.server.api.service;
 
 import com.clsaa.dop.server.api.module.configuration.WeightingPolicyConfig;
 import com.clsaa.dop.server.api.module.vo.response.ResponseResult;
+import com.clsaa.dop.server.api.module.vo.response.RoutePolicyList;
 import com.clsaa.dop.server.api.module.vo.response.policyDetail.CurrentLimitPolicyDetail;
 import com.clsaa.dop.server.api.module.vo.response.policyDetail.routingPolicyDetail.RoutingPolicyDetail;
 
@@ -21,7 +22,9 @@ public interface PolicyService {
 
     ResponseResult<RoutingPolicyDetail> getRoutingPolicyDetail(String policyId);
 
-    ResponseResult<List<RoutingPolicyDetail>> getRoutingPolicy(String type);
+    ResponseResult<RoutePolicyList> getRoutingPolicy(int pageNo, int pageSize, String type);
+
+    ResponseResult<List<RoutingPolicyDetail>> searchRoutingPolicy(String value);
 
     ResponseResult<String> createCurrentLimitPolicy(String name,String cycle,int requests,String serviceId);
 

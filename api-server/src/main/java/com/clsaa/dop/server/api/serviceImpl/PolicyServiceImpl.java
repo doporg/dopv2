@@ -6,6 +6,7 @@ import com.clsaa.dop.server.api.module.configuration.WeightingPolicyConfig;
 import com.clsaa.dop.server.api.module.kong.targetModule.KongTarget;
 import com.clsaa.dop.server.api.module.kong.upstreamModule.KongUpstream;
 import com.clsaa.dop.server.api.module.vo.response.ResponseResult;
+import com.clsaa.dop.server.api.module.vo.response.RoutePolicyList;
 import com.clsaa.dop.server.api.module.vo.response.policyDetail.CurrentLimitPolicyDetail;
 import com.clsaa.dop.server.api.module.vo.response.policyDetail.routingPolicyDetail.RoutingPolicyDetail;
 import com.clsaa.dop.server.api.module.vo.response.policyDetail.routingPolicyDetail.ServiceDiscoveryPolicyDetail;
@@ -237,7 +238,7 @@ public class PolicyServiceImpl implements PolicyService {
     }
 
     @Override
-    public ResponseResult<List<RoutingPolicyDetail>> getRoutingPolicy(String type) {
+    public ResponseResult<RoutePolicyList> getRoutingPolicy(int pageNo, int pageSize, String type) {
         List<ServiceRoute> serviceRoutes;
         switch (type) {
             case "All":
@@ -252,6 +253,21 @@ public class PolicyServiceImpl implements PolicyService {
             default:
                 return new ResponseResult<>(1, "type not match");
         }
+        if (pageSize == 0) throw new AssertionError();
+        int num = serviceRoutes.size();
+        int pageNum = (num-1)/pageSize+1;
+        int current = pageNo<pageNum?pageNo:pageNum;
+        RoutePolicyList routePolicyList = new RoutePolicyList(num,current);
+        for(int i = (current-1)*pageSize;i < pageSize&&i<num;i++){
+            ServiceRoute serviceRoute = serviceRoutes.get(i);
+            routePolicyList.addRoutePolicy(new RoutingPolicyDetail(serviceRoute.getId(),serviceRoute.getName(),serviceRoute.getDescription(),serviceRoute.getType()));
+        }
+        return new ResponseResult<>(0, "success",routePolicyList);
+    }
+
+    @Override
+    public ResponseResult<List<RoutingPolicyDetail>> searchRoutingPolicy(String value) {
+        List<ServiceRoute> serviceRoutes = serviceRouteRepository.findByNameStartingWith(value);
         List<RoutingPolicyDetail> routingPolicyDetails = new LinkedList<>();
         for (ServiceRoute serviceRoute : serviceRoutes) {
             routingPolicyDetails.add(new RoutingPolicyDetail(serviceRoute.getId(),serviceRoute.getName(),serviceRoute.getDescription(),serviceRoute.getType()));

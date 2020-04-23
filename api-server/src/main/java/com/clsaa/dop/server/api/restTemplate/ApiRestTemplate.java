@@ -1,12 +1,15 @@
 package com.clsaa.dop.server.api.restTemplate;
 
 //import com.alibaba.fastjson.JSON;
-import com.clsaa.dop.server.api.module.kong.pluginModule.KongPlugin;
+import com.alibaba.fastjson.JSON;
+import com.clsaa.dop.server.api.module.kong.pluginModule.currentLimiting.CurrentLimitingPlugin;
+import com.clsaa.dop.server.api.module.kong.pluginModule.proxyCache.ProxyCachePlugin;
 import com.clsaa.dop.server.api.module.kong.routeModule.KongRoute;
 import com.clsaa.dop.server.api.module.kong.serviceModule.KongService;
 import com.clsaa.dop.server.api.module.kong.serviceModule.KongServiceList;
 import com.clsaa.dop.server.api.module.kong.targetModule.KongTarget;
 import com.clsaa.dop.server.api.module.kong.upstreamModule.KongUpstream;
+import com.clsaa.dop.server.api.module.kong.upstreamModule.UpstreamHealth;
 import com.clsaa.dop.server.api.module.vo.request.lifeCycle.FusePolicy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -16,6 +19,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class ApiRestTemplate {
@@ -378,7 +384,7 @@ public class ApiRestTemplate {
 
         HttpEntity<MultiValueMap> request = new HttpEntity<>(map, header);
         try {
-            ResponseEntity<KongPlugin> exchangeResult = restTemplate.exchange(pluginUrl, HttpMethod.POST, request, KongPlugin.class);
+            ResponseEntity<CurrentLimitingPlugin> exchangeResult = restTemplate.exchange(pluginUrl, HttpMethod.POST, request, CurrentLimitingPlugin.class);
             if (exchangeResult.getStatusCode().equals(HttpStatus.CREATED)&&exchangeResult.getBody()!=null){
                 return exchangeResult.getBody().getId();
             }else {
@@ -413,12 +419,70 @@ public class ApiRestTemplate {
         String url = pluginUrl+"/"+pluginId;
         HttpEntity<MultiValueMap> request = new HttpEntity<>(map, header);
         try {
-            ResponseEntity<KongPlugin> exchangeResult = restTemplate.exchange(url, HttpMethod.PATCH, request, KongPlugin.class);
+            ResponseEntity<CurrentLimitingPlugin> exchangeResult = restTemplate.exchange(url, HttpMethod.PATCH, request, CurrentLimitingPlugin.class);
             return exchangeResult.getStatusCode().equals(HttpStatus.OK) && exchangeResult.getBody() != null;
         }catch (HttpClientErrorException ex){
             ex.printStackTrace();
             return false;
         }
+    }
+
+    public String createCachePolicy(String serviceId,int ttl){
+        MultiValueMap<String,String> header = new LinkedMultiValueMap<>();
+        header.add(HttpHeaders.CONTENT_TYPE,(MediaType.MULTIPART_FORM_DATA_VALUE));
+
+        MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+
+        map.add("name", "proxy-cache");
+        map.add("service.id", serviceId);
+        map.add("config.strategy", "memory");
+        if(ttl!=0){
+            map.add("config.cache_ttl", ttl);
+        }
+
+        HttpEntity<MultiValueMap> request = new HttpEntity<>(map, header);
+        try {
+            ResponseEntity<ProxyCachePlugin> exchangeResult = restTemplate.exchange(pluginUrl, HttpMethod.POST, request, ProxyCachePlugin.class);
+            if (exchangeResult.getStatusCode().equals(HttpStatus.CREATED)&&exchangeResult.getBody()!=null){
+                return exchangeResult.getBody().getId();
+            }else {
+                return null;
+            }
+        }catch (HttpClientErrorException ex){
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public boolean updateCachePolicy(String pluginId,String serviceId,int ttl){
+        MultiValueMap<String,String> header = new LinkedMultiValueMap<>();
+        header.add(HttpHeaders.CONTENT_TYPE,(MediaType.MULTIPART_FORM_DATA_VALUE));
+
+        MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+
+        map.add("name", "proxy-cache");
+        map.add("service.id", serviceId);
+        map.add("config.strategy", "memory");
+        if(ttl!=0){
+            map.add("config.cache_ttl", ttl);
+        }
+
+        String url = pluginUrl+"/"+pluginId;
+        HttpEntity<MultiValueMap> request = new HttpEntity<>(map, header);
+        try {
+            ResponseEntity<ProxyCachePlugin> exchangeResult = restTemplate.exchange(url, HttpMethod.PATCH, request, ProxyCachePlugin.class);
+            return exchangeResult.getStatusCode().equals(HttpStatus.OK) && exchangeResult.getBody() != null;
+        }catch (HttpClientErrorException ex){
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public UpstreamHealth getUpstreamHealth(String upstreamId){
+        String url = upstreamUrl + "/" + upstreamId + "/health/?balancer_health={balancer_health}";
+        Map<String,Integer> paramMap = new HashMap<>();
+        paramMap.put("balancer_health",1);
+        return restTemplate.getForObject(url,UpstreamHealth.class,paramMap);
     }
 
     public boolean deleteUpstream(String upstreamId){

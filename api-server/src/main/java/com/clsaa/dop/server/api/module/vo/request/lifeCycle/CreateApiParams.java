@@ -30,13 +30,13 @@ public class CreateApiParams {
     private FusePolicy fusePolicy;
 
     @ApiModelProperty(value = "routingPolicyId",dataType = "String[]")
-    private String[] routingPolicyId;
+    private String routingPolicyId;
 
     public CreateApiParams() {
     }
 
     public CreateApiParams(String name, String description, String state, String requestMethod, String requestPath,
-                           Long timeout, boolean caching, Long cachingTime, FusePolicy fusePolicy, String[] routingPolicyId) {
+                           Long timeout, boolean caching, Long cachingTime, FusePolicy fusePolicy, String routingPolicyId) {
         this.name = name;
         this.description = description;
         this.requestMethod = requestMethod;
@@ -113,11 +113,11 @@ public class CreateApiParams {
         this.fusePolicy = fusePolicy;
     }
 
-    public String[] getRoutingPolicyId() {
+    public String getRoutingPolicyId() {
         return routingPolicyId;
     }
 
-    public void setRoutingPolicyId(String[] routingPolicyId) {
+    public void setRoutingPolicyId(String routingPolicyId) {
         this.routingPolicyId = routingPolicyId;
     }
 }

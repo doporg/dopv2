@@ -11,4 +11,6 @@ public interface ServiceRouteRepository extends JpaRepository<ServiceRoute,Strin
     ServiceRoute findByName(String name);
 
     List<ServiceRoute> findByType(String type);
+
+    List<ServiceRoute> findByNameStartingWith(String value);
 }
