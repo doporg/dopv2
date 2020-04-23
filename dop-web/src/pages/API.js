@@ -9,6 +9,7 @@ const code = "/code-server";
 const user = "/user-server";
 const image = "/image-server";
 const test = "/test-server";
+const link = "/link-server";
 
 const API = {
     address: "http://www.dop.clsaa.com/#/",
@@ -20,7 +21,8 @@ const API = {
     code: host + code,
     user: host + user,
     image: host + image,
-    test: host + test
+    test: host + test,
+    link: "http://localhost:14300"
 };
 
 export default API;
