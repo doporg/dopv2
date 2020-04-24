@@ -8,10 +8,7 @@ import com.clsaa.dop.server.link.util.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class BindService {
@@ -37,22 +34,23 @@ public class BindService {
         newBind.setService(vo.getService());
         newBind.setThreshold(vo.getThreshold());
         newBind.setState(MonitorState.FREE);
+        newBind.setCtime(new Date());
         bindDao.save(newBind);
     }
 
-    public void stop(long nid) {
-
+    public void stop(long bid) {
+        bindDao.stopBind(bid);
     }
 
-    public void start(long nid) {
-
+    public void start(long bid) {
+        bindDao.startBind(bid);
     }
 
     public void delete(long bid) {
         bindDao.deleteById(bid);
     }
 
-    public void modify(BindVO bindVO) {
+    public void modify(Long bid,BindVO bindVO) {
 
     }
 

@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,4 +35,6 @@ public class BindVO {
     private double threshold;// 阈值 单位时间内调用链n次调用>=m次出错通知
 
     private MonitorState state;
+
+    private Date ctime; //创建时间
 }

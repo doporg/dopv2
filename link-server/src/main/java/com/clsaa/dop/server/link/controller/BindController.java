@@ -7,11 +7,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+
 @RestController
 @CrossOrigin
+//        (methods = {GET, HEAD, POST, PUT, DELETE, OPTIONS}, origins = "*", allowedHeaders = "*", allowCredentials = "true")
 public class BindController {
-
-    // 监控流水线，可以创建、删除、停止、开始、编辑、查看列表
 
     @Autowired
     private BindService service;
@@ -22,29 +23,32 @@ public class BindController {
         return service.getList(cuser);
     }
 
-    @PostMapping(value = "/bind/new")
+    @PostMapping(value = "/binds")
     public void newBind(@RequestBody BindVO bindVO) {
         System.out.println(bindVO.toString());
         service.add(bindVO);
     }
 
-    @DeleteMapping(value = "/bind/delete")
-    public void deleteBind(@RequestParam(name = "bid")Long bid) {
+    @DeleteMapping(value = "/binds/{bid}")
+    public void deleteBind(@PathVariable(name = "bid")Long bid) {
+        System.out.println("delete bid: " + bid);
         service.delete(bid);
     }
 
-    @PutMapping(value = "/bind/modify")
-    public void modifyBind(@RequestBody BindVO bindVO) {
-        service.modify(bindVO);
+    @PutMapping(value = "/binds/{bid}")
+    public void modifyBind(@PathVariable(name = "bid")Long bid, @RequestBody BindVO bindVO) {
+        service.modify(bid, bindVO);
     }
 
-    @PostMapping(value = "/bind/stop")
-    public void stopBind(@RequestParam(name = "bid")Long bid) {
+    @PatchMapping(value = "/binds/{bid}/stop")
+    public void stopBind(@PathVariable(name = "bid")Long bid) {
+        System.out.println("stop bid: " + bid);
         service.stop(bid);
     }
 
-    @PostMapping(value = "/bind/start")
-    public void startBind(@RequestParam(name = "bid")Long bid) {
+    @PatchMapping(value = "/binds/{bid}/start")
+    public void startBind(@PathVariable(name = "bid")Long bid) {
+        System.out.println("start bid: " + bid);
         service.start(bid);
     }
 
