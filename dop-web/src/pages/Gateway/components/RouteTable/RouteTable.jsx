@@ -35,7 +35,6 @@ class RouteTable extends Component {
                 owner: '',
                 type: 'All',
             },
-            selectApi: '',
         };
 
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
@@ -50,7 +49,6 @@ class RouteTable extends Component {
     };
 
     onChange = (...args) => {
-
     };
 
     handlePaginationChange = (current) => {
@@ -98,34 +96,39 @@ class RouteTable extends Component {
 
     renderOper = (value, index, record) => {
         let MoveTarget = <Icon
-            type="search"
+            type="close"
             size="small"
             style={{...styles.icon, ...styles.deleteIcon}}
             onClick={() => {
-                this.props.history.push('/gateway/showLogs/' + record.id);
+                this.delete(record.policyId);
             }}
         />;
+
 
         let edit = <Icon
             type="edit"
             size="small"
             style={{...styles.icon, ...styles.editIcon}}
             onClick={() => {
-                this.props.history.push('/gateway/editApi/' + record.id);
+                if(record.type === this.props.intl.messages["gateway.search.routeType.weightingPolicy"]){
+                    this.props.history.push('/gateway/route/editWeightingPolicy/' + record.policyId);
+                }else if(record.type === this.props.intl.messages["gateway.search.routeType.serviceDiscoveryPolicy"]){
+                    this.props.history.push('/gateway/route/editServiceDiscoveryPolicy/' + record.policyId);
+                }
             }}
         />;
         return (
             <div style={styles.oper}>
                 <Balloon.Tooltip trigger={edit} triggerType="hover" align='l'>
                     <FormattedMessage
-                        id="gateway.apiLists.table.edit"
+                        id="gateway.routeList.table.edit"
                         defaultMessage="编辑api"
                     />
                 </Balloon.Tooltip>
                 <Balloon.Tooltip trigger={MoveTarget} triggerType="hover" align='r'>
                     <FormattedMessage
-                        id="gateway.apiLists.table.logs"
-                        defaultMessage="查看日志"
+                        id="gateway.routeList.table.delete"
+                        defaultMessage="删除策略"
                     />
                 </Balloon.Tooltip>
             </div>
@@ -180,30 +183,29 @@ class RouteTable extends Component {
         });
     };
 
-    delete = () => {
-        let id = this.state.selectApi;
-        let url = API.gateway + '/lifeCycle/' + id;
+    delete = (policyId) => {
+        let url = API.gateway + '/policy/route/' + policyId;
         let _this = this;
-        if (id !== '') {
+        if (policyId !== '') {
             Axios.delete(url).then(function (response) {
                 console.log(response);
                 if (response.data.code === 0) {
                     Toast.success(<FormattedMessage
-                        id='gateway.apiLists.table.message.delete'
-                        defaultMessage="api成功删除!"
+                        id='gateway.routeList.table.message.delete.success'
+                        defaultMessage={_this.props.intl.messages["gateway.routeList.table.message.delete.success"]}
                     />);
                     _this.refreshList(_this.state.current);
                 } else {
                     Toast.error(<FormattedMessage
-                        id='gateway.apiLists.table.message.delete'
-                        defaultMessage="api删除失败!"
+                        id='gateway.routeList.table.message.delete.success'
+                        defaultMessage={_this.props.intl.messages["gateway.routeList.table.message.delete.fail"]}
                     />);
                 }
             }).catch(function (error) {
                 console.log(error);
                 Toast.success(<FormattedMessage
-                    id='gateway.apiLists.table.message.delete'
-                    defaultMessage="api删除失败!"
+                    id='gateway.routeList.table.message.delete.fail'
+                    defaultMessage={_this.props.intl.messages["gateway.routeList.table.message.delete.fail"]}
                 />);
             });
         }
@@ -248,40 +250,23 @@ class RouteTable extends Component {
                     <Row wrap style={styles.headRow}>
                         <Col l="12">
                             <Button style={{...styles.button, marginLeft: 10}}>
-                                <Link to="/gateway/createApi">
+                                <Link to="/gateway/route/createServiceDiscoveryPolicyForm">
                                     <Icon type="add" size="xs" style={{marginRight: '4px'}}/>
                                     {this.props.intl.messages["gateway.routeList.add.serviceDiscoveryPolicy"]}
                                 </Link>
                             </Button>
 
                             <Button style={{...styles.button, marginLeft: 10}}>
-                                <Link to="/gateway/createApi">
+                                <Link to="/gateway/route/createWeightingPolicy">
                                     <Icon type="add" size="xs" style={{marginRight: '4px'}}/>
                                     {this.props.intl.messages["gateway.routeList.add.weightingPolicy"]}
                                 </Link>
-                            </Button>
-                        </Col>
-
-                        <Col l="12" style={styles.center}>
-                            <Button type="normal" style={styles.button} onClick={this.delete}>
-                                {this.props.intl.messages["gateway.apiLists.delete"]}
                             </Button>
                         </Col>
                     </Row>
 
                     <Table
                         dataSource={this.state.currentData}
-                        rowSelection={{
-                            onChange: this.onChange,
-                            onSelect: (selected, record, records) => {
-                                console.log('onSelect', selected, record, records);
-                                if (selected) {
-                                    this.state.selectApi = record.id;
-                                } else {
-                                    this.state.selectApi = '';
-                                }
-                            },
-                        }}
                     >
                         <Table.Column title={this.props.intl.messages["gateway.routeList.table.policyId"]}
                                       dataIndex="policyId" width={100}/>

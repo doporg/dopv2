@@ -10,7 +10,7 @@ import java.util.List;
 @ApiModel(description = "权重策略详情")
 public class WeightingPolicyParams extends RoutingPolicyParams{
     @ApiModelProperty(value = "configuration",dataType = "Configuration")
-    private List<WeightingPolicyConfig> configurations;
+    private List<WeightingPolicyConfig> targets;
 
     @ApiModelProperty(value = "algorithm",dataType = "String",allowableValues = "round-robin,hash,least-connections")
     private String algorithm;
@@ -27,8 +27,8 @@ public class WeightingPolicyParams extends RoutingPolicyParams{
     public WeightingPolicyParams() {
     }
 
-    public List<WeightingPolicyConfig> getConfigurations() {
-        return configurations;
+    public List<WeightingPolicyConfig> getTargets() {
+        return targets;
     }
 
     public String getAlgorithm() {

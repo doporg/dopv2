@@ -186,7 +186,7 @@ public class ApiRestTemplate {
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
         map.add("name", name);
         map.add("algorithm", algorithm);
-        if (algorithm.equals("hash")){
+        if (algorithm.equals("consistent-hashing")){
             map.add("hash_on", hash_on);
             if (hash_on.equals("header")){
                 map.add("hash_on_header",hash_on_header);
@@ -295,7 +295,7 @@ public class ApiRestTemplate {
 
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
         map.add("algorithm", algorithm);
-        if (algorithm.equals("hash")){
+        if (algorithm.equals("consistent-hashing")){
             map.add("hash_on", hash_on);
             if (hash_on.equals("header")){
                 map.add("hash_on_header",hash_on_header);

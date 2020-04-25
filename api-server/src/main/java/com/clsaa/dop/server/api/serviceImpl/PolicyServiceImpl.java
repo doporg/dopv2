@@ -140,6 +140,7 @@ public class PolicyServiceImpl implements PolicyService {
             }
             serviceRoute.setName(name);
             serviceRoute.setHost(host);
+            serviceRoute.setPort(port);
             serviceRoute.setDescription(description);
             serviceRoute.setPath(path);
             serviceRouteRepository.saveAndFlush(serviceRoute);
@@ -160,8 +161,9 @@ public class PolicyServiceImpl implements PolicyService {
                 if (kongTarget != null) {
                     Target target = new Target(kongTarget.getId(), host, port, upstream);
                     targetRepository.saveAndFlush(target);
+                }else {
+                    return new ResponseResult(3, "target update fail");
                 }
-
 
                 return new ResponseResult(0, "success");
             } else {
@@ -203,9 +205,12 @@ public class PolicyServiceImpl implements PolicyService {
                 for (WeightingPolicyConfig weightingPolicyConfig : configs) {
                     String targetUrl = weightingPolicyConfig.getTargetHost() + ":" + weightingPolicyConfig.getTargetPort();
                     KongTarget kongTarget = apiRestTemplate.createTarget(upstream.getId(), targetUrl, weightingPolicyConfig.getWeights());
+                    System.out.println("target: " +upstream.getId()+" "+ targetUrl+" "+weightingPolicyConfig.getWeights());
                     if (kongTarget != null) {
                         Target target = new Target(kongTarget.getId(), weightingPolicyConfig.getTargetHost(), weightingPolicyConfig.getTargetPort(), weightingPolicyConfig.getWeights(), upstream);
                         targetRepository.saveAndFlush(target);
+                    }else {
+                        return new ResponseResult(3, "target update error");
                     }
                 }
                 return new ResponseResult(0, "success");

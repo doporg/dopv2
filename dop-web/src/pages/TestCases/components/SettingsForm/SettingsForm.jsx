@@ -13,6 +13,7 @@ const { Row, Col } = Grid;
 const { Group: RadioGroup } = Radio;
 const { ImageUpload } = Upload;
 
+
 function beforeUpload(info) {
   console.log('beforeUpload callback : ', info);
 }

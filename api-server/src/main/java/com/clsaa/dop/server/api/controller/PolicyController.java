@@ -100,7 +100,7 @@ public class PolicyController {
             @ApiResponse(code = 400, message = "错误参数")
     })
     public ResponseResult<String> createWeightingPolicyDetail(@ApiParam(name = "weightingPolicyDetail params", required = true) @RequestBody WeightingPolicyParams policyParams) {
-        return policyService.createWeightingPolicy(policyParams.getName(), policyParams.getDescription(), policyParams.getAlgorithm(), policyParams.getHashOn(), policyParams.getHeader(), policyParams.getPath(), policyParams.getConfigurations());
+        return policyService.createWeightingPolicy(policyParams.getName(), policyParams.getDescription(), policyParams.getAlgorithm(), policyParams.getHashOn(), policyParams.getHeader(), policyParams.getPath(), policyParams.getTargets());
     }
 
     @ApiOperation(value = "创建服务发现策略")
@@ -130,7 +130,7 @@ public class PolicyController {
     })
     public ResponseResult modifyWeightingPolicy(@ApiParam(name = "policy id", required = true) @PathVariable("policyId") String policyId,
                                                 @ApiParam(name = "weightingPolicy params", required = true) @RequestBody WeightingPolicyParams policyParams) {
-        return policyService.modifyWeightingPolicy(policyId, policyParams.getName(), policyParams.getDescription(), policyParams.getAlgorithm(), policyParams.getHashOn(), policyParams.getHeader(), policyParams.getPath(), policyParams.getConfigurations());
+        return policyService.modifyWeightingPolicy(policyId, policyParams.getName(), policyParams.getDescription(), policyParams.getAlgorithm(), policyParams.getHashOn(), policyParams.getHeader(), policyParams.getPath(), policyParams.getTargets());
     }
 
     @ApiOperation(value = "修改服务发现策略")
