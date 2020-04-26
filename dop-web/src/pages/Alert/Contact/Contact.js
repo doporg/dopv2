@@ -22,14 +22,6 @@ class Contact extends Component {
             createManualDialogVisiable: false,
             isSubmit: false,
             total: 1,
-            currentData: [{}],
-            searchValue: {
-                owner: '',
-                type: 'interface',
-                group: '',
-                result: '',
-                cuser: ''
-            },
         };
 
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
@@ -62,28 +54,6 @@ class Contact extends Component {
         });
     }
 
-    addStrategy() {
-        let url = API.alert + "/alert/test2";
-        Axios({
-            method: "POST",
-            headers:{
-                'Content-Type':'application/x-www-form-urlencoded',
-                'X_LOGIN_USER': 111,
-
-            },
-            url: url,
-            data: {},
-            params: {
-                // strategyName:this.state.strategyName,
-            },
-        }).then(() => {
-            // this.props.history.push("/alert/"+this.state.projectid+"/branches");
-            alert("send")
-        })
-    }
-
-
-
     onOpen = () =>{
 
         this.setState({
@@ -98,13 +68,13 @@ class Contact extends Component {
             size="small"
             style={{...styles.icon, ...styles.editIcon}}
             onClick={() => {
-                this.props.history.push('/test/editGroups/' + record.id);
+                this.props.history.push('/alert/editContact/' + record.id);
             }}
         />;
         return (
-            <div style={styles.oper}>
-                <Balloon.Tooltip trigger={edit} triggerType="hover" align='l'>
-                    {this.props.intl.messages['test.createGroup.edit']}
+            <div >
+                <Balloon.Tooltip trigger={edit} triggerType="hover" align='r' style={{marginLeft: 30, width: 30}}>
+                    {this.props.intl.messages['alert.contact.table.edit']}
                 </Balloon.Tooltip>
             </div>
         );
@@ -118,6 +88,7 @@ class Contact extends Component {
                     <Row wrap style={styles.headRow}>
                         <Col l="12">
                             <ContactInfo
+                                // refresh={this.refreshList()}
                                 visible={this.state.visible}
                                 title={this.props.intl.messages['alert.newContact.title']}
                             />
@@ -137,11 +108,12 @@ class Contact extends Component {
                         dataSource={this.state.currentData}
                         rowSelection={{ onChange: this.onChange }}
                     >
-                        <Table.Column title={this.props.intl.messages['alert.contact.table.name']} dataIndex="name" width={130} />
-                        <Table.Column title={this.props.intl.messages['alert.contact.table.mail']} dataIndex="mail" width={150} />
-                        <Table.Column title={this.props.intl.messages['alert.contact.table.phone']} dataIndex="phone" width={150} />
-                        <Table.Column title={this.props.intl.messages['alert.contact.table.mtime']} dataIndex="mtime" width={150} />
-                        <Table.Column title={this.props.intl.messages['alert.contact.table.modify']} width={50} cell={this.renderOper} />
+                        <Table.Column title={this.props.intl.messages['alert.contact.table.name']} dataIndex="name" width={120} />
+                        <Table.Column title={this.props.intl.messages['alert.contact.table.mail']} dataIndex="mail" width={120} />
+                        <Table.Column title={this.props.intl.messages['alert.contact.table.phone']} dataIndex="phone" width={120} />
+                        <Table.Column title={this.props.intl.messages['alert.contact.table.remark']} dataIndex="remark" width={120} />
+                        <Table.Column title={this.props.intl.messages['alert.contact.table.mtime']} dataIndex="mtime" width={100} />
+                        <Table.Column title={this.props.intl.messages['alert.contact.table.oper']} width={50} cell={this.renderOper} />
 
                     </Table>
                     <Pagination

@@ -46,12 +46,12 @@ public class ContactServiceTest {
 	@Test
 	public void testAddNewContact() throws Exception {
 	//TODO: Test goes here...
-		contactService.addNewContact(new ContactVo("张三","wewewe@1","1234123"),(long)1);
-		contactService.addNewContact(new ContactVo("李四","wewewe@2","1234123"),(long)1);
-		contactService.addNewContact(new ContactVo("王五","wewewe@3","1234123"),(long)1);
-		contactService.addNewContact(new ContactVo("胡少","wewewe@1","1234123"),(long)1);
-		contactService.addNewContact(new ContactVo("何少","wewewe@2","1234123"),(long)1);
-		contactService.addNewContact(new ContactVo("王小波","wewewe@3","1234123"),(long)2);
+		contactService.addNewContact(new ContactVo("张三","wewewe@1","1234123",""),(long)1);
+		contactService.addNewContact(new ContactVo("李四","wewewe@2","1234123",""),(long)1);
+		contactService.addNewContact(new ContactVo("王五","wewewe@3","1234123",""),(long)1);
+		contactService.addNewContact(new ContactVo("胡少","wewewe@1","1234123",""),(long)1);
+		contactService.addNewContact(new ContactVo("何少","wewewe@2","1234123",""),(long)1);
+		contactService.addNewContact(new ContactVo("王小波","wewewe@3","1234123",""),(long)2);
 	}
 
 
@@ -85,9 +85,9 @@ public class ContactServiceTest {
 	@Test
 	public void testModifyContact() throws Exception {
 	//TODO: Test goes here...
-		contactService.modifyContact(new ContactVo((long)1,"ww2","wewewe@1","123232323", LocalDateTime.now()),(long)1);
+		contactService.modifyContact(new ContactVo((long)1,"ww2","wewewe@1","123232323","", LocalDateTime.now()));
 
-		contactService.modifyContact(new ContactVo((long)4,"ww2","wewewe@1","123232323", LocalDateTime.now()),(long)1);
+		contactService.modifyContact(new ContactVo((long)4,"ww2","wewewe@1","123232323","", LocalDateTime.now()));
 	}
 
 

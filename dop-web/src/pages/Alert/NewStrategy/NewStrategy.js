@@ -96,52 +96,58 @@ class NewStrategy extends React.Component {
                 <div className="div-new-strategy-top">
                     {this.props.intl.messages["alert.newStrategy.top"]}
                 </div>
-                <div>
-                    <div className="div-new-strategy-input">
-                        <span className="text-new-strategy-name">{this.props.intl.messages["alert.newStrategy.name"]}</span>
-                        <input maxLength={20}
-                               hasLimitHint
-                               placeholder=" 策略名称"
-                               {...init("name", {
-                                   rules: [
-                                       { required: true, min: 5, message: "用户名至少为 5 个字符" },
-                                       { validator: this.userExists }
-                                   ]
-                               })}
-                               onChange={this.changeStrategyName.bind(this)}
-                               className="input-new-strategy-name"
-                        />
-                    </div>
+                <FormBinderWrapper
+                    value={this.state.value}   // 传递 values
+                    onChange={this.formChange} // 响应 onChange
+                    ref="form"
+                >
+                    <div>
+                        <div className="div-new-strategy-input">
+                            <span className="text-new-strategy-name">{this.props.intl.messages["alert.newStrategy.name"]}</span>
+                            <input maxLength={20}
+                                   hasLimitHint
+                                   placeholder=" 策略名称"
+                                   {...init("name", {
+                                       rules: [
+                                           { required: true, min: 5, message: "用户名至少为 5 个字符" },
+                                           { validator: this.userExists }
+                                       ]
+                                   })}
+                                   onChange={this.changeStrategyName.bind(this)}
+                                   className="input-new-strategy-name"
+                            />
+                        </div>
 
-                    <div className="div-new-strategy-select">
-                        <span className="text-new-strategy-name">{this.props.intl.messages["alert.newStrategy.state"]}</span>
-                        <div className="div-new-strategy-state">
-                            <Switch checkedChildren="开" onChange={this.changeState.bind(this)} unCheckedChildren="关" />
+                        <div className="div-new-strategy-select">
+                            <span className="text-new-strategy-name">{this.props.intl.messages["alert.newStrategy.state"]}</span>
+                            <div className="div-new-strategy-state">
+                                <Switch checkedChildren="开" onChange={this.changeState.bind(this)} unCheckedChildren="关" />
+                            </div>
+                        </div>
+
+                        <div className="div-new-strategy-select">
+                            <span className="text-new-strategy-name">{this.props.intl.messages["alert.newStrategy.level.name"]}</span>
+                            <div className="div-new-strategy-state">
+                                <Select>
+                                    <Select.Option value="option1">
+                                        {this.props.intl.messages["alert.newStrategy.level.normal"]}
+                                    </Select.Option>
+                                    <Select.Option value="option2">
+                                        {this.props.intl.messages["alert.newStrategy.level.serve"]}
+                                    </Select.Option>
+                                </Select>
+                            </div>
+                        </div>
+
+                        <div className="div-new-strategy-input">
+                            <span className="text-new-strategy-name">{this.props.intl.messages["alert.newStrategy.description"]}</span>
+                            <Input multiple placeholder="multiple" className="input-new-strategy-description"/>
                         </div>
                     </div>
 
-                    <div className="div-new-strategy-select">
-                        <span className="text-new-strategy-name">{this.props.intl.messages["alert.newStrategy.level.name"]}</span>
-                        <div className="div-new-strategy-state">
-                            <Select>
-                                <Select.Option value="option1">
-                                    {this.props.intl.messages["alert.newStrategy.level.normal"]}
-                                </Select.Option>
-                                <Select.Option value="option2">
-                                    {this.props.intl.messages["alert.newStrategy.level.serve"]}
-                                </Select.Option>
-                            </Select>
-                        </div>
-                    </div>
-
-                    <div className="div-new-strategy-input">
-                        <span className="text-new-strategy-name">{this.props.intl.messages["alert.newStrategy.description"]}</span>
-                        <Input multiple placeholder="multiple" className="input-new-strategy-description"/>
-                    </div>
+                </FormBinderWrapper>
 
 
-
-                </div>
                 <div className="div-new-strategy-submit">
                     <Button type="primary" onClick={this.addStrategy.bind(this)} className="btn-new-strategy-add">{this.props.intl.messages["alert.newStrategy.add"]}</Button>
                     <Button type="normal" shape="warning" onClick={this.cancel.bind(this)} className="btn-new-strategy-cancel">{this.props.intl.messages["alert.newStrategy.cancel"]}</Button>

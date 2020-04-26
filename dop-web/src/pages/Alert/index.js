@@ -4,6 +4,7 @@ import AlertLog from "./AlertLog/AlertLog";
 import AlertLayout from "../../layouts/AlertLayout/AlertLayout";
 import NewStrategy from "./NewStrategy/NewStrategy";
 import Contact from "./Contact/Contact";
+import EditContact from "./EditContact/EditContact"
 
 const alertConfig = [
     {
@@ -13,26 +14,32 @@ const alertConfig = [
         isLogin: true
     },
     {
-        path: '/alert/Strategy',
+        path: '/alert/strategy',
         component: Strategy,
         layout: AlertLayout,
         isLogin: true
     },
     {
-        path: '/alert/AlertLog',
+        path: '/alert/alertLog',
         component: AlertLog,
         layout: AlertLayout,
         isLogin: true
     },
     {
-        path: '/alert/NewStrategy',
+        path: '/alert/newStrategy',
         component: NewStrategy,
         layout: AlertLayout,
         isLogin: true
     },
     {
-        path: '/alert/Contact',
+        path: '/alert/contact',
         component: Contact,
+        layout: AlertLayout,
+        isLogin: true
+    },
+    {
+        path: '/alert/editContact/:contactId',
+        component: EditContact,
         layout: AlertLayout,
         isLogin: true
     }

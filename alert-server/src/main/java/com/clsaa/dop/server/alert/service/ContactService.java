@@ -40,7 +40,7 @@ public class ContactService {
 	 * @param contact contactVo
 	 * @param userId 用户id
 	 */
-	void addNewContact(ContactVo contact, Long userId){
+	public void addNewContact(ContactVo contact, Long userId){
 		ContactPo contactPo = new ContactPo();
 		contactPo.setNewContact(contact, userId);
 		System.out.println(contactPo.toString());
@@ -51,14 +51,15 @@ public class ContactService {
 	/**
 	 * 修改联系人
 	 * @param contact contactVo
-	 * @param userId 用户id
 	 */
-	void modifyContact(ContactVo contact, Long userId){
+	public void modifyContact(ContactVo contact){
 		ContactPo contactPo = contactDao.findByCid(contact.getId());
 		contactPo.setMtime(LocalDateTime.now());
 		contactPo.setMail(contact.getMail());
 		contactPo.setName(contact.getName());
 		contactPo.setPhone(contact.getPhone());
+		contactPo.setRemark(contact.getRemark());
+		contactPo.setCid(contact.getId());
 		contactDao.save(contactPo);
 	}
 
@@ -67,7 +68,7 @@ public class ContactService {
 	 * @param contact contactVo
 	 * @param userId 用户id
 	 */
-	void deleteContact(ContactVo contact, Long userId){
+	public void deleteContact(ContactVo contact, Long userId){
 		ContactPo contactPo = contactDao.findByCid(contact.getId());
 		contactPo.setDeleted(true);
 		contactDao.save(contactPo);
@@ -105,8 +106,8 @@ public class ContactService {
 			@Override
 			public Predicate toPredicate(Root<ContactPo> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 				Path<Long> cUser = root.get("cuser");
-				Path<Boolean> deleted = root.get("is_deleted");
-				query.where(criteriaBuilder.equal(cUser,cuser),criteriaBuilder.equal(deleted,false));
+				Path<Integer> deleted = root.get("deleted");
+				query.where(criteriaBuilder.equal(cUser,cuser),criteriaBuilder.equal(deleted,0));
 				return null;
 			}
 
@@ -121,5 +122,15 @@ public class ContactService {
 		}
 		pagination.setPageList(contactVoList);
 		return pagination;
+	}
+
+	public ContactVo getContactById(Long contactId) {
+		return contactDao.findByCid(contactId).transferToVo();
+	}
+
+	public void deleteContacts(List<Long> contactIdList) {
+		for(Long id : contactIdList){
+			contactDao.deleteById(id);
+		}
 	}
 }

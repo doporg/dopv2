@@ -38,6 +38,9 @@ public class ContactPo implements Serializable{
 	@Column(name = "phone")
 	private String phone;
 
+	@Column(name = "remark")
+	private String remark;
+
 	/**
 	 * 创建时间
 	 */
@@ -89,6 +92,7 @@ public class ContactPo implements Serializable{
 		this.name = contactVo.getName();
 		this.mail = contactVo.getMail();
 		this.phone = contactVo.getPhone();
+		this.remark = contactVo.getRemark();
 		this.ctime = LocalDateTime.now();
 		this.mtime = this.ctime;
 		this.cuser = user;
@@ -98,7 +102,7 @@ public class ContactPo implements Serializable{
 
 
 	public ContactVo transferToVo(){
-		return new ContactVo(cid,name,mail,phone,mtime);
+		return new ContactVo(cid,name,mail,phone,remark,mtime);
 	}
 
 	@Override

@@ -33,22 +33,38 @@ public class ContactVo {
 
 	private String phone;
 
+	private String remark;
+
 	private LocalDateTime mtime;
 
 	public ContactVo() {
 	}
 
-	public ContactVo(Long id, String name, String mail, String phone, LocalDateTime mtime) {
+	public ContactVo(Long id, String name, String mail, String phone, String remark, LocalDateTime mtime) {
 		this.id = id;
 		this.name = name;
 		this.mail = mail;
 		this.phone = phone;
 		this.mtime = mtime;
+		this.remark = remark;
 	}
 
-	public ContactVo(String name, String mail, String phone) {
+	public ContactVo(String name, String mail, String phone,String remark) {
 		this.name = name;
 		this.mail = mail;
 		this.phone = phone;
+		this.remark = remark;
+	}
+
+	@Override
+	public String toString() {
+		return "ContactVo{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", mail='" + mail + '\'' +
+				", phone='" + phone + '\'' +
+				", remark='" + remark + '\'' +
+				", mtime=" + mtime +
+				'}';
 	}
 }
