@@ -8,6 +8,7 @@
     "@icedesign/base": "^0.2.6",
     "@icedesign/container": "^0.1.4",
     "@icedesign/data-binder": "^1.0.3",
+    "@icedesign/ellipsis": "^0.1.7",
     "@icedesign/form-binder": "^0.1.7",
     "@icedesign/icon": "^0.1.1",
     "@icedesign/img": "^0.1.0",
