@@ -1,5 +1,7 @@
 const GATEWAY_ZH_CN = {
     'gateway.name': 'API管理',
+    'gateway.menu.apiManage': 'API管理',
+    'gateway.menu.routePolicyManage': '路由策略管理',
 
     'gateway.search.searchTitle':'搜索',
     'gateway.search.pleaseSelect': '请选择',
@@ -31,10 +33,13 @@ const GATEWAY_ZH_CN = {
     'gateway.apiLists.table.operations': '相关操作',
     'gateway.apiLists.table.edit': '编辑',
     'gateway.apiLists.table.logs': '查看日志',
+    'gateway.apiLists.table.delete': '删除',
 
     'gateway.apiLists.table.message.inOnline': 'api上线成功！',
     'gateway.apiLists.table.message.inOffline': 'api下线成功！',
-    'gateway.apiLists.table.message.delete': 'api删除成功！',
+    'gateway.apiLists.table.message.delete.success': 'api删除成功！',
+    'gateway.apiLists.table.message.delete.fail': 'api删除失败',
+    'gateway.apiLists.table.message.delete.loading': 'api正在删除，请稍后',
 
     'gateway.routeList.title':'路由策略列表',
     'gateway.routeList.add.serviceDiscoveryPolicy':'服务发现策略',
@@ -48,6 +53,7 @@ const GATEWAY_ZH_CN = {
     'gateway.routeList.table.delete': '删除策略',
 
     'gateway.routeList.table.message.delete.success': '路由策略删除成功！',
+    'gateway.routeList.table.message.delete.loading': '路由策略正在删除，请稍后',
     'gateway.routeList.table.message.delete.fail': '路由策略删除失败！',
 
     "gateway.createApi.title": '创建api',
@@ -160,7 +166,5 @@ const GATEWAY_ZH_CN = {
     "gateway.route.editServiceDiscoveryPolicy.cancel": '取消',
     "gateway.route.editServiceDiscoveryPolicy.yes": '修改策略',
     "gateway.route.editServiceDiscoveryPolicy.reset": '重置',
-
-
 };
 export default GATEWAY_ZH_CN;

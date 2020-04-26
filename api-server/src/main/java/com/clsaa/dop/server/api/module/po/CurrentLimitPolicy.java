@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -19,19 +20,26 @@ public class CurrentLimitPolicy {
     private String name;
 
     @Column(nullable = false)
-    private String circle;
+    private int second;
 
     @Column(nullable = false)
-    private int time;
+    private int minute;
 
-    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)
-    @JoinColumn(name = "service_id")
-    private Service service;
+    @Column(nullable = false)
+    private int hour;
 
-    public CurrentLimitPolicy(String name, String circle, int time, Service service) {
+    @Column(nullable = false)
+    private int day;
+
+
+    @OneToMany(mappedBy = "currentLimitPolicy",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    private List<Service> services;
+
+    public CurrentLimitPolicy(String name, int second, int minute, int hour, int day) {
         this.name = name;
-        this.circle = circle;
-        this.time = time;
-        this.service = service;
+        this.second = second;
+        this.minute = minute;
+        this.hour = hour;
+        this.day = day;
     }
 }

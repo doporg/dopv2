@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+
 @Entity
 public class Service {
     @Id
@@ -53,9 +54,9 @@ public class Service {
     @JoinColumn(name = "serviceRoute_id",referencedColumnName = "id")
     private ServiceRoute serviceRoute;
 
-    @OneToMany(mappedBy  = "service",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private List<CurrentLimitPolicy> currentLimitPolicies;
-
+    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH})
+    @JoinColumn(name = "currentLimitPolicy_id")
+    private CurrentLimitPolicy currentLimitPolicy;
 
     public Service(String id, String name, String description, Long timeout,
                    boolean fuse, Long fuseDetectionRing, Long criticalFusingFailureRate, Long fuseDuration, Long replyDetectionRingSize, ServiceRoute serviceRoute) {
@@ -74,4 +75,5 @@ public class Service {
         this.rateLimitingPluginId = "";
         this.proxyCachePluginId = "";
     }
+
 }

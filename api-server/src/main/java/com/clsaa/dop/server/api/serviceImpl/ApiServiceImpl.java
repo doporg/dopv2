@@ -1,5 +1,6 @@
 package com.clsaa.dop.server.api.serviceImpl;
 
+import com.clsaa.dop.server.api.dao.CurrentLimitPolicyRepository;
 import com.clsaa.dop.server.api.dao.RouteRepository;
 import com.clsaa.dop.server.api.dao.ServiceRepository;
 import com.clsaa.dop.server.api.dao.ServiceRouteRepository;
@@ -18,6 +19,7 @@ import com.clsaa.dop.server.api.module.vo.response.policyDetail.ApiInfo;
 import com.clsaa.dop.server.api.module.vo.response.policyDetail.routingPolicyDetail.RoutingPolicyDetail;
 import com.clsaa.dop.server.api.restTemplate.ApiRestTemplate;
 import com.clsaa.dop.server.api.service.ApiService;
+import com.clsaa.dop.server.api.service.PolicyService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -27,15 +29,19 @@ public class ApiServiceImpl implements ApiService {
     private ServiceRepository serviceRepository;
     private RouteRepository routeRepository;
     private ServiceRouteRepository serviceRouteRepository;
+    private CurrentLimitPolicyRepository currentLimitPolicyRepository;
+    private PolicyService policyService;
     private ApiRestTemplate apiRestTemplate;
 
     @Autowired
     public ApiServiceImpl(ServiceRepository serviceRepository, RouteRepository routeRepository, ServiceRouteRepository serviceRouteRepository,
-                          ApiRestTemplate apiRestTemplate) {
+                          ApiRestTemplate apiRestTemplate,CurrentLimitPolicyRepository currentLimitPolicyRepository,PolicyService policyService) {
         this.serviceRepository = serviceRepository;
         this.routeRepository = routeRepository;
         this.serviceRouteRepository = serviceRouteRepository;
+        this.currentLimitPolicyRepository = currentLimitPolicyRepository;
         this.apiRestTemplate = apiRestTemplate;
+        this.policyService = policyService;
     }
 
     @Override
@@ -64,7 +70,13 @@ public class ApiServiceImpl implements ApiService {
 
                     //更新缓存策略
                     if (updateCachePolicy(createApiParams.isCaching(),createApiParams.getCachingTime().intValue(),service)){
-                        return new ResponseResult<>(0,"success",service.getId());
+                        //更新流控策略
+                        CurrentLimitPolicy currentLimitPolicy = currentLimitPolicyRepository.findCurrentLimitPolicyById(createApiParams.getCurrentLimitPolicyId());
+                        if (policyService.updateServiceCurrentLimitPolicy(service,currentLimitPolicy)){
+                            return new ResponseResult<>(0,"success",service.getId());
+                        }else {
+                            return new ResponseResult<>(5,"current limit policy update error",service.getId());
+                        }
                     }else {
                         return new ResponseResult<>(4,"cache policy update error",service.getId());
                     }
@@ -174,10 +186,17 @@ public class ApiServiceImpl implements ApiService {
                     route.setRequestPath(modifyApiParams.getRequestPath());
                     routeRepository.saveAndFlush(route);
 
+                    //更新缓存策略
                     if (updateCachePolicy(modifyApiParams.isCaching(),modifyApiParams.getCachingTime().intValue(),service)){
                         if (!route.isOnline()){
                             if (apiRestTemplate.modifyRoute(route.getKongRouteId(),route.getRequestMethod(),route.getRequestPath(),apiId)!=null){
-                                return new ResponseResult<>(0,"success");
+                                //更新流控策略
+                                CurrentLimitPolicy currentLimitPolicy = currentLimitPolicyRepository.findCurrentLimitPolicyById(modifyApiParams.getCurrentLimitPolicyId());
+                                if (policyService.updateServiceCurrentLimitPolicy(service,currentLimitPolicy)){
+                                    return new ResponseResult<>(0,"success",service.getId());
+                                }else {
+                                    return new ResponseResult<>(5,"current limit policy update error",service.getId());
+                                }
                             }else {
                                 return new ResponseResult<>(4,"route modify error");
                             }

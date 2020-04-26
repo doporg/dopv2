@@ -1,6 +1,7 @@
 package com.clsaa.dop.server.api.controller;
 
 import com.clsaa.dop.server.api.module.vo.request.policy.*;
+import com.clsaa.dop.server.api.module.vo.response.CurrentLimitPolicyList;
 import com.clsaa.dop.server.api.module.vo.response.ResponseResult;
 import com.clsaa.dop.server.api.module.vo.response.RoutePolicyList;
 import com.clsaa.dop.server.api.module.vo.response.policyDetail.CurrentLimitPolicyDetail;
@@ -28,13 +29,23 @@ public class PolicyController {
         this.policyService = policyService;
     }
 
-    @ApiOperation(value = "查看限流策略")
-    @GetMapping("/flowControl/currentLimit/{serviceId}")
+    @ApiOperation(value = "查看限流策略列表")
+    @GetMapping("/flowControl/currentLimit")
     @ApiResponses({
             @ApiResponse(code = 400, message = "错误参数")
     })
-    public ResponseResult<List<CurrentLimitPolicyDetail>> getCurrentLimitPolicy(@ApiParam(name = "service id", required = true) @PathVariable("serviceId") String serviceId) {
-        return policyService.getCurrentLimitPolicies(serviceId);
+    public ResponseResult<CurrentLimitPolicyList> getCurrentLimitPolicy(@ApiParam(name = "pageSize", required = true) @RequestParam("pageSize") int pageSize,
+                                                                        @ApiParam(name = "pageNo", required = true) @RequestParam("pageNo") int pageNo) {
+        return policyService.getCurrentLimitPolicies(pageNo, pageSize);
+    }
+
+    @ApiOperation(value = "查看限流策略详情")
+    @GetMapping("/flowControl/currentLimit/{policyId}")
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "错误参数")
+    })
+    public ResponseResult<CurrentLimitPolicyDetail> getCurrentLimitPolicyDetail(@ApiParam(name = "policy id", required = true) @PathVariable("policyId") String policyId) {
+        return policyService.getCurrentLimitPolicyDetail(policyId);
     }
 
     @ApiOperation(value = "创建限流策略")
@@ -43,7 +54,7 @@ public class PolicyController {
             @ApiResponse(code = 400, message = "错误参数")
     })
     public ResponseResult<String> createCurrentLimitPolicy(@ApiParam(name = "currentLimitPolicy params", required = true) @RequestBody CurrentLimitPolicyParam policyParams) {
-        return policyService.createCurrentLimitPolicy(policyParams.getName(), policyParams.getCycle(), policyParams.getRequests(), policyParams.getServiceId());
+        return policyService.createCurrentLimitPolicy(policyParams);
     }
 
     @ApiOperation(value = "修改限流策略")
@@ -53,7 +64,7 @@ public class PolicyController {
     })
     public ResponseResult modifyCurrentLimitPolicy(@ApiParam(name = "policy id", required = true) @PathVariable("policyId") String policyId,
                                                    @ApiParam(name = "currentLimitPolicy params", required = true) @RequestBody CurrentLimitPolicyParam policyParams) {
-        return policyService.modifyCurrentLimitPolicy(policyParams.getName(), policyParams.getCycle(), policyParams.getRequests(), policyId);
+        return policyService.modifyCurrentLimitPolicy(policyParams , policyId);
     }
 
     @ApiOperation(value = "删除限流策略")
@@ -63,6 +74,15 @@ public class PolicyController {
     })
     public ResponseResult deleteCurrentLimitPolicy(@ApiParam(name = "policy id", required = true) @PathVariable("policyId") String policyId) {
         return policyService.deleteCurrentLimitPolicy(policyId);
+    }
+
+    @ApiOperation(value = "搜索限流策略")
+    @GetMapping("/flowControl/currentLimit/search")
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "错误参数")
+    })
+    public ResponseResult<List<CurrentLimitPolicyDetail>> searchCurrentLimitPolicy(@ApiParam(name = "policy name", required = true) @RequestParam("value") String value) {
+        return policyService.searchCurrentLimitPolicy(value);
     }
 
     @ApiOperation(value = "查看路由策略")

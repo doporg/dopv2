@@ -10,8 +10,7 @@ import java.util.List;
 public interface CurrentLimitPolicyRepository extends JpaRepository<CurrentLimitPolicy,String> {
     CurrentLimitPolicy findCurrentLimitPolicyById(String id);
 
-    CurrentLimitPolicy findByNameAndService(String name,Service service);
+    CurrentLimitPolicy findByName(String name);
 
-    List<CurrentLimitPolicy> findByService(Service service);
-
+    List<CurrentLimitPolicy> findByNameStartingWith(String name);
 }

@@ -187,6 +187,10 @@ class RouteTable extends Component {
         let url = API.gateway + '/policy/route/' + policyId;
         let _this = this;
         if (policyId !== '') {
+            Toast.loading(<FormattedMessage
+                id='gateway.routeList.table.message.delete.loading'
+                defaultMessage={_this.props.intl.messages["gateway.routeList.table.message.delete.loading"]}
+            />);
             Axios.delete(url).then(function (response) {
                 console.log(response);
                 if (response.data.code === 0) {
@@ -203,7 +207,7 @@ class RouteTable extends Component {
                 }
             }).catch(function (error) {
                 console.log(error);
-                Toast.success(<FormattedMessage
+                Toast.error(<FormattedMessage
                     id='gateway.routeList.table.message.delete.fail'
                     defaultMessage={_this.props.intl.messages["gateway.routeList.table.message.delete.fail"]}
                 />);

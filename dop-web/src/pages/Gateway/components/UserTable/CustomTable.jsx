@@ -35,7 +35,6 @@ class CustomTable extends Component {
                 owner: '',
                 type: 'All',
             },
-            selectApi: '',
         };
 
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
@@ -91,6 +90,15 @@ class CustomTable extends Component {
             }}
         />;
 
+        let deleteApi = <Icon
+            type="close"
+            size="small"
+            style={{...styles.icon, ...styles.deleteIcon}}
+            onClick={() => {
+                this.delete(record.id);
+            }}
+        />;
+
         let edit = <Icon
             type="edit"
             size="small"
@@ -111,6 +119,12 @@ class CustomTable extends Component {
                     <FormattedMessage
                         id="gateway.apiLists.table.logs"
                         defaultMessage="查看日志"
+                    />
+                </Balloon.Tooltip>
+                <Balloon.Tooltip trigger={deleteApi} triggerType="hover" align='r'>
+                    <FormattedMessage
+                        id="gateway.apiLists.table.delete"
+                        defaultMessage="删除"
                     />
                 </Balloon.Tooltip>
             </div>
@@ -186,30 +200,33 @@ class CustomTable extends Component {
         });
     };
 
-    delete = () => {
-        let id = this.state.selectApi;
+    delete = (id) => {
         let url = API.gateway + '/lifeCycle/' + id;
         let _this = this;
         if (id !== '') {
+            Toast.loading(<FormattedMessage
+                id='gateway.apiLists.table.message.delete.loading'
+                defaultMessage={_this.props.intl.messages["gateway.apiLists.table.message.delete.loading"]}
+            />);
             Axios.delete(url).then(function (response) {
                 console.log(response);
-                if (response.data.code === 0){
+                if (response.data.code === 0) {
                     Toast.success(<FormattedMessage
-                        id='gateway.apiLists.table.message.delete'
-                        defaultMessage="api成功删除!"
+                        id='gateway.apiLists.table.message.delete.success'
+                        defaultMessage={_this.props.intl.messages["gateway.apiLists.table.message.delete.success"]}
                     />);
                     _this.refreshList(_this.state.current);
-                }else {
+                } else {
                     Toast.error(<FormattedMessage
-                        id='gateway.apiLists.table.message.delete'
-                        defaultMessage="api删除失败!"
+                        id='gateway.apiLists.table.message.delete.fail'
+                        defaultMessage={_this.props.intl.messages["gateway.apiLists.table.message.delete.fail"]}
                     />);
                 }
             }).catch(function (error) {
                 console.log(error);
-                Toast.success(<FormattedMessage
-                    id='gateway.apiLists.table.message.delete'
-                    defaultMessage="api删除失败!"
+                Toast.error(<FormattedMessage
+                    id='gateway.apiLists.table.message.delete.fail'
+                    defaultMessage={_this.props.intl.messages["gateway.apiLists.table.message.delete.fail"]}
                 />);
             });
         }
@@ -261,26 +278,10 @@ class CustomTable extends Component {
                                 </Link>
                             </Button>
                         </Col>
-                        <Col l="12" style={styles.center}>
-                            <Button type="normal" style={styles.button} onClick={this.delete}>
-                                {this.props.intl.messages["gateway.apiLists.delete"]}
-                            </Button>
-                        </Col>
                     </Row>
 
                     <Table
                         dataSource={this.state.currentData}
-                        rowSelection={{
-                            onChange: this.onChange,
-                            onSelect: (selected, record, records) => {
-                                console.log('onSelect', selected, record, records);
-                                if (selected) {
-                                    this.state.selectApi = record.id;
-                                } else {
-                                    this.state.selectApi = '';
-                                }
-                            },
-                        }}
                     >
                         <Table.Column title={this.props.intl.messages["gateway.apiLists.table.apiId"]}
                                       dataIndex="id" width={100}/>

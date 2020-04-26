@@ -1,6 +1,10 @@
 package com.clsaa.dop.server.api.service;
 
 import com.clsaa.dop.server.api.module.configuration.WeightingPolicyConfig;
+import com.clsaa.dop.server.api.module.po.CurrentLimitPolicy;
+import com.clsaa.dop.server.api.module.po.Service;
+import com.clsaa.dop.server.api.module.vo.request.policy.CurrentLimitPolicyParam;
+import com.clsaa.dop.server.api.module.vo.response.CurrentLimitPolicyList;
 import com.clsaa.dop.server.api.module.vo.response.ResponseResult;
 import com.clsaa.dop.server.api.module.vo.response.RoutePolicyList;
 import com.clsaa.dop.server.api.module.vo.response.policyDetail.CurrentLimitPolicyDetail;
@@ -26,13 +30,19 @@ public interface PolicyService {
 
     ResponseResult<List<RoutingPolicyDetail>> searchRoutingPolicy(String value);
 
-    ResponseResult<String> createCurrentLimitPolicy(String name,String cycle,int requests,String serviceId);
+    ResponseResult<String> createCurrentLimitPolicy(CurrentLimitPolicyParam policyParams);
 
-    ResponseResult modifyCurrentLimitPolicy(String name,String cycle,int requests,String policyId);
+    ResponseResult modifyCurrentLimitPolicy(CurrentLimitPolicyParam policyParams, String policyId);
 
     ResponseResult deleteCurrentLimitPolicy(String policyId);
 
-    ResponseResult<List<CurrentLimitPolicyDetail>> getCurrentLimitPolicies(String serviceId);
+    ResponseResult<CurrentLimitPolicyList> getCurrentLimitPolicies(int pageNo, int pageSize);
+
+    ResponseResult<CurrentLimitPolicyDetail> getCurrentLimitPolicyDetail(String policyId);
+
+    ResponseResult<List<CurrentLimitPolicyDetail>> searchCurrentLimitPolicy(String value);
+
+    boolean updateServiceCurrentLimitPolicy(Service service, CurrentLimitPolicy currentLimitPolicy);
 }
 
 

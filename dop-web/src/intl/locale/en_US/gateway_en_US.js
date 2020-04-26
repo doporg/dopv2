@@ -1,5 +1,7 @@
 const GATEWAY_EN_US = {
     'gateway.name': 'Pipeline management',
+    'gateway.menu.apiManage': 'API Management',
+    'gateway.menu.routePolicyManage': 'Route Policy Management',
 
     'gateway.search.searchTitle':'Search',
     'gateway.search.pleaseSelect': 'Please Select',
@@ -30,10 +32,15 @@ const GATEWAY_EN_US = {
     'gateway.apiLists.table.operations': 'operations',
     'gateway.apiLists.table.edit': 'edit',
     'gateway.apiLists.table.logs': 'show logs',
+    'gateway.apiLists.table.delete': 'delete',
+
 
     'gateway.apiLists.table.message.inOnline': 'api online successfully!',
     'gateway.apiLists.table.message.inOffline': 'api offline successfully!',
     'gateway.apiLists.table.message.delete': 'api delete successfully!',
+    'gateway.apiLists.table.message.delete.success': 'api delete successfully!',
+    'gateway.apiLists.table.message.delete.fail': 'api delete fail',
+    'gateway.apiLists.table.message.delete.loading': 'please wait...',
 
     'gateway.routeList.title':'Route Policy List',
     'gateway.routeList.add.serviceDiscoveryPolicy':'Service Discovery Policy',
@@ -47,8 +54,10 @@ const GATEWAY_EN_US = {
     'gateway.routeList.table.delete': 'delete policy',
 
 
+
     'gateway.routeList.table.message.delete.success': 'policy delete successfully!',
     'gateway.routeList.table.message.delete.fail': 'policy delete failed!！',
+    'gateway.routeList.table.message.delete.loading': 'Please wait',
 
     "gateway.createApi.title": 'Create Api',
     "gateway.createApi.apiName": 'Api Name:',

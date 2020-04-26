@@ -1,6 +1,7 @@
 import Gateway from './Gateway';
 import RouteTable from './components/RouteTable/RouteTable';
 import BasicLayout from "../../layouts/BasicLayout";
+import GatewayLayout from "../../layouts/GatewayLayout";
 import CreateApi from "./CreateApi";
 import EditApiInfo from "./EditApiInfo";
 import CreateWeightingPolicyForm from "./components/CreateWeightingPolicy/CreateWeightingPolicyForm/index";
@@ -12,49 +13,49 @@ import  EditServiceDiscoveryPolicy from "./components/EditServiceDiscoveryPolicy
 const gatewayConfig = [
     {
         path: '/gateway',
-        layout: BasicLayout,
+        layout: GatewayLayout,
         component: Gateway,
         isLogin: true
     },
     {
         path: "/gateway/createApi",
-        layout: BasicLayout,
+        layout: GatewayLayout,
         component: CreateApi,
         isLogin: true
     },
     {
         path: "/gateway/editApi/:apiId",
-        layout: BasicLayout,
+        layout: GatewayLayout,
         component: EditApiInfo,
         isLogin: true
     },
     {
         path: "/gateway/route",
-        layout: BasicLayout,
+        layout: GatewayLayout,
         component: RouteTable,
         isLogin: true
     },
     {
         path: "/gateway/route/createWeightingPolicy",
-        layout: BasicLayout,
+        layout: GatewayLayout,
         component: CreateWeightingPolicyForm,
         isLogin: true
     },
     {
         path: "/gateway/route/createServiceDiscoveryPolicyForm",
-        layout: BasicLayout,
+        layout: GatewayLayout,
         component: CreateServiceDiscoveryPolicyForm,
         isLogin: true
     },
     {
         path: "/gateway/route/editWeightingPolicy/:policyId",
-        layout: BasicLayout,
+        layout: GatewayLayout,
         component: EditWeightingPolicy,
         isLogin: true
     },
     {
         path: "/gateway/route/editServiceDiscoveryPolicy/:policyId",
-        layout: BasicLayout,
+        layout: GatewayLayout,
         component: EditServiceDiscoveryPolicy,
         isLogin: true
     },
