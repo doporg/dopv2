@@ -14,7 +14,7 @@ import Axios from "axios";
 import {Link, withRouter} from "react-router-dom";
 import API from "../../../../API";
 import {FormBinder, FormBinderWrapper, FormError} from '@icedesign/form-binder';
-import {injectIntl} from "react-intl";
+import {FormattedMessage, injectIntl} from "react-intl";
 
 const {Row, Col} = Grid;
 
@@ -65,8 +65,10 @@ class CreateActivityForm extends Component {
                     replyDetectionRingSize: 10,
                 },
                 routingPolicyId: '',
+                currentLimitPolicyId:'',
             },
-            dataSource: [],
+            routeDataSource: [],
+            currentLimitDataSource:[{label: this.props.intl.messages['gateway.createApi.currentLimitPolicy.null'], value: ''}],
         };
     }
 
@@ -95,6 +97,7 @@ class CreateActivityForm extends Component {
                     replyDetectionRingSize: 10,
                 },
                 routingPolicyId: '',
+                currentLimitPolicyId:''
             },
         });
     };
@@ -115,6 +118,10 @@ class CreateActivityForm extends Component {
 
         if (noError) {
             let url = API.gateway + '/lifeCycle';
+            Toast.success(<FormattedMessage
+                id='gateway.createApi.waiting'
+                defaultMessage={_this.props.intl.messages['gateway.createApi.waiting']}
+            />);
             Axios.post(url, this.state.value)
                 .then(function (response) {
                     Toast.success(_this.props.intl.messages['gateway.createApi.successInfo']);
@@ -127,7 +134,7 @@ class CreateActivityForm extends Component {
         }
     };
 
-    handleSearch = (value) => {
+    handleRouteSearch = (value) => {
         let _this = this;
         let url = API.gateway + '/policy/route/search';
         if (this.searchTimeout) {
@@ -142,10 +149,33 @@ class CreateActivityForm extends Component {
                 const dataSource = response.data.body.map(item => ({
                     label: item.name, value: item.policyId
                 }));
-                _this.setState({dataSource});
+                _this.setState({routeDataSource:dataSource});
             }).catch(function (error) {
                 console.log(error);
-            }) : this.setState({dataSource: []});
+            }) : this.setState({routeDataSource: []});
+        }, 100);
+    };
+
+    handleCurrentLimitSearch = (value) => {
+        let _this = this;
+        let url = API.gateway + '/policy/flowControl/currentLimit/search';
+        if (this.searchTimeout) {
+            clearTimeout(this.searchTimeout);
+        }
+        this.searchTimeout = setTimeout(() => {
+            value ? Axios.get(url, {
+                params: {
+                    value: value,
+                }
+            }).then(function (response) {
+                const dataSource = response.data.body.map(item => ({
+                    label: item.name, value: item.policyId
+                }));
+                dataSource[dataSource.length] = {label: _this.props.intl.messages['gateway.createApi.currentLimitPolicy.null'], value: ''};
+                _this.setState({currentLimitDataSource:dataSource});
+            }).catch(function (error) {
+                console.log(error);
+            }) : this.setState({currentLimitDataSource: []});
         }, 100);
     };
 
@@ -336,10 +366,25 @@ class CreateActivityForm extends Component {
                                 <Col s="12" l="10">
                                     <FormBinder name="routingPolicyId">
                                         <Select showSearch placeholder="select search" filterLocal={false}
-                                                dataSource={this.state.dataSource} onSearch={this.handleSearch}
+                                                dataSource={this.state.routeDataSource} onSearch={this.handleRouteSearch}
                                                 style={{width: '100%'}}/>
                                     </FormBinder>
                                     <FormError name="routingPolicyId"/>
+                                </Col>
+                            </Row>
+
+                            <Row style={styles.formItem}>
+                                <Col xxs="6" s="2" l="3" style={styles.formLabel}>
+                                    {this.props.intl.messages['gateway.createApi.currentLimitPolicy']}
+                                </Col>
+
+                                <Col s="12" l="10">
+                                    <FormBinder name="currentLimitPolicyId">
+                                        <Select showSearch placeholder="select search" filterLocal={false}
+                                                dataSource={this.state.currentLimitDataSource} onSearch={this.handleCurrentLimitSearch}
+                                                style={{width: '100%'}}/>
+                                    </FormBinder>
+                                    <FormError name="currentLimitPolicyId"/>
                                 </Col>
                             </Row>
 

@@ -2,7 +2,6 @@
 import React, {Component} from 'react';
 import {Table, Switch, Icon, Button, Grid, Pagination, Dialog, Select, Input, Feedback} from '@icedesign/base';
 import IceContainer from '@icedesign/container';
-import CreateManualCaseFrom from "../CreateTestCases/CreateManualCaseForm";
 import API from "../../../API";
 import Axios from "axios";
 import {Link} from "react-router-dom";

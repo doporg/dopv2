@@ -20,6 +20,9 @@ public class CurrentLimitPolicy {
     private String name;
 
     @Column(nullable = false)
+    private String description;
+
+    @Column(nullable = false)
     private int second;
 
     @Column(nullable = false)
@@ -35,8 +38,9 @@ public class CurrentLimitPolicy {
     @OneToMany(mappedBy = "currentLimitPolicy",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
     private List<Service> services;
 
-    public CurrentLimitPolicy(String name, int second, int minute, int hour, int day) {
+    public CurrentLimitPolicy(String name,String description, int second, int minute, int hour, int day) {
         this.name = name;
+        this.description = description;
         this.second = second;
         this.minute = minute;
         this.hour = hour;

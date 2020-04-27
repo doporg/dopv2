@@ -13,7 +13,7 @@ import Axios from "axios";
 import {Link, withRouter} from "react-router-dom";
 import API from "../../../../API";
 import {FormBinder, FormBinderWrapper, FormError} from '@icedesign/form-binder';
-import {injectIntl} from "react-intl";
+import {FormattedMessage, injectIntl} from "react-intl";
 
 const {Row, Col} = Grid;
 const styles = {
@@ -59,10 +59,20 @@ class EditApiForm extends Component {
                     fuseDuration: 1000,
                     replyDetectionRingSize: 10,
                 },
-                routingPolicyId: '',
+                routingPolicy: {
+                    value:'',
+                    label:''
+                },
+                currentLimitPolicy: {
+                    value:'',
+                    label:''
+                },
             },
-            routingPolicyName: '',
-            dataSource: [],
+            routeDataSource: [],
+            currentLimitDataSource: [{
+                label: this.props.intl.messages['gateway.createApi.currentLimitPolicy.null'],
+                value: ''
+            }],
         };
         this.doGetApi(api_Id);
     }
@@ -71,7 +81,7 @@ class EditApiForm extends Component {
         // 说明：
         //  1. 表单是双向通行的，所有表单的响应数据都会同步更新 value
         //  2. 这里 setState 只是为了实时展示当前表单数据的演示使用
-        this.setState({value});
+        //this.setState({value});
     };
 
     reset = () => {
@@ -95,7 +105,10 @@ class EditApiForm extends Component {
     }
 
     static doTrans(apiDto) {
-        let routingPolicy = apiDto.routingPolicies[0];
+        let routingPolicy = apiDto.routingPolicy;
+        let currentLimitPolicy = apiDto.currentLimitPolicy;
+        let currentLimitPolicyId = currentLimitPolicy ? currentLimitPolicy.policyId : null;
+        let currentLimitPolicyName = currentLimitPolicy ? currentLimitPolicy.name : null;
         return {
             value: {
                 name: apiDto.name,
@@ -112,15 +125,22 @@ class EditApiForm extends Component {
                     fuseDuration: apiDto.fusePolicy.fuseDuration,
                     replyDetectionRingSize: apiDto.fusePolicy.replyDetectionRingSize,
                 },
-                routingPolicyId: routingPolicy.policyId,
+                routingPolicy: {
+                    value: routingPolicy.policyId,
+                    label: routingPolicy.name,
+                },
+                currentLimitPolicy: {
+                    value: currentLimitPolicyId,
+                    label: currentLimitPolicyName,
+                }
             },
-            routingPolicyName: routingPolicy.name,
         };
     };
 
     back = () => {
         this.props.history.push('/gateway');
     };
+
 
     submit = () => {
         let _this = this;
@@ -131,12 +151,15 @@ class EditApiForm extends Component {
                 noError = false;
             }
         });
-
         if (noError) {
-            let url = API.gateway + '/lifeCycle/'+_this.state.apiId;
-            Axios.patch(url, this.state.value)
+            let url = API.gateway + '/lifeCycle/' + _this.state.apiId;
+            Toast.success(<FormattedMessage
+                id='gateway.editApi.waiting'
+                defaultMessage={_this.props.intl.messages['gateway.editApi.waiting']}
+            />);
+            Axios.patch(url, EditApiForm.submitValueTrans(this.state.value))
                 .then(function (response) {
-                    if (response.data.code===0){
+                    if (response.data.code === 0) {
                         Toast.success(_this.props.intl.messages['gateway.editApi.successInfo']);
                         let route = '/gateway';
                         _this.props.history.push(route);
@@ -150,7 +173,29 @@ class EditApiForm extends Component {
         }
     };
 
-    handleSearch = (value) => {
+    static submitValueTrans(value){
+        return {
+            name: value.name,
+            description: value.description,
+            requestMethod: value.requestMethod,
+            requestPath: value.requestPath,
+            caching: value.caching,
+            cachingTime: value.cachingTime,
+            timeout: value.timeout,
+            fusePolicy: {
+                enable: value.fusePolicy.enable,
+                criticalFusingFailureRate: value.fusePolicy.criticalFusingFailureRate,
+                fuseDetectionRing: value.fusePolicy.fuseDetectionRing,
+                fuseDuration: value.fusePolicy.fuseDuration,
+                replyDetectionRingSize: value.fusePolicy.replyDetectionRingSize,
+            },
+            routingPolicy: value.routingPolicy.value?value.routingPolicy.value:value.routingPolicy,
+            currentLimitPolicy: value.currentLimitPolicy.value?value.currentLimitPolicy.value:value.currentLimitPolicy,
+        }
+    }
+
+
+    handleRouteSearch = (value) => {
         let _this = this;
         let url = API.gateway + '/policy/route/search';
         if (this.searchTimeout) {
@@ -165,10 +210,36 @@ class EditApiForm extends Component {
                 const dataSource = response.data.body.map(item => ({
                     label: item.name, value: item.policyId
                 }));
-                _this.setState({dataSource});
+                _this.setState({routeDataSource: dataSource});
             }).catch(function (error) {
                 console.log(error);
-            }) : this.setState({dataSource: []});
+            }) : this.setState({routeDataSource: []});
+        }, 100);
+    };
+
+    handleCurrentLimitSearch = (value) => {
+        let _this = this;
+        let url = API.gateway + '/policy/flowControl/currentLimit/search';
+        if (this.searchTimeout) {
+            clearTimeout(this.searchTimeout);
+        }
+        this.searchTimeout = setTimeout(() => {
+            value ? Axios.get(url, {
+                params: {
+                    value: value,
+                }
+            }).then(function (response) {
+                const dataSource = response.data.body.map(item => ({
+                    label: item.name, value: item.policyId
+                }));
+                dataSource[dataSource.length] = {
+                    label: _this.props.intl.messages['gateway.editApi.currentLimitPolicy.null'],
+                    value: ''
+                };
+                _this.setState({currentLimitDataSource: dataSource});
+            }).catch(function (error) {
+                console.log(error);
+            }) : this.setState({currentLimitDataSource: []});
         }, 100);
     };
 
@@ -357,16 +428,32 @@ class EditApiForm extends Component {
                                 </Col>
 
                                 <Col s="12" l="10">
-                                    <FormBinder name="routingPolicyId">
-                                        <Select showSearch value={{
-                                            value: this.state.value.routingPolicyId,
-                                            label: this.state.routingPolicyName
-                                        }}
+                                    <FormBinder name="routingPolicy">
+                                        <Select
+                                            showSearch
+                                            placeholder="select search" filterLocal={false}
+                                            dataSource={this.state.routeDataSource}
+                                            onSearch={this.handleRouteSearch}
+                                            style={{width: '100%'}}/>
+                                    </FormBinder>
+                                    <FormError name="routingPolicy"/>
+                                </Col>
+                            </Row>
+
+                            <Row style={styles.formItem}>
+                                <Col xxs="6" s="2" l="3" style={styles.formLabel}>
+                                    {this.props.intl.messages['gateway.editApi.currentLimitPolicy']}
+                                </Col>
+
+                                <Col s="12" l="10">
+                                    <FormBinder name="currentLimitPolicy">
+                                        <Select showSearch
                                                 placeholder="select search" filterLocal={false}
-                                                dataSource={this.state.dataSource} onSearch={this.handleSearch}
+                                                dataSource={this.state.currentLimitDataSource}
+                                                onSearch={this.handleCurrentLimitSearch}
                                                 style={{width: '100%'}}/>
                                     </FormBinder>
-                                    <FormError name="routingPolicyId"/>
+                                    <FormError name="currentLimitPolicy"/>
                                 </Col>
                             </Row>
 

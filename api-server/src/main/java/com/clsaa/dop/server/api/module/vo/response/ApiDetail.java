@@ -5,7 +5,13 @@ import com.clsaa.dop.server.api.module.vo.response.policyDetail.CurrentLimitPoli
 import com.clsaa.dop.server.api.module.vo.response.policyDetail.routingPolicyDetail.RoutingPolicyDetail;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @ApiModel(description = "api详情")
 public class ApiDetail {
     @ApiModelProperty(value = "apiId",example = "123",dataType = "String")
@@ -41,130 +47,9 @@ public class ApiDetail {
     @ApiModelProperty(value = "fusePolicy",dataType = "FusePolicy")
     private FusePolicy fusePolicy;
 
-    @ApiModelProperty(value = "routingPolicies",dataType = "RoutingPolicyDetail[]")
-    private RoutingPolicyDetail[] routingPolicies;
+    @ApiModelProperty(value = "routingPolicy",dataType = "RoutingPolicyDetail")
+    private RoutingPolicyDetail routingPolicy;
 
-    @ApiModelProperty(value = "currentLimitPolicies",dataType = "CurrentLimitPolicyDetail[]")
-    private CurrentLimitPolicyDetail[] currentLimitPolicies;
-
-
-    public ApiDetail() {
-    }
-
-    public ApiDetail(String apiId, String name, String description,String health, boolean state, String requestMethod, String requestPath,
-                     Long timeout, boolean caching, Long cachingTime, FusePolicy fusePolicy, RoutingPolicyDetail[] routingPolicies, CurrentLimitPolicyDetail[] currentLimitPolicies) {
-        this.apiId = apiId;
-        this.name = name;
-        this.description = description;
-        this.health = health;
-        this.state = state;
-        this.requestMethod = requestMethod;
-        this.requestPath = requestPath;
-        this.timeout = timeout;
-        this.caching = caching;
-        this.cachingTime = cachingTime;
-        this.fusePolicy = fusePolicy;
-        this.routingPolicies = routingPolicies;
-        this.currentLimitPolicies = currentLimitPolicies;
-    }
-
-    public String getApiId() {
-        return apiId;
-    }
-
-    public void setApiId(String apiId) {
-        this.apiId = apiId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getHealth() {
-        return health;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public boolean getState() {
-        return state;
-    }
-
-    public void setState(boolean state) {
-        this.state = state;
-    }
-
-    public String getRequestMethod() {
-        return requestMethod;
-    }
-
-    public void setRequestMethod(String requestMethod) {
-        this.requestMethod = requestMethod;
-    }
-
-    public String getRequestPath() {
-        return requestPath;
-    }
-
-    public void setRequestPath(String requestPath) {
-        this.requestPath = requestPath;
-    }
-
-    public Long getTimeout() {
-        return timeout;
-    }
-
-    public void setTimeout(Long timeout) {
-        this.timeout = timeout;
-    }
-
-    public boolean isCaching() {
-        return caching;
-    }
-
-    public void setCaching(boolean caching) {
-        this.caching = caching;
-    }
-
-    public Long getCachingTime() {
-        return cachingTime;
-    }
-
-    public void setCachingTime(Long cachingTime) {
-        this.cachingTime = cachingTime;
-    }
-
-    public FusePolicy getFusePolicy() {
-        return fusePolicy;
-    }
-
-    public void setFusePolicy(FusePolicy fusePolicy) {
-        this.fusePolicy = fusePolicy;
-    }
-
-    public RoutingPolicyDetail[] getRoutingPolicies() {
-        return routingPolicies;
-    }
-
-    public void setRoutingPolicies(RoutingPolicyDetail[] routingPolicies) {
-        this.routingPolicies = routingPolicies;
-    }
-
-    public CurrentLimitPolicyDetail[] getCurrentLimitPolicies() {
-        return currentLimitPolicies;
-    }
-
-    public void setCurrentLimitPolicies(CurrentLimitPolicyDetail[] currentLimitPolicies) {
-        this.currentLimitPolicies = currentLimitPolicies;
-    }
+    @ApiModelProperty(value = "currentLimitPolicy",dataType = "CurrentLimitPolicyDetail")
+    private CurrentLimitPolicyDetail currentLimitPolicy;
 }

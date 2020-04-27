@@ -16,6 +16,7 @@ import com.clsaa.dop.server.api.module.vo.response.ApiDetail;
 import com.clsaa.dop.server.api.module.vo.response.ApiList;
 import com.clsaa.dop.server.api.module.vo.response.ResponseResult;
 import com.clsaa.dop.server.api.module.vo.response.policyDetail.ApiInfo;
+import com.clsaa.dop.server.api.module.vo.response.policyDetail.CurrentLimitPolicyDetail;
 import com.clsaa.dop.server.api.module.vo.response.policyDetail.routingPolicyDetail.RoutingPolicyDetail;
 import com.clsaa.dop.server.api.restTemplate.ApiRestTemplate;
 import com.clsaa.dop.server.api.service.ApiService;
@@ -161,7 +162,7 @@ public class ApiServiceImpl implements ApiService {
         Service service = serviceRepository.findServiceById(apiId);
         Route route = routeRepository.findRouteByServiceId(apiId);
         if (service!=null&&route!=null){
-            String upstreamId = modifyApiParams.getRoutingPolicyId();
+            String upstreamId = modifyApiParams.getRoutingPolicy();
             ServiceRoute serviceRoute = serviceRouteRepository.findServiceRouteById(upstreamId);
             FusePolicy fusePolicy = modifyApiParams.getFusePolicy();
 
@@ -188,20 +189,21 @@ public class ApiServiceImpl implements ApiService {
 
                     //更新缓存策略
                     if (updateCachePolicy(modifyApiParams.isCaching(),modifyApiParams.getCachingTime().intValue(),service)){
-                        if (!route.isOnline()){
-                            if (apiRestTemplate.modifyRoute(route.getKongRouteId(),route.getRequestMethod(),route.getRequestPath(),apiId)!=null){
-                                //更新流控策略
-                                CurrentLimitPolicy currentLimitPolicy = currentLimitPolicyRepository.findCurrentLimitPolicyById(modifyApiParams.getCurrentLimitPolicyId());
-                                if (policyService.updateServiceCurrentLimitPolicy(service,currentLimitPolicy)){
-                                    return new ResponseResult<>(0,"success",service.getId());
+                        //更新流控策略
+                        CurrentLimitPolicy currentLimitPolicy = currentLimitPolicyRepository.findCurrentLimitPolicyById(modifyApiParams.getCurrentLimitPolicy());
+                        if (policyService.updateServiceCurrentLimitPolicy(service,currentLimitPolicy)){
+                            //更新请求路径
+                            if (route.isOnline()){
+                                if (apiRestTemplate.modifyRoute(route.getKongRouteId(),route.getRequestMethod(),route.getRequestPath(),apiId)!=null){
+                                    return new ResponseResult<>(0,"success");
                                 }else {
-                                    return new ResponseResult<>(5,"current limit policy update error",service.getId());
+                                    return new ResponseResult<>(4,"route modify error");
                                 }
                             }else {
-                                return new ResponseResult<>(4,"route modify error");
+                                return new ResponseResult<>(0,"success");
                             }
                         }else {
-                            return new ResponseResult<>(0,"success");
+                            return new ResponseResult<>(5,"current limit policy update error",service.getId());
                         }
                     }else {
                         return new ResponseResult<>(4,"cache policy update error",service.getId());
@@ -223,15 +225,20 @@ public class ApiServiceImpl implements ApiService {
         if(route!=null){
             Service service = route.getService();
             ServiceRoute serviceRoute = service.getServiceRoute();
+            CurrentLimitPolicy currentLimitPolicy = service.getCurrentLimitPolicy();
             Upstream upstream = serviceRoute.getUpstream();
             FusePolicy fusePolicy = new FusePolicy(service.isFuse(),service.getFuseDetectionRing(),service.getCriticalFusingFailureRate(),
                     service.getFuseDuration(),service.getReplyDetectionRingSize());
-            RoutingPolicyDetail[] routingPolicies = new RoutingPolicyDetail[1];
-            routingPolicies[0] = new RoutingPolicyDetail(serviceRoute.getId(),serviceRoute.getName(),serviceRoute.getDescription(),serviceRoute.getType());
+            RoutingPolicyDetail routingPolicyDetail = new RoutingPolicyDetail(serviceRoute.getId(),serviceRoute.getName(),serviceRoute.getDescription(),serviceRoute.getType());
             UpstreamHealth upstreamHealth = apiRestTemplate.getUpstreamHealth(upstream.getId());
+
+            CurrentLimitPolicyDetail currentLimitPolicyDetail = null;
+            if (currentLimitPolicy!=null){
+                currentLimitPolicyDetail = new CurrentLimitPolicyDetail(currentLimitPolicy.getId(),currentLimitPolicy.getName(),currentLimitPolicy.getDescription(),currentLimitPolicy.getSecond(),currentLimitPolicy.getMinute(),currentLimitPolicy.getHour(),currentLimitPolicy.getDay());
+            }
             return new ResponseResult<>(0,"success",new ApiDetail(apiId,service.getName(),service.getDescription(),upstreamHealth.getHealthData(),
                     route.isOnline(),route.getRequestMethod(),route.getRequestPath(),service.getTimeout(),service.isCaching(),
-                    service.getCachingTime(),fusePolicy,routingPolicies,null));
+                    service.getCachingTime(),fusePolicy,routingPolicyDetail,currentLimitPolicyDetail));
         }else{
             return new ResponseResult<>(1,"no service");
         }

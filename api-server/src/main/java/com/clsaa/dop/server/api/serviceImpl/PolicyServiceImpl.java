@@ -285,7 +285,7 @@ public class PolicyServiceImpl implements PolicyService {
     @Override
     public ResponseResult<String> createCurrentLimitPolicy(CurrentLimitPolicyParam policyParams) {
         if (currentLimitPolicyRepository.findByName(policyParams.getName())==null){
-            CurrentLimitPolicy currentLimitPolicy = new CurrentLimitPolicy(policyParams.getName(),policyParams.getSecond(),policyParams.getMinute(),policyParams.getHour(),policyParams.getDay());
+            CurrentLimitPolicy currentLimitPolicy = new CurrentLimitPolicy(policyParams.getName(),policyParams.getDescription(),policyParams.getSecond(),policyParams.getMinute(),policyParams.getHour(),policyParams.getDay());
             currentLimitPolicyRepository.saveAndFlush(currentLimitPolicy);
             return new ResponseResult<>(0, "success",currentLimitPolicy.getId());
         }else {
@@ -342,7 +342,7 @@ public class PolicyServiceImpl implements PolicyService {
         CurrentLimitPolicyList currentLimitPolicyList = new CurrentLimitPolicyList(num,current);
         for(int i = (current-1)*pageSize;i < pageSize&&i<num;i++){
             CurrentLimitPolicy currentLimitPolicy = currentLimitPolicies.get(i);
-            currentLimitPolicyList.addCurrentLimitPolicy(new CurrentLimitPolicyDetail(currentLimitPolicy.getId(),currentLimitPolicy.getName(),
+            currentLimitPolicyList.addCurrentLimitPolicy(new CurrentLimitPolicyDetail(currentLimitPolicy.getId(),currentLimitPolicy.getName(),currentLimitPolicy.getDescription(),
                     currentLimitPolicy.getSecond(),currentLimitPolicy.getMinute(),currentLimitPolicy.getHour(),currentLimitPolicy.getDay()));
         }
         return new ResponseResult<>(0, "success",currentLimitPolicyList);
@@ -352,7 +352,7 @@ public class PolicyServiceImpl implements PolicyService {
     public ResponseResult<CurrentLimitPolicyDetail> getCurrentLimitPolicyDetail(String policyId) {
         CurrentLimitPolicy currentLimitPolicy = currentLimitPolicyRepository.findCurrentLimitPolicyById(policyId);
         if (currentLimitPolicy!=null){
-            return new ResponseResult<>(0, "success",new CurrentLimitPolicyDetail(currentLimitPolicy.getId(),currentLimitPolicy.getName(),currentLimitPolicy.getSecond(),currentLimitPolicy.getMinute(),currentLimitPolicy.getHour(),currentLimitPolicy.getDay()));
+            return new ResponseResult<>(0, "success",new CurrentLimitPolicyDetail(currentLimitPolicy.getId(),currentLimitPolicy.getName(),currentLimitPolicy.getDescription(),currentLimitPolicy.getSecond(),currentLimitPolicy.getMinute(),currentLimitPolicy.getHour(),currentLimitPolicy.getDay()));
         }else {
             return new ResponseResult<>(1, "policy not found");
         }
@@ -363,7 +363,7 @@ public class PolicyServiceImpl implements PolicyService {
         List<CurrentLimitPolicy> currentLimitPolicies = currentLimitPolicyRepository.findByNameStartingWith(value);
         List<CurrentLimitPolicyDetail> currentLimitPolicyDetails = new LinkedList<>();
         for (CurrentLimitPolicy currentLimitPolicy : currentLimitPolicies) {
-            currentLimitPolicyDetails.add(new CurrentLimitPolicyDetail(currentLimitPolicy.getId(),currentLimitPolicy.getName(),
+            currentLimitPolicyDetails.add(new CurrentLimitPolicyDetail(currentLimitPolicy.getId(),currentLimitPolicy.getName(),currentLimitPolicy.getDescription(),
                     currentLimitPolicy.getSecond(),currentLimitPolicy.getMinute(),currentLimitPolicy.getHour(),currentLimitPolicy.getDay()));
         }
         return new ResponseResult<>(0, "success",currentLimitPolicyDetails);

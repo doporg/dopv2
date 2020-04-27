@@ -2,6 +2,7 @@ const GATEWAY_EN_US = {
     'gateway.name': 'Pipeline management',
     'gateway.menu.apiManage': 'API Management',
     'gateway.menu.routePolicyManage': 'Route Policy Management',
+    'gateway.menu.currentLimitPolicyManage': 'CurrentLimit Policy Management',
 
     'gateway.search.searchTitle':'Search',
     'gateway.search.pleaseSelect': 'Please Select',
@@ -53,11 +54,21 @@ const GATEWAY_EN_US = {
     'gateway.routeList.table.edit': 'edit',
     'gateway.routeList.table.delete': 'delete policy',
 
-
-
     'gateway.routeList.table.message.delete.success': 'policy delete successfully!',
     'gateway.routeList.table.message.delete.fail': 'policy delete failed!！',
     'gateway.routeList.table.message.delete.loading': 'Please wait',
+
+    'gateway.currentLimitList.title':'CurrentLimit Policy List',
+    'gateway.currentLimitList.table.policyId': 'ID',
+    'gateway.currentLimitList.table.name': 'name',
+    'gateway.currentLimitList.table.description': 'description',
+    'gateway.currentLimitList.table.creator': 'creator',
+    'gateway.currentLimitList.table.edit': 'edit',
+    'gateway.currentLimitList.table.delete': 'delete policy',
+
+    'gateway.currentLimitList.table.message.delete.success': 'policy delete successfully!',
+    'gateway.currentLimitList.table.message.delete.fail': 'policy delete failed!！',
+    'gateway.currentLimitList.table.message.delete.loading': 'Please wait',
 
     "gateway.createApi.title": 'Create Api',
     "gateway.createApi.apiName": 'Api Name:',
@@ -76,9 +87,12 @@ const GATEWAY_EN_US = {
     "gateway.createApi.fuse.fuseDuration": 'Fuse Duration:',
     "gateway.createApi.fuse.replyDetectionRingSize": 'Reply Detection Ring Size:',
     "gateway.createApi.routingPolicy": 'Route Policy:',
+    "gateway.createApi.currentLimitPolicy": 'Current Limit Policy:',
+    "gateway.createApi.currentLimitPolicy.null": 'No Current Limit Policy',
     "gateway.createApi.cancel": 'Cancel',
     "gateway.createApi.yes": 'Create Api',
     "gateway.createApi.reset": 'Reset',
+    "gateway.createApi.waiting": 'Please wait',
     "gateway.createApi.successInfo": 'create api successfully!',
     "gateway.createApi.errorInfo": 'create api fail',
 
@@ -99,9 +113,12 @@ const GATEWAY_EN_US = {
     "gateway.editApi.fuse.fuseDuration": 'Fuse Duration:',
     "gateway.editApi.fuse.replyDetectionRingSize": 'Reply Detection Ring Size:',
     "gateway.editApi.routingPolicy": 'Route Policy:',
+    "gateway.editApi.currentLimitPolicy": 'Current Limit Policy:',
+    "gateway.editApi.currentLimitPolicy.null": 'No Current Limit Policy',
     "gateway.editApi.cancel": 'Cancel',
     "gateway.editApi.yes": 'Edit Api',
     "gateway.editApi.reset": 'Reset',
+    "gateway.editApi.waiting": 'Please wait',
     "gateway.editApi.successInfo": 'Edit api successfully!',
     "gateway.editApi.errorInfo": 'Edit api failed',
 
@@ -118,6 +135,7 @@ const GATEWAY_EN_US = {
     "gateway.route.createServiceDiscoveryPolicy.cancel": 'Cancel',
     "gateway.route.createServiceDiscoveryPolicy.yes": 'Create Policy',
     "gateway.route.createServiceDiscoveryPolicy.reset": 'Reset',
+    "gateway.route.createServiceDiscoveryPolicy.waiting": 'Please wait a second',
     "gateway.route.createServiceDiscoveryPolicy.successInfo": 'Create serviceDiscovery policy successfully!',
     "gateway.route.createServiceDiscoveryPolicy.errorInfo": 'Create serviceDiscovery policy failed',
 
@@ -151,6 +169,7 @@ const GATEWAY_EN_US = {
     "gateway.route.createWeightingPolicy.cancel": 'cancel',
     "gateway.route.createWeightingPolicy.yes": 'Create Policy',
     "gateway.route.createWeightingPolicy.reset": 'Reset',
+    "gateway.route.createWeightingPolicy.waiting": 'Please wait a second',
     "gateway.route.createWeightingPolicy.successInfo": 'Create weightingPolicy policy successfully!',
     "gateway.route.createWeightingPolicy.errorInfo": 'Create weightingPolicy policy failed!',
 
@@ -169,5 +188,34 @@ const GATEWAY_EN_US = {
     "gateway.route.editServiceDiscoveryPolicy.cancel": 'Cancel',
     "gateway.route.editServiceDiscoveryPolicy.yes": 'Edit Policy',
     "gateway.route.editServiceDiscoveryPolicy.reset": 'Reset',
+
+    "gateway.currentLimit.createCurrentLimitPolicy.title":"Create Current Limit Policy",
+    "gateway.currentLimit.createCurrentLimitPolicy.name":"Name:",
+    "gateway.currentLimit.createCurrentLimitPolicy.nameWarn": 'Please input name of this policy',
+    "gateway.currentLimit.createCurrentLimitPolicy.description":"Description:",
+    "gateway.currentLimit.createCurrentLimitPolicy.second":"Request per Second:",
+    "gateway.currentLimit.createCurrentLimitPolicy.secondWarn": 'Request per second Can Not be zero',
+    "gateway.currentLimit.createCurrentLimitPolicy.minute":"Request per Minute",
+    "gateway.currentLimit.createCurrentLimitPolicy.minuteWarn": 'Request per minute Can Not be zero',
+    "gateway.currentLimit.createCurrentLimitPolicy.hour":"Request per Hour",
+    "gateway.currentLimit.createCurrentLimitPolicy.hourWarn": 'Request per hour Can Not be zero',
+    "gateway.currentLimit.createCurrentLimitPolicy.day":"Request per Day",
+    "gateway.currentLimit.createCurrentLimitPolicy.dayWarn": 'Request per day Can Not be zero',
+    "gateway.currentLimit.createCurrentLimitPolicy.warn.number":"Must be a Number",
+    "gateway.currentLimit.createCurrentLimitPolicy.warn.less":"Must be more than 0",
+    "gateway.currentLimit.createCurrentLimitPolicy.warn.must": 'At least input a item',
+    "gateway.currentLimit.createCurrentLimitPolicy.cancel": 'Cancel',
+    "gateway.currentLimit.createCurrentLimitPolicy.yes": 'create policy',
+    "gateway.currentLimit.createCurrentLimitPolicy.reset": 'reset',
+    "gateway.currentLimit.createCurrentLimitPolicy.successInfo": 'Create current limit policy successfully!',
+    "gateway.currentLimit.createCurrentLimitPolicy.errorInfo": 'Create current limit policy failed!',
+
+    "gateway.currentLimit.editCurrentLimitPolicy.title": 'Edit Current Limit Policy',
+    "gateway.currentLimit.editCurrentLimitPolicy.successInfo": 'Edit Current Limit policy successfully',
+    "gateway.currentLimit.editCurrentLimitPolicy.errorInfo": 'Edit Current Limit policy successfully failed',
+    "gateway.currentLimit.editCurrentLimitPolicy.waiting": 'Please wait a second',
+    "gateway.currentLimit.editCurrentLimitPolicy.cancel": 'Cancel',
+    "gateway.currentLimit.editCurrentLimitPolicy.yes": 'Edit Policy',
+    "gateway.currentLimit.editCurrentLimitPolicy.reset": 'Reset',
 };
 export default GATEWAY_EN_US;

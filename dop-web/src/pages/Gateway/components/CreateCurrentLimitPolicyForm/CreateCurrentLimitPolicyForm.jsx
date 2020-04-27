@@ -3,46 +3,21 @@ import IceContainer from '@icedesign/container';
 import {
     Input,
     Button,
-    Checkbox,
-    Select,
-    DatePicker,
-    Switch,
-    Radio,
     Grid, Feedback,
 } from '@icedesign/base';
 import Axios from "axios";
 import {Link, withRouter} from "react-router-dom";
 import API from "../../../API";
 import {FormBinder, FormBinderWrapper, FormError} from '@icedesign/form-binder';
-import {FormattedMessage, injectIntl} from "react-intl";
+import {injectIntl} from "react-intl";
 
 const {Row, Col} = Grid;
 
-// FormBinder 用于获取表单组件的数据，通过标准受控 API value 和 onChange 来双向操作数据
-const CheckboxGroup = Checkbox.Group;
-const RadioGroup = Radio.Group;
-const {RangePicker} = DatePicker;
-
-
-// Switch 组件的选中等 props 是 checked 不符合表单规范的 value 在此做转换
-const SwitchForForm = (props) => {
-    const checked = props.checked === undefined ? props.value : props.checked;
-
-    return (
-        <Switch
-            {...props}
-            checked={checked}
-            onChange={(currentChecked) => {
-                if (props.onChange) props.onChange(currentChecked);
-            }}
-        />
-    );
-};
 
 const Toast = Feedback.toast;
 
-class CreateServiceDiscoveryPolicyForm extends Component {
-    static displayName = 'CreateServiceDiscoveryPolicyForm';
+class CreateCurrentLimitPolicyForm extends Component {
+    static displayName = 'CreateCurrentLimitPolicyForm';
 
     static defaultProps = {};
 
@@ -52,9 +27,10 @@ class CreateServiceDiscoveryPolicyForm extends Component {
             value: {
                 name: '',
                 description: '',
-                targetHost: '',
-                targetPath: '/',
-                targetPort: '80',
+                second: '',
+                minute: '',
+                hour: '',
+                day: '',
             },
         };
     }
@@ -71,49 +47,73 @@ class CreateServiceDiscoveryPolicyForm extends Component {
             value: {
                 name: '',
                 description: '',
-                targetHost: '',
-                targetPath: '/',
-                targetPort: '80',
+                second: '',
+                minute: '',
+                hour: '',
+                day: '',
             }
         });
     };
 
     back = () => {
-        this.props.history.push('/gateway/route');
+        this.props.history.push('/gateway/currentLimit');
+    };
+
+    checkValue = () => {
+        console.log(this.state.value.second !== ''|| this.state.value.minute !== '' || this.state.value.hour !== '' || this.state.value.day !== '');
+        return this.state.value.second !== ''|| this.state.value.minute !== '' || this.state.value.hour !== '' || this.state.value.day !== ''
     };
 
     submit = () => {
         let _this = this;
         let noError = true;
 
+
         this.refs.form.validateAll((error, value) => {
-            if (error != null) {
+            if (error != null||!this.checkValue()) {
                 noError = false;
             }
         });
 
         if (noError) {
-            let url = API.gateway + '/policy/route/serviceDiscoveryPolicy';
-            Toast.success(<FormattedMessage
-                id='gateway.route.createWeightingPolicy.waiting'
-                defaultMessage={_this.props.intl.messages['gateway.route.createServiceDiscoveryPolicy.waiting']}
-            />);
+            let url = API.gateway + '/policy/flowControl/currentLimit';
             Axios.post(url, this.state.value)
                 .then(function (response) {
-                    Toast.success(_this.props.intl.messages['gateway.route.createServiceDiscoveryPolicy.successInfo']);
-                    let route = '/gateway/route';
-                    _this.props.history.push(route);
+                    if (response.data.code === 0) {
+                        Toast.success(_this.props.intl.messages['gateway.currentLimit.createCurrentLimitPolicy.successInfo']);
+                        let route = '/gateway/currentLimit';
+                        _this.props.history.push(route);
+                    } else {
+                        Toast.error(_this.props.intl.messages['gateway.currentLimit.createCurrentLimitPolicy.errorInfo']);
+                    }
                 }).catch(function (error) {
                 console.log(error);
-                Toast.error(_this.props.intl.messages['gateway.route.createServiceDiscoveryPolicy.errorInfo']);
+                Toast.error(_this.props.intl.messages['gateway.currentLimit.createCurrentLimitPolicy.errorInfo']);
             });
+        }else {
+            Toast.error(_this.props.intl.messages['gateway.currentLimit.createCurrentLimitPolicy.warn.must']);
+        }
+    };
+
+    inputValidator = (rule, value, callback) => {
+        console.log(value);
+        if (value) {
+            if (isNaN(value)) {
+                callback(this.props.intl.messages['gateway.currentLimit.createCurrentLimitPolicy.warn.number']);
+            } else if (value <= 0) {
+                callback(this.props.intl.messages['gateway.currentLimit.createCurrentLimitPolicy.warn.less']);
+            } else {
+                callback();
+            }
+        } else {
+            callback();
         }
     };
 
     render() {
         return (
-            <div className="create-serviceDiscoveryPolicy-form">
-                <IceContainer title={this.props.intl.messages['gateway.route.createServiceDiscoveryPolicy.title']}
+            <div className="create-currentLimitPolicy-form">
+                <IceContainer title={this.props.intl.messages['gateway.currentLimit.createCurrentLimitPolicy.title']}
                               style={styles.container}>
                     <FormBinderWrapper
                         value={this.state.value}
@@ -123,14 +123,14 @@ class CreateServiceDiscoveryPolicyForm extends Component {
                         <div>
                             <Row style={styles.formItem}>
                                 <Col xxs="6" s="2" l="3" style={styles.formLabel}>
-                                    {this.props.intl.messages['gateway.route.createServiceDiscoveryPolicy.name']}
+                                    {this.props.intl.messages['gateway.currentLimit.createCurrentLimitPolicy.name']}
                                 </Col>
 
                                 <Col s="12" l="10">
                                     <FormBinder
                                         name="name"
                                         required
-                                        message={this.props.intl.messages['gateway.route.createServiceDiscoveryPolicy.nameWarn']}
+                                        message={this.props.intl.messages['gateway.currentLimit.createCurrentLimitPolicy.nameWarn']}
                                     >
                                         <Input style={{width: '100%'}}/>
                                     </FormBinder>
@@ -140,7 +140,7 @@ class CreateServiceDiscoveryPolicyForm extends Component {
 
                             <Row>
                                 <Col xxs="6" s="2" l="3" style={styles.formLabel}>
-                                    {this.props.intl.messages['gateway.route.createServiceDiscoveryPolicy.description']}
+                                    {this.props.intl.messages['gateway.currentLimit.createCurrentLimitPolicy.description']}
                                 </Col>
 
                                 <Col s="12" l="10">
@@ -154,43 +154,57 @@ class CreateServiceDiscoveryPolicyForm extends Component {
 
                             <Row style={styles.formItem}>
                                 <Col xxs="6" s="2" l="3" style={styles.formLabel}>
-                                    {this.props.intl.messages['gateway.route.createServiceDiscoveryPolicy.path']}
+                                    {this.props.intl.messages['gateway.currentLimit.createCurrentLimitPolicy.second']}
                                 </Col>
 
                                 <Col s="12" l="10">
-                                    <FormBinder name="targetPath" required
-                                                message={this.props.intl.messages['gateway.route.createServiceDiscoveryPolicy.pathWarn']}>
+                                    <FormBinder name="second"
+                                                validator={this.inputValidator}>
                                         <Input style={{width: '100%'}}/>
                                     </FormBinder>
-                                    <FormError name="targetPath"/>
+                                    <FormError name="second"/>
                                 </Col>
                             </Row>
 
                             <Row style={styles.formItem}>
                                 <Col xxs="6" s="2" l="3" style={styles.formLabel}>
-                                    {this.props.intl.messages['gateway.route.createServiceDiscoveryPolicy.host']}
+                                    {this.props.intl.messages['gateway.currentLimit.createCurrentLimitPolicy.minute']}
                                 </Col>
 
                                 <Col s="12" l="10">
-                                    <FormBinder name="targetHost" required
-                                                message={this.props.intl.messages['gateway.route.createServiceDiscoveryPolicy.hostWarn']}>
+                                    <FormBinder name="minute"
+                                                validator={this.inputValidator}>
                                         <Input style={{width: '100%'}}/>
                                     </FormBinder>
-                                    <FormError name="targetHost"/>
+                                    <FormError name="minute"/>
                                 </Col>
                             </Row>
 
                             <Row style={styles.formItem}>
                                 <Col xxs="6" s="2" l="3" style={styles.formLabel}>
-                                    {this.props.intl.messages['gateway.route.createServiceDiscoveryPolicy.port']}
+                                    {this.props.intl.messages['gateway.currentLimit.createCurrentLimitPolicy.hour']}
                                 </Col>
 
                                 <Col s="12" l="10">
-                                    <FormBinder name="targetPort" required
-                                                message={this.props.intl.messages['gateway.route.createServiceDiscoveryPolicy.portWarn']}>
+                                    <FormBinder name="hour"
+                                                validator={this.inputValidator}>
                                         <Input style={{width: '100%'}}/>
                                     </FormBinder>
-                                    <FormError name="targetPort"/>
+                                    <FormError name="hour"/>
+                                </Col>
+                            </Row>
+
+                            <Row style={styles.formItem}>
+                                <Col xxs="6" s="2" l="3" style={styles.formLabel}>
+                                    {this.props.intl.messages['gateway.currentLimit.createCurrentLimitPolicy.day']}
+                                </Col>
+
+                                <Col s="12" l="10">
+                                    <FormBinder name="day"
+                                                validator={this.inputValidator}>
+                                        <Input style={{width: '100%'}}/>
+                                    </FormBinder>
+                                    <FormError name="day"/>
                                 </Col>
                             </Row>
 
@@ -206,8 +220,6 @@ class CreateServiceDiscoveryPolicyForm extends Component {
 
                                     <Button onClick={this.submit} type='secondary'>
                                         {this.props.intl.messages['gateway.route.createServiceDiscoveryPolicy.yes']}
-                                        {/* <Link to='/test/createInterfaceScripts'>
-                    </Link>*/}
                                     </Button>
                                     <Button style={styles.resetBtn} onClick={this.reset}>
                                         {this.props.intl.messages['gateway.route.createServiceDiscoveryPolicy.reset']}
@@ -242,4 +254,4 @@ const styles = {
     },
 };
 
-export default injectIntl(withRouter(CreateServiceDiscoveryPolicyForm));
+export default injectIntl(withRouter(CreateCurrentLimitPolicyForm));

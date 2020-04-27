@@ -14,7 +14,7 @@ import Axios from "axios";
 import {Link, withRouter} from "react-router-dom";
 import API from "../../../../API";
 import {FormBinder, FormBinderWrapper, FormError} from '@icedesign/form-binder';
-import {injectIntl} from "react-intl";
+import {FormattedMessage, injectIntl} from "react-intl";
 import Targets from "../Targets";
 
 const {Row, Col} = Grid;
@@ -142,6 +142,10 @@ class CreateWeightingPolicyForm extends Component {
 
         if (noError) {
             let url = API.gateway + '/policy/route/weightingPolicy';
+            Toast.success(<FormattedMessage
+                id='gateway.route.createWeightingPolicy.waiting'
+                defaultMessage={_this.props.intl.messages['gateway.route.createWeightingPolicy.waiting']}
+            />);
             Axios.post(url, this.state.value)
                 .then(function (response) {
                     Toast.success(_this.props.intl.messages['gateway.route.createWeightingPolicy.successInfo']);

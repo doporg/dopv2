@@ -9,7 +9,7 @@ import {injectIntl, FormattedMessage} from 'react-intl';
 
 const {Row, Col} = Grid;
 
-class TestSteps extends Component {
+class Targets extends Component {
 
     inputValidator = (rule, value, callback) => {
         const errors = [];
@@ -113,4 +113,4 @@ const styles = {
         margin: '25px 0',
     },
 };
-export default injectIntl(TestSteps);
+export default injectIntl(Targets);

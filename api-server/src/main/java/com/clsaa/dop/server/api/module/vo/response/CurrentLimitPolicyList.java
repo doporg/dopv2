@@ -12,15 +12,15 @@ import java.util.List;
 public class CurrentLimitPolicyList {
     private int totalCount;
     private int current;
-    private List<CurrentLimitPolicyDetail> routePolicyList;
+    private List<CurrentLimitPolicyDetail> currentLimitPolicyList;
 
     public CurrentLimitPolicyList(int totalCount, int current) {
         this.totalCount = totalCount;
         this.current = current;
-        routePolicyList = new LinkedList<>();
+        currentLimitPolicyList = new LinkedList<>();
     }
 
     public void addCurrentLimitPolicy(CurrentLimitPolicyDetail currentLimitPolicyDetail){
-        routePolicyList.add(currentLimitPolicyDetail);
+        currentLimitPolicyList.add(currentLimitPolicyDetail);
     }
 }

@@ -1,3 +1,3 @@
-import CreateServiceDiscoveryPolicyForm from './CreateServiceDiscoveryPolicyForm';
+import CreateServiceDiscoveryPolicyForm from "./CreateServiceDiscoveryPolicyForm";
 
 export default CreateServiceDiscoveryPolicyForm;

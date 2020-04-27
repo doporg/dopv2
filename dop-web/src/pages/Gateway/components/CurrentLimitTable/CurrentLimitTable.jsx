@@ -13,8 +13,8 @@ import {injectIntl, FormattedMessage} from 'react-intl';
 const {Row, Col} = Grid;
 const Toast = Feedback.toast;
 
-class RouteTable extends Component {
-    static displayName = 'RouteTable';
+class CurrentLimitTable extends Component {
+    static displayName = 'CurrentLimitTable';
 
     static propTypes = {};
 
@@ -25,14 +25,11 @@ class RouteTable extends Component {
         this.state = {
             formValue: {},
             current: 1,
-            createdCaseNeedRefresh: false,
-            createManualDialogVisiable: false,
             isSubmit: false,
             total: 1,
             currentData: [{"policyId": "1"}],
             searchValue: {
                 owner: '',
-                type: 'All',
             },
         };
 
@@ -58,39 +55,26 @@ class RouteTable extends Component {
         if (!current) {
             current = 1;
         }
-        let url = API.gateway + '/policy/route';
-        let type = this.state.searchValue.type;
+        let url = API.gateway + '/policy/flowControl/currentLimit';
         let _this = this;
         Axios.get(url, {
             params: {
                 pageSize: 10,
                 pageNo: current,
-                type: type,
             }
         }).then(function (response) {
             _this.setState({
                 current: current,
                 total: response.data.body.totalCount,
-                currentData: response.data.body.routePolicyList.map(item => ({
+                currentData: response.data.body.currentLimitPolicyList.map(item => ({
                     name: item.name,
                     policyId: item.policyId,
                     description: item.description,
-                    type: _this.typeSwitch(item.type),
                 }))
             });
         }).catch(function (error) {
             console.log(error);
         });
-    };
-
-    typeSwitch(type){
-        if (type==='ServiceDiscoveryPolicy'){
-            return this.props.intl.messages["gateway.search.routeType.serviceDiscoveryPolicy"];
-        }
-        if (type==='WeightingPolicy'){
-            return this.props.intl.messages["gateway.search.routeType.weightingPolicy"];
-        }
-        return '';
     };
 
     renderOper = (value, index, record) => {
@@ -109,25 +93,21 @@ class RouteTable extends Component {
             size="small"
             style={{...styles.icon, ...styles.editIcon}}
             onClick={() => {
-                if(record.type === this.props.intl.messages["gateway.search.routeType.weightingPolicy"]){
-                    this.props.history.push('/gateway/route/editWeightingPolicy/' + record.policyId);
-                }else if(record.type === this.props.intl.messages["gateway.search.routeType.serviceDiscoveryPolicy"]){
-                    this.props.history.push('/gateway/route/editServiceDiscoveryPolicy/' + record.policyId);
-                }
+                this.props.history.push('/gateway/currentLimit/editCurrentLimitPolicy/' + record.policyId);
             }}
         />;
         return (
             <div style={styles.oper}>
                 <Balloon.Tooltip trigger={edit} triggerType="hover" align='l'>
                     <FormattedMessage
-                        id="gateway.routeList.table.edit"
-                        defaultMessage="编辑api"
+                        id="gateway.currentLimitList.table.edit"
+                        defaultMessage="编辑"
                     />
                 </Balloon.Tooltip>
                 <Balloon.Tooltip trigger={MoveTarget} triggerType="hover" align='r'>
                     <FormattedMessage
-                        id="gateway.routeList.table.delete"
-                        defaultMessage="删除策略"
+                        id="gateway.currentLimitList.table.delete"
+                        defaultMessage="删除"
                     />
                 </Balloon.Tooltip>
             </div>
@@ -154,32 +134,32 @@ class RouteTable extends Component {
     };
 
     delete = (policyId) => {
-        let url = API.gateway + '/policy/route/' + policyId;
+        let url = API.gateway + '/policy/flowControl/currentLimit/' + policyId;
         let _this = this;
         if (policyId !== '') {
             Toast.loading(<FormattedMessage
-                id='gateway.routeList.table.message.delete.loading'
-                defaultMessage={_this.props.intl.messages["gateway.routeList.table.message.delete.loading"]}
+                id='gateway.currentLimitList.table.message.delete.loading'
+                defaultMessage={_this.props.intl.messages["gateway.currentLimitList.table.message.delete.loading"]}
             />);
             Axios.delete(url).then(function (response) {
                 console.log(response);
                 if (response.data.code === 0) {
                     Toast.success(<FormattedMessage
-                        id='gateway.routeList.table.message.delete.success'
-                        defaultMessage={_this.props.intl.messages["gateway.routeList.table.message.delete.success"]}
+                        id='gateway.currentLimitList.table.message.delete.success'
+                        defaultMessage={_this.props.intl.messages["gateway.currentLimitList.table.message.delete.success"]}
                     />);
                     _this.refreshList(_this.state.current);
                 } else {
                     Toast.error(<FormattedMessage
-                        id='gateway.routeList.table.message.delete.success'
-                        defaultMessage={_this.props.intl.messages["gateway.routeList.table.message.delete.fail"]}
+                        id='gateway.currentLimitList.table.message.delete.success'
+                        defaultMessage={_this.props.intl.messages["gateway.currentLimitList.table.message.delete.fail"]}
                     />);
                 }
             }).catch(function (error) {
                 console.log(error);
                 Toast.error(<FormattedMessage
-                    id='gateway.routeList.table.message.delete.fail'
-                    defaultMessage={_this.props.intl.messages["gateway.routeList.table.message.delete.fail"]}
+                    id='gateway.currentLimitList.table.message.delete.fail'
+                    defaultMessage={_this.props.intl.messages["gateway.currentLimitList.table.message.delete.fail"]}
                 />);
             });
         }
@@ -193,23 +173,6 @@ class RouteTable extends Component {
                 <IceContainer title={this.props.intl.messages["gateway.search.searchTitle"]}>
                     <FormBinderWrapper value={this.state.searchValue} onChange={this.formChange}>
                         <Row wrap>
-
-                            <Col xxs="24" l="8" style={styles.formCol}>
-                                <span style={styles.label}>{this.props.intl.messages["gateway.search.routeType"]}</span>
-                                <FormBinder name="type">
-                                    <Select placeholder={this.props.intl.messages["gateway.search.pleaseSelect"]}
-                                            style={{width: '200px'}} defaultValue="All"
-                                            onClose={this.refreshList.bind(this, 1)}>
-                                        <Select.Option
-                                            value="ServiceDiscoveryPolicy">{this.props.intl.messages["gateway.search.routeType.serviceDiscoveryPolicy"]}</Select.Option>
-                                        <Select.Option
-                                            value="WeightingPolicy">{this.props.intl.messages["gateway.search.routeType.weightingPolicy"]}</Select.Option>
-                                        <Select.Option
-                                            value="All">{this.props.intl.messages["gateway.search.routeType.all"]}</Select.Option>
-                                    </Select>
-                                </FormBinder>
-                            </Col>
-
                             <Col xxs="24" l="8" style={styles.formCol}>
                                 <span style={styles.label}>{this.props.intl.messages["gateway.search.creator"]}</span>
                                 <FormBinder name="owner">
@@ -220,20 +183,13 @@ class RouteTable extends Component {
                     </FormBinderWrapper>
                 </IceContainer>
 
-                <IceContainer title={this.props.intl.messages['gateway.routeList.title']}>
+                <IceContainer title={this.props.intl.messages['gateway.currentLimitList.title']}>
                     <Row wrap style={styles.headRow}>
                         <Col l="12">
                             <Button style={{...styles.button, marginLeft: 10}}>
-                                <Link to="/gateway/route/createServiceDiscoveryPolicyForm">
+                                <Link to="/gateway/currentLimit/createCurrentLimitForm">
                                     <Icon type="add" size="xs" style={{marginRight: '4px'}}/>
-                                    {this.props.intl.messages["gateway.routeList.add.serviceDiscoveryPolicy"]}
-                                </Link>
-                            </Button>
-
-                            <Button style={{...styles.button, marginLeft: 10}}>
-                                <Link to="/gateway/route/createWeightingPolicy">
-                                    <Icon type="add" size="xs" style={{marginRight: '4px'}}/>
-                                    {this.props.intl.messages["gateway.routeList.add.weightingPolicy"]}
+                                    {this.props.intl.messages["gateway.currentLimitList.add"]}
                                 </Link>
                             </Button>
                         </Col>
@@ -248,8 +204,6 @@ class RouteTable extends Component {
                                       dataIndex="name" width={100}/>
                         <Table.Column title={this.props.intl.messages["gateway.routeList.table.description"]}
                                       dataIndex="description" width={200}/>
-                        <Table.Column title={this.props.intl.messages["gateway.routeList.table.type"]}
-                                      dataIndex="type" width={100}/>
                         <Table.Column title={this.props.intl.messages["gateway.apiLists.table.creator"]}
                                       dataIndex="creator" width={100}/>
                         <Table.Column title={this.props.intl.messages["gateway.apiLists.table.operations"]} width={100}
@@ -309,4 +263,4 @@ const styles = {
     },
 };
 
-export default injectIntl(withRouter(RouteTable));
+export default injectIntl(withRouter(CurrentLimitTable));

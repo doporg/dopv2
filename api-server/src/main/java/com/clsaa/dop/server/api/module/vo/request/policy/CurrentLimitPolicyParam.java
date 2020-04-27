@@ -14,6 +14,9 @@ public class CurrentLimitPolicyParam {
     @ApiModelProperty(value = "name",example = "testPolicy",dataType = "string")
     private String name;
 
+    @ApiModelProperty(value = "description",example = "testPolicy",dataType = "string")
+    private String description;
+
     @ApiModelProperty(value = "minute",example = "60",dataType = "int")
     private int second;
 

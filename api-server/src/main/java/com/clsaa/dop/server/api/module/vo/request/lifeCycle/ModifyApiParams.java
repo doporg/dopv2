@@ -38,8 +38,8 @@ public class ModifyApiParams {
     private FusePolicy fusePolicy;
 
     @ApiModelProperty(value = "routingPolicyId",dataType = "String[]")
-    private String routingPolicyId;
+    private String routingPolicy;
 
     @ApiModelProperty(value = "currentLimitPolicyId",dataType = "String")
-    private String currentLimitPolicyId;
+    private String currentLimitPolicy;
 }

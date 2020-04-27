@@ -16,5 +16,10 @@ const gatewayMenuConfig=[
         path: '/gateway/route',
         icon: 'box',
     },
+    {
+        name: <FormattedMessage id="gateway.menu.currentLimitPolicyManage" defaultMessage="流控策略管理"/>,
+        path: '/gateway/currentLimit',
+        icon: 'box',
+    },
 ];
 export {gatewayMenuConfig};
