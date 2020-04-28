@@ -9,18 +9,24 @@ const code = "/code-server";
 const user = "/user-server";
 const image = "/image-server";
 const test = "/test-server";
+
 const gateway = "/v2/api";
+
+const link = "/link-server";
 
 const API = {
     address: "http://www.dop.clsaa.com/#/",
-    gateway: host+gateway,
+    // address: "http://localhost:3000/#/",
+    gateway: host,
+
     pipeline: host + pipeline,
     application: host + application,
     permission: host + permission,
     code: host + code,
     user: host + user,
     image: host + image,
-    test: host + test
+    test: host + test,
+    link: "http://localhost:14300"
 };
 
 export default API;

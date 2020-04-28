@@ -11,7 +11,14 @@ import {permissionConfig} from "../pages/Permissions";
 import codeConfig from "../pages/Code";
 import {testConfig} from "../pages/TestCases";
 import {imageConfig} from "../pages/Image";
+
 import {gatewayConfig} from "../pages/Gateway";
+
+import {linkConfig} from "../pages/Link";
+
+import {demoConfig} from "../pages/Demo";
+import {baasConfig} from "../pages/Baas";
+
 
 const baseConfig = [
     {
@@ -27,7 +34,19 @@ const baseConfig = [
 
 ];
 
+const routerConfig = [
+    ...linkConfig,
+    ...demoConfig,
+    ...imageConfig,
+    ...testConfig,
+    ...codeConfig,
+    ...projectConfig,
+    ...permissionConfig,
+    ...pipelineConfig,
+    ...loginConfig,
+    ...baasConfig,
+    ...baseConfig，
+    ...gatewayConfig];
 
-const routerConfig = [...imageConfig,...testConfig, ...codeConfig, ...projectConfig,  ...permissionConfig, ...pipelineConfig,...gatewayConfig, ...loginConfig, ...baseConfig];
 
 export default routerConfig;
