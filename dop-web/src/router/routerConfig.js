@@ -14,6 +14,7 @@ import {imageConfig} from "../pages/Image";
 import {linkConfig} from "../pages/Link";
 
 import {demoConfig} from "../pages/Demo";
+import {baasConfig} from "../pages/Baas";
 
 const baseConfig = [
     {
@@ -37,6 +38,10 @@ const routerConfig = [
     ...testConfig,
     ...codeConfig,
     ...projectConfig,
-    ...permissionConfig, ...pipelineConfig, ...loginConfig, ...baseConfig];
+    ...permissionConfig,
+    ...pipelineConfig,
+    ...loginConfig,
+    ...baasConfig,
+    ...baseConfig];
 
 export default routerConfig;

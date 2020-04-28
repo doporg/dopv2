@@ -8,7 +8,7 @@ class Demo extends Component {
         return (
             <div>
                 11111
-                <Button type="primary">主要按钮</Button>
+                <Button type="primary">主要222按钮</Button>
             </div>
         )
     }

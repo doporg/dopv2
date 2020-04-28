@@ -64,6 +64,11 @@ const asideMenuConfig = [
         name: <FormattedMessage id="link.name" defaultMessage="链路管理"/>,
         path: '/link/list',
         icon: 'browse',
+    },
+    {
+        name: <FormattedMessage id="baas.name" defaultMessage="链路管理"/>,
+        path: '/baas',
+        icon: 'set',
     }
 
 
