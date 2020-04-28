@@ -40,7 +40,7 @@ spec:
             path: /etc/timezone
 ---
 apiVersion: v1
-kind: Service
+kind: KongService
 metadata:
   name: api-server
   namespace: dop
