@@ -45,7 +45,7 @@ const routerConfig = [
     ...pipelineConfig,
     ...loginConfig,
     ...baasConfig,
-    ...baseConfig，
+    ...baseConfig,
     ...gatewayConfig];
 
 
