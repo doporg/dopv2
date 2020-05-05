@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import {injectIntl} from "react-intl";
 
-class SpanShow extends Component{
+class SpanDetail extends Component{
     constructor(props) {
         super(props);
         this.state = {
@@ -38,4 +38,4 @@ class SpanShow extends Component{
     }
 }
 
-export default injectIntl(SpanShow);
+export default injectIntl(SpanDetail);

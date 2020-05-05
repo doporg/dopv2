@@ -1,5 +1,6 @@
 package com.clsaa.dop.server.link.controller;
 
+import com.clsaa.dop.server.link.enums.MonitorState;
 import com.clsaa.dop.server.link.model.vo.BindVO;
 import com.clsaa.dop.server.link.service.BindService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
 @CrossOrigin
-//        (methods = {GET, HEAD, POST, PUT, DELETE, OPTIONS}, origins = "*", allowedHeaders = "*", allowCredentials = "true")
 public class BindController {
 
     @Autowired
@@ -29,28 +29,21 @@ public class BindController {
         service.add(bindVO);
     }
 
-    @DeleteMapping(value = "/binds/{bid}")
+    @GetMapping(value = "/binds/{bid}")
     public void deleteBind(@PathVariable(name = "bid")Long bid) {
         System.out.println("delete bid: " + bid);
         service.delete(bid);
     }
 
-    @PutMapping(value = "/binds/{bid}")
+    @PostMapping(value = "/binds/{bid}")
     public void modifyBind(@PathVariable(name = "bid")Long bid, @RequestBody BindVO bindVO) {
         service.modify(bid, bindVO);
     }
 
-    @PatchMapping(value = "/binds/{bid}/stop")
-    public void stopBind(@PathVariable(name = "bid")Long bid) {
+    @GetMapping(value = "/binds/{bid}/state")
+    public void changeBindState(@PathVariable(name = "bid")Long bid, @RequestParam(name = "state") MonitorState state) {
         System.out.println("stop bid: " + bid);
-        service.stop(bid);
+        service.changeState(bid, state);
     }
-
-    @PatchMapping(value = "/binds/{bid}/start")
-    public void startBind(@PathVariable(name = "bid")Long bid) {
-        System.out.println("start bid: " + bid);
-        service.start(bid);
-    }
-
 
 }

@@ -1,5 +1,6 @@
 package com.clsaa.dop.server.link.dao;
 
+import com.clsaa.dop.server.link.enums.MonitorState;
 import com.clsaa.dop.server.link.model.po.Bind;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -12,8 +13,8 @@ public interface BindDao extends JpaRepository<Bind, Long> {
     List<Bind> findByCuser(long cuser);
 
     @Modifying
-    @Query(value = "update Bind b set b.state='STOP' where b.bid=?1")
-    int stopBind(long bid);
+    @Query(value = "update Bind b set b.state=?2 where b.bid=?1")
+    int updateBindState(long bid, MonitorState state);
 
     @Modifying
     @Query(value = "update Bind b set b.state='RUNNING' where b.bid=?2")

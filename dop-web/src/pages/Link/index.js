@@ -1,5 +1,5 @@
 import LinkList from './LinkList/LinkList';
-import LinkDetail from './LinkDetail/LinkDetail';
+import LinkSearch from './LinkSearch/LinkSearch';
 import LinkStar from './LinkStar/LinkStar';
 import LinkBind from './LinkBind/LinkBind';
 import LinkLayout from '../../layouts/LinkLayout';
@@ -15,13 +15,13 @@ const linkConfig = [
     {
         path: '/link/detail/:traceId',
         layout: LinkLayout,
-        component: LinkDetail,
+        component: LinkSearch,
         isLogin: true
     },
     {
         path: '/link/detail',
         layout: LinkLayout,
-        component: LinkDetail,
+        component: LinkSearch,
         isLogin: true
     },
     {
@@ -38,4 +38,4 @@ const linkConfig = [
     }
 ];
 
-export {LinkList, LinkDetail, LinkStar, linkConfig}
+export {LinkList, LinkSearch, LinkStar, linkConfig}

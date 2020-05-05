@@ -38,8 +38,8 @@ public class BindService {
         bindDao.save(newBind);
     }
 
-    public void stop(long bid) {
-        bindDao.stopBind(bid);
+    public void changeState(long bid, MonitorState state) {
+        bindDao.updateBindState(bid, state);
     }
 
     public void start(long bid) {

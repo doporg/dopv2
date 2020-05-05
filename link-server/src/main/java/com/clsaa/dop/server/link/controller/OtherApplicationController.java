@@ -19,7 +19,7 @@ public class OtherApplicationController {
     @Autowired
     private ProjectInterface projectInterface;
 
-//    @GetMapping(value = "/getProjectList")
+//    @GetMapping(value = "/projects")
     public Pagination<ProjectVO> getProjectList(@RequestHeader(HttpHeaders.X_LOGIN_USER) Long loginUser,
                                                 @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
                                                 @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,

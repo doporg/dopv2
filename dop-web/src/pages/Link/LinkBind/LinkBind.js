@@ -116,6 +116,20 @@ class LinkBind extends Component{
                 let deleteBindUrl = API.link + '/binds/' + bindRecord.bid;
                 console.log("url: " + deleteBindUrl);
 
+                // Axios(deleteBindUrl, {
+                //     method: 'DELETE',
+                //     mode: 'cors',
+                //     headers: {
+                //         'Access-Control-Allow-Origin': '*',
+                //         'Content-Type': 'application/json',
+                //     },
+                //     withCredentials: true
+                // }).then(response => {
+                //     window.location.reload();
+                // }).catch(error => {
+                //     console.log("删除失败: "+JSON.stringify(error))
+                // })
+
                 Axios.delete(deleteBindUrl).then(response => {
                     window.location.reload();
                 }).catch((error)=>{
@@ -133,11 +147,26 @@ class LinkBind extends Component{
         // } else {
         //     content = '确认修改吗？'
         // }
-        let modifyBindUrl = API.link + '/binds/' + bindRecord.bid;
-        Axios.put(modifyBindUrl, bindRecord).then(response => {
-            alert("修改")
+        // let modifyBindUrl = API.link + '/binds/' + bindRecord.bid;
+        // Axios.put(modifyBindUrl, bindRecord).then(response => {
+        //     alert("修改")
+        // }).catch( error => {
+        //     console.log("修改请求失败", error)
+        // })
+
+        let url = API.link + '/testDelete';
+        Axios(url, {
+            method: 'DELETE',
+            mode: 'cors',
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true
+        }).then(response => {
+            console.log("response: " + JSON.stringify(response));
         }).catch( error => {
-            console.log("修改请求失败", error)
+            console.log(JSON.stringify(error))
         })
     };
 
@@ -162,7 +191,7 @@ class LinkBind extends Component{
     // 获得项目列表
     getProjectList = () => {
         // console.log("展开选择框");
-        let getProjectListUrl = API.link + "/getProjectList";
+        let getProjectListUrl = API.link + "/projects";
         let param = {};
         this.setState({
             isLoading: true

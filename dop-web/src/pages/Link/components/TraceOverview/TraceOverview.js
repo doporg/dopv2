@@ -9,7 +9,7 @@ import Grid from "@icedesign/base/lib/grid";
 import Icon from "@icedesign/base/lib/icon";
 
 const {Row, Col} = Grid;
-class LinkOverview extends Component{
+class TraceOverview extends Component{
     constructor(props) {
         super(props);
         this.state = {
@@ -25,10 +25,10 @@ class LinkOverview extends Component{
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-        this.setState = {
+        this.setState({
             traceId: nextProps.traceId,
             traceInfo: nextProps.traceInfo
-        }
+        });
     }
 
     render() {
@@ -85,4 +85,4 @@ const styles = {
 
 
 
-export default injectIntl(LinkOverview)
+export default injectIntl(TraceOverview)

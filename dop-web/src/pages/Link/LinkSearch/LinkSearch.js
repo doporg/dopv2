@@ -9,11 +9,11 @@ import Grid from "@icedesign/base/lib/grid";
 
 import '../linkStyles.css'
 import ShowTraceOrNothing from "../components/ShowTraceOrNothing/ShowTraceOrNothing";
-import LinkOverview from "../components/LinkOverview/LinkOverview";
+import TraceInfo from "../components/TraceInfo/TraceInfo";
 
 const Toast = Feedback.toast;
 const {Row, Col} = Grid;
-class LinkDetail extends Component{
+class LinkSearch extends Component{
 
     constructor(props) {
         super(props);
@@ -205,13 +205,11 @@ class LinkDetail extends Component{
                 </div>
 
                 <ShowTraceOrNothing traceId={this.state.traceId} trace={this.state.trace}>
-                    <LinkOverview traceInfo={this.state.trace} traceId={this.state.traceId}/>
-                    {/*<SpanShow traceInfo={this.state.trace} traceId={this.state.traceId} />*/}
-                    {/*<LinkDependency traceInfo={this.state.trace} traceId={this.state.traceId} />*/}
+                    <TraceInfo traceInfo={this.state.trace} traceId={this.state.traceId}/>
                 </ShowTraceOrNothing>
 
             </div>);
     }
 }
 
-export default injectIntl(LinkDetail);
+export default injectIntl(LinkSearch);
