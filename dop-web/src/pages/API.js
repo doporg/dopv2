@@ -9,9 +9,8 @@ const code = "/code-server";
 const user = "/user-server";
 const image = "/image-server";
 const test = "/test-server";
-
+const scan = "/testing-server";
 const gateway = "/v2/api";
-
 const link = "/link-server";
 
 const API = {
@@ -26,7 +25,9 @@ const API = {
     user: host + user,
     image: host + image,
     test: host + test,
+    scan:host+scan
     link: "http://localhost:14300"
+
 };
 
 export default API;

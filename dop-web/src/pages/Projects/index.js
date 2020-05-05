@@ -24,7 +24,7 @@ const projectConfig = [
     {
         path: '/application/environment/detail',
         layout: BasicLayout,
-        component: ApplicationEnvironmentDetail
+        component: ApplicationEnvironmentDetail,
     }
 ];
 export {projectConfig};

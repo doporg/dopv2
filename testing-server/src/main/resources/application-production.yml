@@ -71,3 +71,5 @@ ribbon:
   ConnectTimeout: 10000
   ServerListRefreshInterval: 2000
 logging.path: ./logs/${spring.application.name}
+sonar.uri:http://115.28.186.77:9000
+sonar.token:0f3f04560a0fb62bf8173fa509f578d1f3cebdd1

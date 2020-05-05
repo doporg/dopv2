@@ -1,5 +1,5 @@
 server:
-  port: 14200       #端口自定
+  port: 8888       #端口自定
 spring:
   http:
     encoding:
@@ -43,7 +43,7 @@ spring:
 
 spring.jackson.serialization.WRITE_DATES_AS_TIMESTAMPS: true
 spring.jackson.serialization.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS: false
-
+spring.devtools.restart.enabled: true
 project:
   host: localhost:${server.port}
   groupId: @project.groupId@

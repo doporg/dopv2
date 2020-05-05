@@ -11,11 +11,10 @@ import {permissionConfig} from "../pages/Permissions";
 import codeConfig from "../pages/Code";
 import {testConfig} from "../pages/TestCases";
 import {imageConfig} from "../pages/Image";
-
+import {scanConfig} from '../pages/Scan'
 import {gatewayConfig} from "../pages/Gateway";
 
 import {linkConfig} from "../pages/Link";
-
 import {demoConfig} from "../pages/Demo";
 import {baasConfig} from "../pages/Baas";
 
@@ -35,6 +34,7 @@ const baseConfig = [
 ];
 
 const routerConfig = [
+  ...scanConfig,
     ...linkConfig,
     ...demoConfig,
     ...imageConfig,
