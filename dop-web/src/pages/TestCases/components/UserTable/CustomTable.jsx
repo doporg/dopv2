@@ -293,7 +293,7 @@ class CustomTable extends Component {
                 dataSource={this.state.currentData}
                 rowSelection={{ onChange: this.onChange }}
             >
-              <Table.Column title={this.props.intl.messages["test.caseLists.table.caseId"]} dataIndex="id" width={100} />
+              <Table.Column title={this.props.intl.messages["gateway.name"]} dataIndex="id" width={100} />
               <Table.Column title={this.props.intl.messages["test.caseLists.table.name"]} dataIndex="caseName" width={100} />
               <Table.Column title={this.props.intl.messages["test.caseLists.table.type"]} cell={this.renderCaseType} width={100} />
               <Table.Column title={this.props.intl.messages["test.caseLists.table.status"]} dataIndex="status" width={100} />

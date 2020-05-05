@@ -1,0 +1,95 @@
+/*
+ * SonarQube
+ * Copyright (C) 2009-2020 SonarSource SA
+ * mailto:info AT sonarsource DOT com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+/* for example java annotations */
+.sonarqube-code {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+
+  .sonarqube-code__issue {
+    grid-column: span 2;
+    background-color: #fcf3f3;
+    color: #9b5656;
+    margin-bottom: 5px;
+    .ant-descriptions-item-content {
+      color: inherit;
+    }
+  }
+
+  &__line {
+    padding: 0 7px;
+  }
+
+  .--issue {
+    background-color: #f3cfd0;
+  }
+
+  .a {
+    color: #808000;
+  }
+
+  /* constants */
+  .c {
+    color: #660e80;
+    font-style: normal;
+    font-weight: bold;
+  }
+
+  /* javadoc */
+  .j {
+    color: #666666;
+    font-style: normal;
+  }
+
+  /* classic comment */
+  .cd {
+    color: #666666;
+    font-style: italic;
+  }
+
+  /* C++ doc */
+  .cppd {
+    color: #666666;
+    font-style: italic;
+  }
+
+  /* keyword */
+  .k {
+    color: #0071ba;
+    font-weight: 600;
+  }
+
+  /* string */
+  .s {
+    color: #277b31;
+    font-weight: normal;
+  }
+
+  /* keyword light*/
+  .h {
+    color: #000080;
+    font-weight: normal;
+  }
+
+  /* preprocessing directive */
+  .p {
+    color: #347235;
+    font-weight: normal;
+  }
+}

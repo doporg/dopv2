@@ -1,11 +1,18 @@
 package com.clsaa.dop.server.api.controller;
 
+import com.clsaa.dop.server.api.module.vo.request.lifeCycle.CreateApiParams;
+import com.clsaa.dop.server.api.module.vo.request.lifeCycle.ModifyApiParams;
+import com.clsaa.dop.server.api.module.vo.response.ApiDetail;
+import com.clsaa.dop.server.api.module.vo.response.ApiList;
+import com.clsaa.dop.server.api.module.vo.response.ResponseResult;
+import com.clsaa.dop.server.api.service.ApiService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Api应用启动类
@@ -14,13 +21,20 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @CrossOrigin
 @RestController
+@RequestMapping(value = "/v2/api/lifeCycle")
 @EnableAutoConfiguration
 public class ApiController {
+    private ApiService apiService;
+
+    @Autowired
+    public ApiController(ApiService apiService) {
+        this.apiService = apiService;
+    }
 
     //如果需要使用服务层对象，则在此声明一个私有对象再进行使用
 
     @ApiOperation(value = "接口名称", notes = "接口说明")
-    @PostMapping("/v2/api")
+    @PostMapping("/HelloWorld")
     /*
      * 访问用 PostMapping, 相应的，创建数据或删除输入需要用其他注解（GerMapping / DeleteMapping）
      */
@@ -35,6 +49,70 @@ public class ApiController {
          * 函数方法体
          */
         return "helloWorld!";
+    }
 
+    @ApiOperation(value = "创建api")
+    @PostMapping()
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "错误参数")
+    })
+    public ResponseResult<String> createApi(@ApiParam(name = "创建api设置参数", required = true) @RequestBody CreateApiParams createApiParams) {
+        return apiService.createApi(createApiParams);
+    }
+
+    @ApiOperation(value = "上线api")
+    @PutMapping("/online/{apiId}")
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "错误参数")
+    })
+    public ResponseResult onlineApi(@ApiParam(name = "api Id", required = true) @PathVariable("apiId") String apiId) {
+        return apiService.onlineApi(apiId);
+    }
+
+    @ApiOperation(value = "下线api")
+    @PutMapping("/offline/{apiId}")
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "错误参数")
+    })
+    public ResponseResult offlineApi(@ApiParam(name = "api Id", required = true) @PathVariable("apiId") String apiId) {
+        return apiService.offlineApi(apiId);
+    }
+
+    @ApiOperation(value = "删除api")
+    @DeleteMapping("/{apiId}")
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "错误参数")
+    })
+    public ResponseResult deleteApi(@ApiParam(name = "api Id", required = true) @PathVariable("apiId") String apiId) {
+        return apiService.deleteApi(apiId);
+    }
+
+    @ApiOperation(value = "修改api")
+    @PatchMapping("/{apiId}")
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "错误参数")
+    })
+    public ResponseResult modifyApi(@ApiParam(name = "api Id", required = true) @PathVariable("apiId") String apiId,@ApiParam(name = "修改api设置参数", required = true) @RequestBody ModifyApiParams modifyApiParams) {
+        return apiService.modifyApi(apiId,modifyApiParams);
+    }
+
+    @ApiOperation(value = "查看api详情")
+    @GetMapping("/{apiId}")
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "错误参数")
+    })
+    public ResponseResult<ApiDetail> getApiDetail(@ApiParam(name = "api Id", required = true) @PathVariable("apiId") String apiId) {
+        return apiService.getApi(apiId);
+    }
+
+    @ApiOperation(value = "查看api列表")
+    @GetMapping()
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "错误参数")
+    })
+    public ResponseResult<ApiList> getApi(@ApiParam(name = "pageNo", required = true) @RequestParam("pageNo") int pageNo,
+                                          @ApiParam(name = "pageSize", required = true) @RequestParam("pageSize") int pageSize,
+                                          @ApiParam(name = "apiType", required = true) @RequestParam("apiType") String apiType) {
+        return apiService.getApiList(pageNo,pageSize,apiType);
     }
 }
