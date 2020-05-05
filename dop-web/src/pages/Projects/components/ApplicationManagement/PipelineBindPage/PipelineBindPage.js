@@ -38,7 +38,7 @@ class PipelineBindPage extends Component {
     //     this.setState({
     //         loading: true
     //     })
-    //     let pipelineListUrl = API.gateway + "/pipeline-server/v1/pipeline/cuser"
+    //     let pipelineListUrl = API.Gateway + "/pipeline-server/v1/pipeline/cuser"
     //     Axios.get(pipelineListUrl, {
     //         params: {
     //             cuser: 18
@@ -92,7 +92,7 @@ class PipelineBindPage extends Component {
             })
         })
 
-        // let pipelineListUrl = API.gateway + "/pipeline-server/v1/pipeline/cuser"
+        // let pipelineListUrl = API.Gateway + "/pipeline-server/v1/pipeline/cuser"
         // Axios.get(pipelineListUrl, {
         //     params: {
         //         cuser: 18
@@ -124,7 +124,7 @@ class PipelineBindPage extends Component {
     //         console.log(errors);
     //         if (errors === null) {
     //
-    //             // let updateUrl = API.gateway + "/application-server/app/env/" + this.state.appEnvId + "/pipeline"
+    //             // let updateUrl = API.Gateway + "/application-server/app/env/" + this.state.appEnvId + "/pipeline"
     //             // Axios.put(updateUrl, {}, {
     //             //     params: {
     //             //         pipelineId: _this.field.getValue('pipeline')
@@ -132,7 +132,7 @@ class PipelineBindPage extends Component {
     //             // })
     //             //     .then((response) => {
     //
-    //             let bindUrl = API.gateway + "/pipeline-server/v1/pipeline/appId"
+    //             let bindUrl = API.Gateway + "/pipeline-server/v1/pipeline/appId"
     //             Axios.post(bindUrl, {}, {
     //                 params: {
     //                     envid: this.state.appEnvId,

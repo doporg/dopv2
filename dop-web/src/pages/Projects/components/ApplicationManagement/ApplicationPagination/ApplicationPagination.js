@@ -72,7 +72,7 @@ class ApplicationPagination extends Component {
                 //     //存放所有请求URL的数组
                 //     let getList = []
                 //     for (let id of userIdList) {
-                //         let nameUrl = API.gateway + '/user-server/v1/users/' + id;
+                //         let nameUrl = API.Gateway + '/user-server/v1/users/' + id;
                 //         getList.push(Axios.get(nameUrl));
                 //     }
                 //

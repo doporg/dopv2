@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: baas-server
+  namespace: dop
+spec:
+  selector:
+    matchLabels:
+      app: baas-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: baas-server
+    spec:
+      containers:
+        - name: baas-server
+          imagePullPolicy: Always
+          image: registry.dop.clsaa.com/dop/baas-server:<BUILD_TAG>
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 250m
+            limits:
+              memory: 512Mi
+              cpu: 500m
+          volumeMounts:
+            - name: host-time
+              mountPath: /etc/localtime
+            - name: host-timezone
+              mountPath: /etc/timezone
+          ports:
+            - containerPort: 16600      # 端口自定
+      volumes:
+        - name: host-time
+          hostPath:
+            path: /etc/localtime
+        - name: host-timezone
+          hostPath:
+            path: /etc/timezone
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: baas-server
+  namespace: dop
+  labels:
+    app: baas-server
+spec:
+  ports:
+    - port: 14800      # 端口自定
+      protocol: TCP
+      targetPort: 14800      # 端口自定
+  selector:
+    app: baas-server
