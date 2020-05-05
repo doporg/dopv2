@@ -25,7 +25,7 @@ const API = {
     user: host + user,
     image: host + image,
     test: host + test,
-    scan:host+scan
+    scan:host+scan,
     link: "http://localhost:14300"
 
 };

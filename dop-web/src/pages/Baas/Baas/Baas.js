@@ -7,7 +7,6 @@ class Baas extends Component {
     render() {
         return (
             <div>
-                111112222
                 <Button type="primary">主要222按钮</Button>
                 <FormattedMessage
                     id="baas.hpy"
