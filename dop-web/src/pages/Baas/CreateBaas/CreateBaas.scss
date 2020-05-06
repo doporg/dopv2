@@ -1,0 +1,26 @@
+.create-baas-wrapper{
+  background: white;
+  padding: 60px;
+  color: black;
+  .icon-add {
+    margin-left: 10px;
+    color: #333;
+    transform: rotate(45deg);
+    cursor: pointer;
+  }
+  .peer-wrapper{
+    margin-bottom: 20px;
+    .peer-child{
+      border-left: #FFC107 3px solid;
+      overflow: hidden;
+      padding-top: 20px;
+    }
+    .peer-child:nth-child(even){
+      border-left: #1DC11D 3px solid;
+      overflow: hidden;
+      padding-top: 20px;
+    }
+  }
+
+
+}
