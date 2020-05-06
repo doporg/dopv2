@@ -1,4 +1,5 @@
 import Baas from './Baas/Baas'
+import CreateBaas from './CreateBaas/CreateBaas'
 import BaasLayout from "../../layouts/BaasLayout";
 import {FormattedMessage} from "react-intl";
 import React from "react";
@@ -26,7 +27,7 @@ const baasConfig = [
 
     {
         path: '/baas/create',
-        component: Baas,
+        component: CreateBaas,
         layout: BaasLayout,
         isLogin: true
     },
