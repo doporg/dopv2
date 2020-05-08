@@ -28,7 +28,7 @@ class PipelineTable extends Component {
     }
 
     getPipeline() {
-        let url = API.pipeline + '/v1/pipelines';
+        let url = API.pipeline + '/v1/pipelines/brief';
         let self = this;
         Axios.get(url).then((response) => {
             let dataSource = [];

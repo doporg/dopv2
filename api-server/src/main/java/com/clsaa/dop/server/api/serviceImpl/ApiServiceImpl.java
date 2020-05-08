@@ -1,6 +1,6 @@
 package com.clsaa.dop.server.api.serviceImpl;
 
-import com.clsaa.dop.server.api.dao.CurrentLimitPolicyRepository;
+import com.clsaa.dop.server.api.dao.LimitPolicyRepository;
 import com.clsaa.dop.server.api.dao.RouteRepository;
 import com.clsaa.dop.server.api.dao.ServiceRepository;
 import com.clsaa.dop.server.api.dao.ServiceRouteRepository;
@@ -22,25 +22,29 @@ import com.clsaa.dop.server.api.restTemplate.ApiRestTemplate;
 import com.clsaa.dop.server.api.service.ApiService;
 import com.clsaa.dop.server.api.service.PolicyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
 @org.springframework.stereotype.Service
 public class ApiServiceImpl implements ApiService {
+
     private ServiceRepository serviceRepository;
     private RouteRepository routeRepository;
     private ServiceRouteRepository serviceRouteRepository;
-    private CurrentLimitPolicyRepository currentLimitPolicyRepository;
+    private LimitPolicyRepository limitPolicyRepository;
     private PolicyService policyService;
     private ApiRestTemplate apiRestTemplate;
 
     @Autowired
     public ApiServiceImpl(ServiceRepository serviceRepository, RouteRepository routeRepository, ServiceRouteRepository serviceRouteRepository,
-                          ApiRestTemplate apiRestTemplate,CurrentLimitPolicyRepository currentLimitPolicyRepository,PolicyService policyService) {
+                          ApiRestTemplate apiRestTemplate, LimitPolicyRepository limitPolicyRepository, PolicyService policyService) {
         this.serviceRepository = serviceRepository;
         this.routeRepository = routeRepository;
         this.serviceRouteRepository = serviceRouteRepository;
-        this.currentLimitPolicyRepository = currentLimitPolicyRepository;
+        this.limitPolicyRepository = limitPolicyRepository;
         this.apiRestTemplate = apiRestTemplate;
         this.policyService = policyService;
     }
@@ -72,8 +76,8 @@ public class ApiServiceImpl implements ApiService {
                     //更新缓存策略
                     if (updateCachePolicy(createApiParams.isCaching(),createApiParams.getCachingTime().intValue(),service)){
                         //更新流控策略
-                        CurrentLimitPolicy currentLimitPolicy = currentLimitPolicyRepository.findCurrentLimitPolicyById(createApiParams.getCurrentLimitPolicyId());
-                        if (policyService.updateServiceCurrentLimitPolicy(service,currentLimitPolicy)){
+                        LimitPolicy limitPolicy = limitPolicyRepository.findLimitPolicyById(createApiParams.getCurrentLimitPolicyId());
+                        if (policyService.updateServiceCurrentLimitPolicy(service, limitPolicy)){
                             return new ResponseResult<>(0,"success",service.getId());
                         }else {
                             return new ResponseResult<>(5,"current limit policy update error",service.getId());
@@ -190,8 +194,8 @@ public class ApiServiceImpl implements ApiService {
                     //更新缓存策略
                     if (updateCachePolicy(modifyApiParams.isCaching(),modifyApiParams.getCachingTime().intValue(),service)){
                         //更新流控策略
-                        CurrentLimitPolicy currentLimitPolicy = currentLimitPolicyRepository.findCurrentLimitPolicyById(modifyApiParams.getCurrentLimitPolicy());
-                        if (policyService.updateServiceCurrentLimitPolicy(service,currentLimitPolicy)){
+                        LimitPolicy limitPolicy = limitPolicyRepository.findLimitPolicyById(modifyApiParams.getCurrentLimitPolicy());
+                        if (policyService.updateServiceCurrentLimitPolicy(service, limitPolicy)){
                             //更新请求路径
                             if (route.isOnline()){
                                 if (apiRestTemplate.modifyRoute(route.getKongRouteId(),route.getRequestMethod(),route.getRequestPath(),apiId)!=null){
@@ -225,7 +229,7 @@ public class ApiServiceImpl implements ApiService {
         if(route!=null){
             Service service = route.getService();
             ServiceRoute serviceRoute = service.getServiceRoute();
-            CurrentLimitPolicy currentLimitPolicy = service.getCurrentLimitPolicy();
+            LimitPolicy limitPolicy = service.getLimitPolicy();
             Upstream upstream = serviceRoute.getUpstream();
             FusePolicy fusePolicy = new FusePolicy(service.isFuse(),service.getFuseDetectionRing(),service.getCriticalFusingFailureRate(),
                     service.getFuseDuration(),service.getReplyDetectionRingSize());
@@ -233,8 +237,8 @@ public class ApiServiceImpl implements ApiService {
             UpstreamHealth upstreamHealth = apiRestTemplate.getUpstreamHealth(upstream.getId());
 
             CurrentLimitPolicyDetail currentLimitPolicyDetail = null;
-            if (currentLimitPolicy!=null){
-                currentLimitPolicyDetail = new CurrentLimitPolicyDetail(currentLimitPolicy.getId(),currentLimitPolicy.getName(),currentLimitPolicy.getDescription(),currentLimitPolicy.getSecond(),currentLimitPolicy.getMinute(),currentLimitPolicy.getHour(),currentLimitPolicy.getDay());
+            if (limitPolicy !=null){
+                currentLimitPolicyDetail = new CurrentLimitPolicyDetail(limitPolicy.getId(), limitPolicy.getName(), limitPolicy.getDescription(), limitPolicy.getSecond(), limitPolicy.getMinute(), limitPolicy.getHour(), limitPolicy.getDay());
             }
             return new ResponseResult<>(0,"success",new ApiDetail(apiId,service.getName(),service.getDescription(),upstreamHealth.getHealthData(),
                     route.isOnline(),route.getRequestMethod(),route.getRequestPath(),service.getTimeout(),service.isCaching(),
@@ -247,28 +251,29 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public ResponseResult<ApiList> getApiList(int pageNo, int pageSize, String apiType) {
         List<Route> routes;
+        Sort sort = new Sort(Sort.Direction.DESC,"id");
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         switch (apiType) {
             case "online":
-                routes = routeRepository.findByOnline(true);
+                routes = routeRepository.findAllByOnline(true,pageable).getContent();
                 break;
             case "offline":
-                routes = routeRepository.findByOnline(false);
+                routes = routeRepository.findAllByOnline(false,pageable).getContent();
                 break;
             default:
-                routes = routeRepository.findAll();
+                routes = routeRepository.findAll(pageable).getContent();
                 break;
         }
         if (pageSize == 0) throw new AssertionError();
         int num = routes.size();
         int pageNum = (num-1)/pageSize+1;
         int current = pageNo<pageNum?pageNo:pageNum;
-        ApiList apiList = new ApiList(num,current);
-        for(int i = (current-1)*pageSize;i < pageSize&&i<num;i++){
-            Route route = routes.get(i);
+        ApiList apiList = new ApiList(pageNum,current);
+        for (Route route : routes) {
             Service service = route.getService();
             Upstream upstream = service.getServiceRoute().getUpstream();
             UpstreamHealth upstreamHealth = apiRestTemplate.getUpstreamHealth(upstream.getId());
-            apiList.addApiInfo(new ApiInfo(service.getId(),service.getName(),service.getDescription(),route.getRequestPath(),"user",upstreamHealth.getHealthData(),route.isOnline()));
+            apiList.addApiInfo(new ApiInfo(service.getId(), service.getName(), service.getDescription(), route.getRequestPath(), "user", upstreamHealth.getHealthData(), route.isOnline()));
         }
         return new ResponseResult<>(0,"success",apiList);
     }

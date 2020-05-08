@@ -30,7 +30,7 @@ public class UTCUtils {
         return sdf.format(date);
     }
 
-    public static Date timeBefore30m(){
-        return new Date(System.currentTimeMillis()- 30 * 60 * 1000);
+    public static Date timeBefore(int minute){
+        return new Date(System.currentTimeMillis()- minute * 60 * 1000);
     }
 }

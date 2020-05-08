@@ -50,6 +50,6 @@ public class ApiDetail {
     @ApiModelProperty(value = "routingPolicy",dataType = "RoutingPolicyDetail")
     private RoutingPolicyDetail routingPolicy;
 
-    @ApiModelProperty(value = "currentLimitPolicy",dataType = "CurrentLimitPolicyDetail")
+    @ApiModelProperty(value = "limitPolicy",dataType = "CurrentLimitPolicyDetail")
     private CurrentLimitPolicyDetail currentLimitPolicy;
 }

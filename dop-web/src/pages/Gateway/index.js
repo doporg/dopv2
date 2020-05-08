@@ -3,13 +3,16 @@ import GatewayLayout from "../../layouts/GatewayLayout";
 import RouteTable from './components/RouteTable/RouteTable';
 import CurrentLimitTable from "./components/CurrentLimitTable/CurrentLimitTable";
 import CreateApi from "./CreateApi";
-import EditApiInfo from "./EditApiInfo";
 import CreateWeightingPolicyForm from "./components/CreateWeightingPolicy/CreateWeightingPolicyForm/index";
 import CreateServiceDiscoveryPolicyForm from "./components/CreateServiceDiscovoryPolicyForm";
 import CreateCurrentLimitPolicyForm from "./components/CreateCurrentLimitPolicyForm";
-import  EditWeightingPolicy from "./components/EditWeightingPolicy"
-import  EditServiceDiscoveryPolicy from "./components/EditServiceDiscoveryPolicy"
-import  EditCurrentLimitPolicy from "./components/EditCurrentLimitPolicy";
+import EditApiInfo from "./EditApiInfo";
+import EditWeightingPolicy from "./components/EditWeightingPolicy"
+import EditServiceDiscoveryPolicy from "./components/EditServiceDiscoveryPolicy"
+import EditCurrentLimitPolicy from "./components/EditCurrentLimitPolicy";
+import RequestLogs from "./components/RequestLogs";
+import LogTable from "./LogTable";
+import TrafficStatistic from "./TrafficStatistic";
 
 
 const gatewayConfig = [
@@ -77,6 +80,24 @@ const gatewayConfig = [
         path: "/gateway/currentLimit/editCurrentLimitPolicy/:policyId",
         layout: GatewayLayout,
         component: EditCurrentLimitPolicy,
+        isLogin: true
+    },
+    {
+        path: "/gateway/showLogs/:apiId",
+        layout: GatewayLayout,
+        component: RequestLogs,
+        isLogin: true
+    },
+    {
+        path: "/gateway/statistic",
+        layout: GatewayLayout,
+        component: TrafficStatistic,
+        isLogin: true
+    },
+    {
+        path: "/gateway/log",
+        layout: GatewayLayout,
+        component: LogTable,
         isLogin: true
     },
 ];

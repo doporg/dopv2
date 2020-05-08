@@ -3,9 +3,6 @@
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/com/clsaa/rest/result/standard-result/0.0.1/standard-result-0.0.1.jar!/" />
     </CLASSES>
-    <JAVADOC>
-      <root url="jar://$MAVEN_REPOSITORY$/com/clsaa/rest/result/standard-result/0.0.1/standard-result-0.0.1-javadoc.jar!/" />
-    </JAVADOC>
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/com/clsaa/rest/result/standard-result/0.0.1/standard-result-0.0.1-sources.jar!/" />
     </SOURCES>

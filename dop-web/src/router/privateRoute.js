@@ -12,7 +12,6 @@ class PrivateRoute extends Component {
     }
 
     componentWillMount() {
-        // this.state.isAuthenticated = true;
         if(!this.state.isAuthenticated){
             const {history} = this.props;
             setTimeout(() => {

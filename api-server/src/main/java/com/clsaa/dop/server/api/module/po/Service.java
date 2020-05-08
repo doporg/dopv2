@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -55,8 +54,8 @@ public class Service {
     private ServiceRoute serviceRoute;
 
     @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH})
-    @JoinColumn(name = "currentLimitPolicy_id")
-    private CurrentLimitPolicy currentLimitPolicy;
+    @JoinColumn(name = "limitPolicy_id")
+    private LimitPolicy limitPolicy;
 
     public Service(String id, String name, String description, Long timeout,
                    boolean fuse, Long fuseDetectionRing, Long criticalFusingFailureRate, Long fuseDuration, Long replyDetectionRingSize, ServiceRoute serviceRoute) {

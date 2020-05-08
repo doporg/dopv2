@@ -1,6 +1,8 @@
 package com.clsaa.dop.server.api.dao;
 
 import com.clsaa.dop.server.api.module.po.Log;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -8,9 +10,9 @@ import java.util.Date;
 import java.util.List;
 
 public interface LogRepository extends JpaRepository<Log,String> {
-    List<Log> findByTimeAfterAndTimeBeforeAndResponseStatusOrderByTimeDesc(Date beginTime,Date endTime,int responseStatus);
+    Page<Log> findAllByTimeAfterAndTimeBeforeAndResponseStatus(Date beginTime, Date endTime, int responseStatus,Pageable pageable);
 
-    List<Log> findTop10ByOrderByTimeDesc();
+    Page<Log> findAllByServiceId(String serviceId,Pageable pageable);
 
     Log findLogById(String id);
 

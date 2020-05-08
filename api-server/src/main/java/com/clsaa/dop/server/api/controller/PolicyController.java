@@ -53,7 +53,7 @@ public class PolicyController {
     @ApiResponses({
             @ApiResponse(code = 400, message = "错误参数")
     })
-    public ResponseResult<String> createCurrentLimitPolicy(@ApiParam(name = "currentLimitPolicy params", required = true) @RequestBody CurrentLimitPolicyParam policyParams) {
+    public ResponseResult<String> createCurrentLimitPolicy(@ApiParam(name = "limitPolicy params", required = true) @RequestBody CurrentLimitPolicyParam policyParams) {
         return policyService.createCurrentLimitPolicy(policyParams);
     }
 
@@ -63,7 +63,7 @@ public class PolicyController {
             @ApiResponse(code = 400, message = "错误参数")
     })
     public ResponseResult modifyCurrentLimitPolicy(@ApiParam(name = "policy id", required = true) @PathVariable("policyId") String policyId,
-                                                   @ApiParam(name = "currentLimitPolicy params", required = true) @RequestBody CurrentLimitPolicyParam policyParams) {
+                                                   @ApiParam(name = "limitPolicy params", required = true) @RequestBody CurrentLimitPolicyParam policyParams) {
         return policyService.modifyCurrentLimitPolicy(policyParams , policyId);
     }
 

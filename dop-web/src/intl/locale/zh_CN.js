@@ -9,10 +9,5 @@ import CODE_ZH_CN from './zh_CN/code_zh_CN';
 import TEST_ZH_CN from './zh_CN/test_zh_CN';
 import GATEWAY_ZH_CN from "./zh_CN/gateway_zh_CN";
 
-import DEMO_ZH_CN from "./zh_CN/demo_zh_CN";
-import LINK_ZH_CN from './zh_CN/link_zh_CN';
-import BAAS_ZH_CN from "./zh_CN/baas_zh_CN";
-
-const zh_CN = {...BAAS_ZH_CN, ...DEMO_ZH_CN, ...BASE_ZH_CN, ...LOGIN_ZH_CN, ...PIPELINE_ZH_CN, ...PROJECTS_ZH_ZN,...PERMISSION_ZH_CN,...CODE_ZH_CN,...IMAGE_ZH_CN,...TEST_ZH_CN,...LINK_ZH_CN,...GATEWAY_ZH_CN};
-
+const zh_CN = {...BASE_ZH_CN, ...LOGIN_ZH_CN, ...PIPELINE_ZH_CN, ...PROJECTS_ZH_ZN,...PERMISSION_ZH_CN,...CODE_ZH_CN,...IMAGE_ZH_CN,...TEST_ZH_CN,...GATEWAY_ZH_CN};
 export default zh_CN;

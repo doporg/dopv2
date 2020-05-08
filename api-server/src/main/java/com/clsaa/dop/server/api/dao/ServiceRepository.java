@@ -1,6 +1,6 @@
 package com.clsaa.dop.server.api.dao;
 
-import com.clsaa.dop.server.api.module.po.CurrentLimitPolicy;
+import com.clsaa.dop.server.api.module.po.LimitPolicy;
 import com.clsaa.dop.server.api.module.po.Service;
 import com.clsaa.dop.server.api.module.po.ServiceRoute;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +14,5 @@ public interface ServiceRepository extends JpaRepository<Service,String> {
 
     List<Service> findByServiceRoute(ServiceRoute serviceRoute);
 
-    List<Service> findByCurrentLimitPolicy(CurrentLimitPolicy currentLimitPolicy);
+    List<Service> findByLimitPolicy(LimitPolicy limitPolicy);
 }

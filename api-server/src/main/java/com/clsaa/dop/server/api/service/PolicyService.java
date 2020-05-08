@@ -1,7 +1,7 @@
 package com.clsaa.dop.server.api.service;
 
 import com.clsaa.dop.server.api.module.configuration.WeightingPolicyConfig;
-import com.clsaa.dop.server.api.module.po.CurrentLimitPolicy;
+import com.clsaa.dop.server.api.module.po.LimitPolicy;
 import com.clsaa.dop.server.api.module.po.Service;
 import com.clsaa.dop.server.api.module.vo.request.policy.CurrentLimitPolicyParam;
 import com.clsaa.dop.server.api.module.vo.response.CurrentLimitPolicyList;
@@ -42,7 +42,7 @@ public interface PolicyService {
 
     ResponseResult<List<CurrentLimitPolicyDetail>> searchCurrentLimitPolicy(String value);
 
-    boolean updateServiceCurrentLimitPolicy(Service service, CurrentLimitPolicy currentLimitPolicy);
+    boolean updateServiceCurrentLimitPolicy(Service service, LimitPolicy limitPolicy);
 }
 
 
