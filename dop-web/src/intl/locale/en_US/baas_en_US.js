@@ -1,8 +1,9 @@
 const BAAS_EN_US = {
     'baas.hpy': 'hpy',
-    'baas.home': 'home',
-    'baas.menu.create': 'create fabric network',
-    'baas.menu.monitor': 'monitor',
+    'baas.home': 'blockchain home',
+    'baas.menu.create': 'create blockchain',
+    'baas.menu.monitor': 'monitor management',
+    'baas.menu.channel': 'channel management',
     'baas.menu.user': 'user management',
     'baas.menu.chaincode': 'chaincode management',
     'baas.name': 'Fabric Block Chain',

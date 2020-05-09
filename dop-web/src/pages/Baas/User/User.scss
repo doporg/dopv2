@@ -1,38 +1,46 @@
-.baas-wrapper {
+.user-wrapper {
   background: white;
   padding: 40px 40px 40px;
-  .tag-run{
+
+  .tag-run {
     color: #669933;
     background-color: #beeee0;
   }
-  .tag-stop{
+
+  .tag-stop {
     color: #000;
     background-color: #CCCCCC;
   }
-  .tag-error{
+
+  .tag-error {
     color: #CC0033;
     background-color: #FFCCCC;
   }
-  .tag-build{
+
+  .tag-build {
     color: #CC6600;
     background-color: #FFFF66;
   }
-  .button-warning{
+
+  .button-warning {
     background-color: #fff;
     border-color: #ff3000;
     color: #ff3000;
   }
-  .button-warning:hover{
+
+  .button-warning:hover {
     background-color: #ff3000;
     border-color: #ff3000;
     color: #fff;
   }
-  .button-start{
+
+  .button-start {
     background-color: #fff;
     border-color: #669933;
     color: #669933;
   }
-  .button-start:hover{
+
+  .button-start:hover {
     background-color: #006633;
     border-color: #006633;
     color: #fff;

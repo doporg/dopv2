@@ -1,5 +1,8 @@
 import Baas from './Baas/Baas'
+import User from './User/User'
+import Monitor from './Monitor/Monitor'
 import CreateBaas from './CreateBaas/CreateBaas'
+import Channel from './Channel/Channel'
 import BaasLayout from "../../layouts/BaasLayout";
 import {FormattedMessage} from "react-intl";
 import React from "react";
@@ -7,8 +10,14 @@ import React from "react";
 
 const baasConfig = [
     {
+        path: '/baas/monitor/:id',
+        component: Monitor,
+        layout: BaasLayout,
+        isLogin: true
+    },
+    {
         path: '/baas/monitor',
-        component: Baas,
+        component: Monitor,
         layout: BaasLayout,
         isLogin: true
     },
@@ -20,13 +29,13 @@ const baasConfig = [
     },
     {
         path: '/baas/user',
-        component: Baas,
+        component: User,
         layout: BaasLayout,
         isLogin: true
     },
 
     {
-        path: '/baas/create',
+        path: '/baas/add',
         component: CreateBaas,
         layout: BaasLayout,
         isLogin: true
@@ -34,6 +43,12 @@ const baasConfig = [
     {
         path: '/baas',
         component: Baas,
+        layout: BaasLayout,
+        isLogin: true
+    },
+    {
+        path: '/baas/channel',
+        component: Channel,
         layout: BaasLayout,
         isLogin: true
     }

@@ -63,7 +63,8 @@ class CreateBaas extends Component {
             consensus: this.state.consensus,
             tls: this.state.tls,
         };
-        console.log(result)
+        alert("提交请求");
+        //TODO: 提交请求
         // let url = API.pipeline + "/v1/pipeline/jenkinsfile";
         let url = "";
         Axios.post(url, result).then((response) => {
@@ -239,7 +240,6 @@ class CreateBaas extends Component {
     render() {
         const {Row, Col} = Grid;
         const FormItem = Form.Item;
-        const init = this.field.init;
         const Option = Select.Option;
         const formItemLayout = {
             labelCol: {span: 6},
