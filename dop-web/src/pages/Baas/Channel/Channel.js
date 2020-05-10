@@ -45,17 +45,17 @@ class Channel extends Component {
                 id: 100,
                 name: `第一个通道`,
                 peers: ["peer0-org1", "peer1-org1"],
-                networkId: "第一个网络"
+                networkId: 100
             }, {
                 id: 101,
                 name: `第二个通道`,
                 peers: ["peer0-org1", "peer1-org1"],
-                networkId: "第一个网络"
+                networkId: 101
             }, {
                 id: 102,
                 name: `第三个通道`,
                 peers: ["peer0-org1", "peer1-org1"],
-                networkId: "第一个网络"
+                networkId: 101
             },
         ];
         this.setState({

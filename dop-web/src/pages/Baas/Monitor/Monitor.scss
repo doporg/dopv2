@@ -47,7 +47,7 @@
   }
 
   .monitor-container{
-    padding: 0 0 30px;
+    padding: 0 0 20px;
     .feedback{
       margin: 1px 0;
     }
@@ -56,13 +56,17 @@
     }
   }
   .monitor-selection{
-    margin: 20px 0;
+    margin: 5px 0 20px;
     .monitor-card{
       width: 100%;
       .monitor-button{
         width: 100%;
         border-radius: 0;
         margin-top: 20px;
+      }
+      .number{
+        padding-top: 50px;
+        font-size: 70px;
       }
     }
   }
