@@ -7,7 +7,7 @@ import {
     Input,
     Dialog,
     Select,
-    Form, Grid, Feedback
+    Form, Grid, Feedback,Tag
 } from "@icedesign/base";
 import {injectIntl} from "react-intl";
 import "./ChainCode.scss"
@@ -33,7 +33,16 @@ class ChainCode extends Component {
             newChainCodeVisible: false,
             newGit: null,
             newVersion: null,
-            selectedChannelId: null
+            selectedChannelId: null,
+
+
+            //操作链码
+            operationVisible: false,
+            operationName: null,
+            selectableOperationType: ["Init","Invoke","Query"],
+            operationType: null,
+            operationParameter: ["a","100"],
+            operationParameterInput: null
         }
     }
 
@@ -220,7 +229,6 @@ class ChainCode extends Component {
         })
     };
 
-
     channelRender(value) {
         let result = null;
         let allChannels = this.state.allChannels;
@@ -268,14 +276,18 @@ class ChainCode extends Component {
         })
     }
 
-    operateChainCode() {
-        Toast.prompt("正在开发")
+    operateChainCode(index, record) {
+        // Toast.prompt("正在开发");
+        this.setState({
+            selectedChainCode: record.id,
+            operationVisible: true
+        })
     }
 
     operationRender(value, index, record) {
         return (
             <Button.Group size="small">
-                <Button type="secondary" onClick={this.operateChainCode.bind(this, record)}><Icon
+                <Button type="secondary" onClick={this.operateChainCode.bind(this, index, record)}><Icon
                     type="form"/>操作</Button>
                 <Button
                     type="normal"
@@ -329,7 +341,7 @@ class ChainCode extends Component {
         })
     }
 
-    networkOnChange(value, record) {
+    networkOnChange(value) {
         console.log(value)
         let allChannels = this.state.allChannels;
         this.setState({
@@ -354,13 +366,12 @@ class ChainCode extends Component {
         })
     }
 
-    channelOnChange(value, record) {
+    channelOnChange(value) {
         this.setState({
             selectedChannelId: value
         });
         console.log(value)
     }
-
 
     onVersionClose() {
         this.setState({
@@ -395,6 +406,49 @@ class ChainCode extends Component {
             newVersion: value
         })
     }
+    onOperationOK(){
+        // TODO: 执行提交
+        console.log(this.state.selectedChainCode);
+        console.log(this.state.operationName);
+        console.log(this.state.operationType);
+        console.log(this.state.operationParameter);
+        // alert("执行");
+    }
+    onOperationClose(){
+        this.setState({
+            operationVisible: false
+        })
+    }
+
+    operationNameOnChange(value){
+        this.setState({
+            operationName: value
+        })
+    }
+    operationTypeOnChange(value){
+        this.setState({
+            operationType: value
+        })
+    }
+    operationParameterOnChange(value){
+        this.setState({
+            operationParameterInput: value
+        })
+    }
+    operationParameterOnClick(){
+        let operationParameter = this.state.operationParameter;
+        operationParameter.push(this.state.operationParameterInput);
+        this.setState({
+            operationParameter
+        })
+    }
+    operationParameterOnClose(index){
+        let operationParameter = this.state.operationParameter;
+        operationParameter.splice(index, 1);
+        this.setState({
+            operationParameter
+        })
+    };
 
     render() {
         const {Row, Col} = Grid;
@@ -503,6 +557,77 @@ class ChainCode extends Component {
                         <FormItem label="版本号: " {...formItemLayout}>
                             <Input htmlType="text" onChange={this.updateVersionOnChange.bind(this)}/>
                             <p style={{color: 'red', fontSize: '13px'}}>*将会根据代码地址目前状态进行升级更新</p>
+                        </FormItem>
+                    </Form>
+                </Dialog>
+
+                <Dialog
+                    visible={this.state.operationVisible}
+                    onOk={this.onOperationOK.bind(this)}
+                    onCancel={this.onOperationClose.bind(this)}
+                    onClose={this.onOperationClose.bind(this)}
+                    title="操作链码"
+                    style={{width: 500}}
+                >
+                    <Form>
+                        <FormItem label="方法: " {...formItemLayout} required>
+                            <Input htmlType="text" onChange={this.operationNameOnChange.bind(this)}/>
+                        </FormItem>
+                        <FormItem label="方法类型: " {...formItemLayout} required>
+                            <Select
+                                size="large"
+                                hasClear={true}
+                                onChange={this.operationTypeOnChange.bind(this)}
+                                style={{width: "100%"}}
+                            >
+                                {this.state.selectableOperationType.map((item, index) => {
+                                    return (
+                                        <Option key={index} value={item}>{item}</Option>
+                                    )
+                                })}
+                            </Select>
+                        </FormItem>
+                        <FormItem label="参数: " {...formItemLayout}>
+                            <Row>
+                                <Col span={18}>
+                                    <Input
+                                        htmlType="text"
+                                        onChange={this.operationParameterOnChange.bind(this)}
+                                        placeholder="请添加"
+                                        style={{width: "100%"}}
+                                    />
+                                </Col>
+                                <Col span={6}>
+                                    <Button
+                                        type="primary"
+                                        style={{width: "100%"}}
+                                        onClick={this.operationParameterOnClick.bind(this)}
+                                    >
+                                        <Icon type="add"/> 添加
+                                    </Button>
+                                </Col>
+                            </Row>
+                            {
+                                this.state.operationParameter.map((item, index)=>{
+                                    return(
+                                        <Tag
+                                            shape="deletable"
+                                            animation={false}
+                                            onClose={this.operationParameterOnClose.bind(this, index)}
+                                        >
+                                            {item}
+                                        </Tag>
+                                    )
+                                })
+                            }
+                        </FormItem>
+                        <FormItem label="返回值: " {...formItemLayout}>
+                            <Feedback key="success" type="success" shape="inline" >
+                                90
+                            </Feedback>
+                            <Feedback key="error" type="error" shape="inline">
+                                error
+                            </Feedback>
                         </FormItem>
                     </Form>
                 </Dialog>
