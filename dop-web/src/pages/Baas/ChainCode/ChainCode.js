@@ -4,62 +4,68 @@ import {
     Icon,
     Pagination,
     Table,
-    Tag,
     Input,
     Dialog,
     Select,
-    Form, Grid
+    Form, Grid, Feedback
 } from "@icedesign/base";
 import {injectIntl} from "react-intl";
-import "./Channel.scss"
+import "./ChainCode.scss"
 
 const {Combobox, Option, OptionGroup} = Select;
+const Toast = Feedback.toast;
 
-class Channel extends Component {
+class ChainCode extends Component {
     constructor(prop) {
         super(prop);
         this.state = {
             allChannels: [],
-            currentChannels: [],
+            allChainCode: [],
+            currentChainCode: [],
             networks: [],
             loading: false,
             searchValue: "",
-            visible: false,
+            updateVisible: false,
             selectedNetworkId: null,
-            selectedNetwork: null,
-            selectedPeer: null
+            selectableChannel: [],
+            selectedChainCode: null,
+            updateVersion: null,
+            newChainCodeVisible: false,
+            newGit: null,
+            newVersion: null,
+            selectedChannelId: null
         }
     }
 
     componentWillMount() {
-        this.getChannels();
         this.getNetwork();
+        this.getChainCode();
+        this.getChannels();
         setTimeout(() => {
             this.getPageData();
         }, 0);
     }
 
-    getChannels() {
-        let allChannels = [
+    getChainCode() {
+        let allChainCode = [
             {
                 id: 100,
-                name: `第一个通道`,
-                peers: ["peer0-org1", "peer1-org1"],
-                networkId: "第一个网络"
+                name: `mycc`,
+                version: "1.0",
+                git: "https://github.com/vanitas92/fabric-external-chaincodes",
+                channelId: 100,
+                networkId: 100,
             }, {
                 id: 101,
-                name: `第二个通道`,
-                peers: ["peer0-org1", "peer1-org1"],
-                networkId: "第一个网络"
-            }, {
-                id: 102,
-                name: `第三个通道`,
-                peers: ["peer0-org1", "peer1-org1"],
-                networkId: "第一个网络"
-            },
+                name: `fishcc`,
+                version: "1.0",
+                git: "https://github.com/vanitas92/fabric-external-chaincodes",
+                channelId: 101,
+                networkId: 101,
+            }
         ];
         this.setState({
-            allChannels
+            allChainCode
         })
     }
 
@@ -128,7 +134,7 @@ class Channel extends Component {
                     peers: [{
                         peerName: "peer0-org1",
                         ports: ["8051", "8052", "8053", "9443"]
-                    },{
+                    }, {
                         peerName: "peer1-org1",
                         ports: ["8051", "8052", "8053", "9443"]
                     }]
@@ -138,7 +144,7 @@ class Channel extends Component {
                         peerName: "peer0-org2",
                         ports: ["8051", "8052", "8053", "9443"]
                     },]
-                },{
+                }, {
                     orgName: "org3",
                     peers: [{
                         peerName: "peer0-org3",
@@ -183,52 +189,102 @@ class Channel extends Component {
         })
     }
 
+    getChannels() {
+        let allChannels = [
+            {
+                id: 100,
+                name: `第一个通道`,
+                peers: ["peer0-org1", "peer1-org1"],
+                networkId: "100"
+            }, {
+                id: 101,
+                name: `第二个通道`,
+                peers: ["peer0-org1", "peer1-org1"],
+                networkId: "100"
+            }, {
+                id: 102,
+                name: `第三个通道`,
+                peers: ["peer0-org1", "peer1-org1"],
+                networkId: "101"
+            },
+        ];
+        this.setState({
+            allChannels
+        })
+    }
+
     getPageData() {
         let self = this;
         this.setState({
-            currentChannels: self.state.allChannels.slice(0, 5)
+            currentChainCode: self.state.allChainCode.slice(0, 5)
         })
     };
 
 
-    peerRender(value) {
+    channelRender(value) {
+        let result = null;
+        let allChannels = this.state.allChannels;
+        for (let i = 0; i < allChannels.length; i++) {
+            if (value === allChannels[i].id) {
+                result = allChannels[i].name
+            }
+        }
+        return result
+    }
+
+    networkRender(value) {
+        let result = null;
+        let networks = this.state.networks;
+        for (let i = 0; i < networks.length; i++) {
+            if (value === networks[i].id) {
+                result = networks[i].name
+            }
+        }
+        return result
+    }
+
+    gitRender(value) {
         return (
-            value.map((item) => {
-                return (
-                    <Tag shape="readonly" size="small">{item}</Tag>
-                )
-            })
+            <a href={value} target="view_window">{value}</a>
         )
     }
 
-    channelDelete(index, record) {
-        let currentChannels = this.state.currentChannels;
-        currentChannels.splice(index, 1);
+    chainCodeDelete(index, record) {
+        let currentChainCode = this.state.currentChainCode;
+        currentChainCode.splice(index, 1);
         this.setState({
-            currentChannels
+            currentChainCode
         });
         console.log(record.id)
         //TODO: 发送删除请求
     }
 
-    installChainCode() {
-        this.props.history.push("/baas/chaincode")
+    updateChainCode(index, record) {
+        this.setState({
+            updateVisible: true
+        });
+        this.setState({
+            selectedChainCode: record.id
+        })
     }
 
-    channelCheck(record) {
-        console.log(record);
-        console.log(record.id);
-        //TODO: 发送启动网络请求
-        this.props.history.push('/baas/monitor/' + record.id)
+    operateChainCode() {
+        Toast.prompt("正在开发")
     }
 
     operationRender(value, index, record) {
         return (
             <Button.Group size="small">
-                <Button type="secondary" onClick={this.channelCheck.bind(this, record)}><Icon type="form"/>查看</Button>
-                <Button type="normal" className="button-start" onClick={this.installChainCode.bind(this)}><Icon
-                    type="repair"/>安装链码</Button>
-                <Button type="normal" className="button-warning" onClick={this.channelDelete.bind(this, index, record)}><Icon
+                <Button type="secondary" onClick={this.operateChainCode.bind(this, record)}><Icon
+                    type="form"/>操作</Button>
+                <Button
+                    type="normal"
+                    className="button-start"
+                    onClick={this.updateChainCode.bind(this, index, record)}>
+                    <Icon type="training"/>升级
+                </Button>
+                <Button type="normal" className="button-warning"
+                        onClick={this.chainCodeDelete.bind(this, index, record)}><Icon
                     type="ashbin"/>删除</Button>
             </Button.Group>
         )
@@ -241,7 +297,7 @@ class Channel extends Component {
         });
         setTimeout(() => {
             self.setState({
-                currentChannels: self.state.allChannels.slice((currentPage - 1) * 5, (currentPage - 1) * 5 + 5),
+                currentChainCode: self.state.allChainCode.slice((currentPage - 1) * 5, (currentPage - 1) * 5 + 5),
                 loading: false
             });
         }, 200);
@@ -255,56 +311,89 @@ class Channel extends Component {
 
     searchSubmit() {
         let self = this;
-        let allChannels = self.state.allChannels;
+        let allChainCode = self.state.allChainCode;
         let result = [];
-        for (let i = 0; i < allChannels.length; i++) {
-            if (allChannels[i].name.indexOf(self.state.searchValue) !== -1) {
-                result.push(allChannels[i])
+        for (let i = 0; i < allChainCode.length; i++) {
+            if (allChainCode[i].name.indexOf(self.state.searchValue) !== -1) {
+                result.push(allChainCode[i])
             }
         }
         this.setState({
-            currentChannels: result
+            currentChainCode: result
         })
     }
 
     addSubmit() {
         this.setState({
-            visible: true
-        })
-    }
-
-    onClose() {
-        this.setState({
-            visible: false
+            newChainCodeVisible: true
         })
     }
 
     networkOnChange(value, record) {
-        let networks = this.state.networks;
+        console.log(value)
+        let allChannels = this.state.allChannels;
         this.setState({
             selectedNetworkId: value
         });
-        for (let i = 0; i < networks.length; i++) {
-            if (networks[i].id === value) {
-                this.setState({
-                    selectedNetwork: networks[i]
-                })
+        let selectableChannel = [];
+        for (let i = 0; i < allChannels.length; i++) {
+            console.log(allChannels[i]);
+            if (allChannels[i].networkId === value.toString()) {
+                selectableChannel.push(allChannels[i]);
+                console.log(selectableChannel)
             }
         }
+        this.setState({
+            selectableChannel
+        })
     }
 
-    peerOnChange(value, record) {
-        //["0/0", "1/0"]
-        // 第0个组织的第0个节点
+    updateVersionOnChange(value) {
         this.setState({
-            selectedPeer: value
+            updateVersion: value
         })
+    }
+
+    channelOnChange(value, record) {
+        this.setState({
+            selectedChannelId: value
+        });
         console.log(value)
     }
-    onOK(){
-        // selectedNetwork
-        // selectedPeer
-        alert("提交")
+
+
+    onVersionClose() {
+        this.setState({
+            updateVisible: false
+        })
+    }
+
+    onVersionOK() {
+        alert("提交: id " + this.state.updateVersion)
+    }
+    onNewChainCodeOK(){
+        console.log(this.state.selectedNetworkId);
+        console.log(this.state.selectedChannelId);
+        console.log(this.state.newGit);
+        console.log(this.state.newVersion);
+        Toast.loading("正在提交，若希望更详细的配置请移步流水线管理")
+    }
+    onNewChainCodeClose(){
+        this.setState({
+            newChainCodeVisible: false
+        })
+    }
+
+    newGitOnChange(value) {
+        this.setState({
+            newGit: value
+        })
+    }
+
+    newVersionOnChange(value) {
+        this.setState({
+            newVersion: value
+        })
     }
 
     render() {
@@ -316,7 +405,7 @@ class Channel extends Component {
             wrapperCol: {span: 18}
         };
         return (
-            <div className="baas-wrapper">
+            <div className="chaincode-wrapper">
                 <Input
                     trim
                     value={this.state.searchValue}
@@ -337,28 +426,31 @@ class Channel extends Component {
                 >
                     <Icon type="add"/> 添加
                 </Button><br/><br/>
-                <Table dataSource={this.state.currentChannels}>
+                <Table dataSource={this.state.currentChainCode}>
                     <Table.Column title="Id" width="5%" dataIndex="id"/>
-                    <Table.Column title="通道名称" width="10%" dataIndex="name"/>
-                    <Table.Column title="包含节点" cell={this.peerRender.bind(this)} dataIndex="peers"/>
-                    <Table.Column title="所属网络" width="10%" dataIndex="networkId"/>
+                    <Table.Column title="链码名称" width="10%" dataIndex="name"/>
+                    <Table.Column title="版本" width="10%" dataIndex="version"/>
+                    <Table.Column title="仓库地址" cell={this.gitRender.bind(this)} dataIndex="git"/>
+                    <Table.Column title="所属通道" cell={this.channelRender.bind(this)} width="10%" dataIndex="channelId"/>
+                    <Table.Column title="所属网络" cell={this.networkRender.bind(this)} width="10%" dataIndex="networkId"/>
                     <Table.Column title="操作" width="25%" cell={this.operationRender.bind(this)}/>
                 </Table><br/>
-                <Pagination onChange={this.onChange.bind(this)} className="page-demo"/>
+                <Pagination onChange={this.onChange.bind(this)}/>
+
                 <Dialog
-                    visible={this.state.visible}
-                    // visible={true}
-                    onOk={this.onOK.bind(this)}
-                    onCancel={this.onClose.bind(this)}
-                    onClose={this.onClose.bind(this)}
-                    title="新建通道"
+                    visible={this.state.newChainCodeVisible}
+                    // updateVisible={true}
+                    onOk={this.onNewChainCodeOK.bind(this)}
+                    onCancel={this.onNewChainCodeClose.bind(this)}
+                    onClose={this.onNewChainCodeClose.bind(this)}
+                    title="新建链码"
                     style={{width: 400}}
                 >
                     <Form>
                         <FormItem label="选择网络: " {...formItemLayout}>
                             <Select
                                 size="large"
-                                hasClear="true"
+                                hasClear={true}
                                 onChange={this.networkOnChange.bind(this)}
                                 style={{width: "100%"}}
                             >
@@ -369,40 +461,48 @@ class Channel extends Component {
                                 })}
                             </Select>
                         </FormItem>
-                        <FormItem label="选择节点: " {...formItemLayout}>
+                        <FormItem label="选择通道: " {...formItemLayout}>
                             <Select
                                 size="large"
                                 hasClear={true}
-                                onChange={this.peerOnChange.bind(this)}
+                                onChange={this.channelOnChange.bind(this)}
                                 style={{width: "100%"}}
-                                multiple
-                                key="peerSelection"
+                                key="channelSelection"
                             >
-                                {(() => {
-                                    if (this.state.selectedNetwork) {
+                                {
+                                    this.state.selectableChannel.map((item, index) => {
                                         return (
-                                            this.state.selectedNetwork.org.map((orgItem, orgIndex) => {
-                                                return (
-                                                    <OptionGroup key={orgIndex} label={orgItem.orgName}>
-                                                        {
-                                                            orgItem.peers.map((peerItem, peerIndex) => {
-                                                                return (
-                                                                    <option
-                                                                        key={peerIndex}
-                                                                        value={orgIndex + "/" + peerIndex}
-                                                                    >
-                                                                        {peerItem.peerName}
-                                                                    </option>
-                                                                )
-                                                            })
-                                                        }
-                                                    </OptionGroup>
-                                                )
-                                            })
+                                            <Option key={index} value={item.id}>{item.name}</Option>
                                         )
-                                    }
-                                })()}
+                                    })
+                                }
                             </Select>
+                        </FormItem>
+                        <Form>
+                            <FormItem label="仓库地址: " {...formItemLayout}>
+                                <Input htmlType="text" onChange={this.newGitOnChange.bind(this)}/>
+                            </FormItem>
+                        </Form>
+                        <Form>
+                            <FormItem label="版本号: " {...formItemLayout}>
+                                <Input htmlType="text" onChange={this.newVersionOnChange.bind(this)}/>
+                            </FormItem>
+                        </Form>
+                    </Form>
+                </Dialog>
+
+                <Dialog
+                    visible={this.state.updateVisible}
+                    onOk={this.onVersionOK.bind(this)}
+                    onCancel={this.onVersionClose.bind(this)}
+                    onClose={this.onVersionClose.bind(this)}
+                    title="升级链码"
+                    style={{width: 400}}
+                >
+                    <Form>
+                        <FormItem label="版本号: " {...formItemLayout}>
+                            <Input htmlType="text" onChange={this.updateVersionOnChange.bind(this)}/>
+                            <p style={{color: 'red', fontSize: '13px'}}>*将会根据代码地址目前状态进行升级更新</p>
                         </FormItem>
                     </Form>
                 </Dialog>
@@ -411,4 +511,4 @@ class Channel extends Component {
     }
 }
 
-export default injectIntl(Channel)
+export default injectIntl(ChainCode)

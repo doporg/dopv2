@@ -3,6 +3,7 @@ import User from './User/User'
 import Monitor from './Monitor/Monitor'
 import CreateBaas from './CreateBaas/CreateBaas'
 import Channel from './Channel/Channel'
+import ChainCode from './ChainCode/ChainCode'
 import BaasLayout from "../../layouts/BaasLayout";
 import {FormattedMessage} from "react-intl";
 import React from "react";
@@ -23,7 +24,7 @@ const baasConfig = [
     },
     {
         path: '/baas/chaincode',
-        component: Baas,
+        component: ChainCode,
         layout: BaasLayout,
         isLogin: true
     },
