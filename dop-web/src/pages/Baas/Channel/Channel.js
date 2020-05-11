@@ -27,7 +27,8 @@ class Channel extends Component {
             visible: false,
             selectedNetworkId: null,
             selectedNetwork: null,
-            selectedPeer: null
+            selectedPeer: null,
+            newChannelName: null
         }
     }
 
@@ -292,13 +293,17 @@ class Channel extends Component {
             }
         }
     }
-
+    nameOnChange(value){
+        this.setState({
+            newChannelName: value
+        })
+    }
     peerOnChange(value, record) {
         //["0/0", "1/0"]
         // 第0个组织的第0个节点
         this.setState({
             selectedPeer: value
-        })
+        });
         console.log(value)
     }
     onOK(){
@@ -355,6 +360,9 @@ class Channel extends Component {
                     style={{width: 400}}
                 >
                     <Form>
+                        <FormItem label="通道名称: " {...formItemLayout}>
+                            <Input htmlType="text" onChange={this.nameOnChange.bind(this)}/>
+                        </FormItem>
                         <FormItem label="选择网络: " {...formItemLayout}>
                             <Select
                                 size="large"

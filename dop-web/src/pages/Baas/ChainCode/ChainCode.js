@@ -34,6 +34,7 @@ class ChainCode extends Component {
             newGit: null,
             newVersion: null,
             selectedChannelId: null,
+            newChainCodeName: null,
 
 
             //操作链码
@@ -449,6 +450,11 @@ class ChainCode extends Component {
             operationParameter
         })
     };
+    nameOnChange(value){
+        this.setState({
+            newChainCodeName: value
+        })
+    }
 
     render() {
         const {Row, Col} = Grid;
@@ -501,6 +507,9 @@ class ChainCode extends Component {
                     style={{width: 400}}
                 >
                     <Form>
+                        <FormItem label="链码名称: " {...formItemLayout}>
+                            <Input htmlType="text" onChange={this.nameOnChange.bind(this)}/>
+                        </FormItem>
                         <FormItem label="选择网络: " {...formItemLayout}>
                             <Select
                                 size="large"
