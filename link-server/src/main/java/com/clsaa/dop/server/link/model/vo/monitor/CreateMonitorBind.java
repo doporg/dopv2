@@ -1,6 +1,7 @@
-package com.clsaa.dop.server.link.model.vo;
+package com.clsaa.dop.server.link.model.vo.monitor;
 
 import com.clsaa.dop.server.link.enums.MonitorState;
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,9 +11,8 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BindVO {
-
-    private long bid;
+@ApiModel(description = "创建链路监控绑定")
+public class CreateMonitorBind {
 
     private String title; // 给这个监控起个名字，做个简单说明
 

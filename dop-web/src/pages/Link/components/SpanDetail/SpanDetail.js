@@ -22,6 +22,7 @@ class SpanDetail extends Component{
     }
 
     render() {
+        console.log("SpanDetail render");
         return (
             <div>
                 {

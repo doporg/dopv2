@@ -1,21 +1,19 @@
-package com.clsaa.dop.server.link.model.po;
+package com.clsaa.dop.server.link.model.vo.monitor;
 
 import com.clsaa.dop.server.link.enums.MonitorState;
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.util.Date;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Bind {
+@ApiModel(description = "更新链路监控绑定")
+public class ModifyMonitorBind {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long bid;
 
     private String title; // 给这个监控起个名字，做个简单说明
@@ -38,10 +36,7 @@ public class Bind {
 
     private double threshold;// 阈值 单位时间内调用链n次调用>=m次出错通知
 
-    @Enumerated(EnumType.STRING)
     private MonitorState state; //
 
     private Date ctime;
-
-    private boolean isDelete;
 }

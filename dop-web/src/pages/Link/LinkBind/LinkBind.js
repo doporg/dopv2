@@ -13,6 +13,8 @@ import Feedback from "@icedesign/base/lib/feedback";
 import Tag from "@icedesign/base/lib/tag";
 import Grid from "@icedesign/base/lib/grid";
 import '../linkStyles.css';
+import Pagination from "@icedesign/base/lib/pagination";
+import {Link} from "react-router-dom";
 
 const Toast = Feedback.toast;
 const {Row, Col} = Grid;
@@ -22,30 +24,44 @@ class LinkBind extends Component{
         this.field = new Field(this);
         this.state = {
             bindList: [],
-
-            isLoading: false,
+            pageNo: 1,
+            pageSize: 10,
+            totalCount: 0,
+            isLoading: true,
 
             dialogVisible: false,
 
             projectList: [],
             serviceList: [],
             memberList: [],
-            selectDisable: true
+
+            projectSelectDisable: false,
+            serviceSelectDisable: true,
+            memberSelectDisable: true,
+
+            currentOpt: '',
+            bidDisplay: 'block'
         }
     }
 
     componentDidMount() {
-        this.setState({
-            isLoading: true
-        });
-        let getBindListUrl = API.link + '/binds';
+        this.loadBindData("", 1);
+    }
+
+    loadBindData = (keywords, currentPage) => {
+        let getBindListUrl = API.link + '/v2/link/bind';
         let param = {
-            cuser: window.sessionStorage.getItem('user-id')
+            cuser: window.sessionStorage.getItem('user-id'),
+            pageNo: currentPage,
+            pageSize: this.state.pageSize,
+            keyword: keywords
         };
         Axios.get(getBindListUrl, {params: param}).then(response => {
-            let list = response.data;
+            let pageableDataList = response.data;
             this.setState({
-                bindList: list
+                bindList: pageableDataList.pageList,
+                totalCount: pageableDataList.totalCount,
+                pageNo: pageableDataList.pageNo
             })
         }).catch((error)=>{
             console.log("获取绑定列表失败", error)
@@ -54,9 +70,18 @@ class LinkBind extends Component{
                 isLoading: false
             })
         })
-    }
+    };
 
-    submitCreateBind = () => {
+    handleSubmit = () => {
+        let opt = this.state.currentOpt;
+        if (opt === 'CREATE') {
+            this.createBind();
+        } else if (opt === 'MODIFY') {
+            this.confirmModifyBind();
+        }
+    };
+
+    createBind = () => {
         this.field.validate((errors, values) => {
             if (errors) {
                 Toast.error(this.props.intl.messages['link.error.prompt.contentError']);
@@ -64,14 +89,12 @@ class LinkBind extends Component{
             }
             console.log(values);
             this.setState({
-                isLoading: true,
-                dialogVisible: false
+                isLoading: true
             });
             let project = this.state.projectList[values.projectIndex];
             let mList = this.state.memberList;
             let notifierId = [], notifierName = [], notifierEmail = [];
             values.notifierIndex.map((item) => {
-                // console.log("arr: " + item);
                 notifierId.push(mList[item].id);
                 notifierName.push(mList[item].name);
                 notifierEmail.push(mList[item].email);
@@ -89,14 +112,18 @@ class LinkBind extends Component{
                 threshold: values.threshold
             };
             // console.log("submit param: " + JSON.stringify(param));
-            let newBindUrl = API.link + "/binds";
+            let newBindUrl = API.link + "/v2/link/bind";
             Axios.post(newBindUrl, param).then(response => {
+                this.setState({
+                    dialogVisible: false
+                });
+                this.loadBindData("",1)
+            }).catch((errors) => {
+                console.log("创建监控绑定失败，" + errors)
+            }).finally(()=>{
                 this.setState({
                     isLoading: false
                 });
-                window.location.reload();
-            }).catch((errors) => {
-                console.log("创建绑定失败，" + errors)
             });
         })
     };
@@ -113,25 +140,18 @@ class LinkBind extends Component{
             content: content,
             title: "删除监控绑定",
             onOk: () => {
-                let deleteBindUrl = API.link + '/binds/' + bindRecord.bid;
-                console.log("url: " + deleteBindUrl);
-
-                // Axios(deleteBindUrl, {
-                //     method: 'DELETE',
-                //     mode: 'cors',
-                //     headers: {
-                //         'Access-Control-Allow-Origin': '*',
-                //         'Content-Type': 'application/json',
-                //     },
-                //     withCredentials: true
-                // }).then(response => {
-                //     window.location.reload();
-                // }).catch(error => {
-                //     console.log("删除失败: "+JSON.stringify(error))
-                // })
-
-                Axios.delete(deleteBindUrl).then(response => {
-                    window.location.reload();
+                let deleteBindUrl = API.link + '/v2/link/bind/delete/' + bindRecord.bid;
+                // let param = {
+                //     bid: bindRecord.bid,
+                //     operation: 'DEL'
+                // };
+                Axios.post(deleteBindUrl).then(response => {
+                    let {getValue} = this.field;
+                    let pageNo = this.state.pageNo;
+                    if (this.state.bindList.length <= 1) {
+                        pageNo = pageNo - 1;
+                    }
+                    this.loadBindData(getValue("keywords"), pageNo)
                 }).catch((error)=>{
                     console.log("删除失败: "+JSON.stringify(error))
                 });
@@ -140,74 +160,81 @@ class LinkBind extends Component{
         });
     };
 
-    modifyBind = (bindRecord) => {
-        let content;
-        // if (bindRecord.state === 'RUNNING') {
-        //     content = '确认停止并修改吗？'
-        // } else {
-        //     content = '确认修改吗？'
-        // }
-        // let modifyBindUrl = API.link + '/binds/' + bindRecord.bid;
-        // Axios.put(modifyBindUrl, bindRecord).then(response => {
-        //     alert("修改")
-        // }).catch( error => {
-        //     console.log("修改请求失败", error)
-        // })
-
-        let url = API.link + '/testDelete';
-        Axios(url, {
-            method: 'DELETE',
-            mode: 'cors',
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json',
-            },
-            withCredentials: true
-        }).then(response => {
-            console.log("response: " + JSON.stringify(response));
-        }).catch( error => {
-            console.log(JSON.stringify(error))
-        })
+    confirmModifyBind = () => {
+        this.field.validate((errors, values) => {
+            if (errors) {
+                Toast.error(this.props.intl.messages['link.error.prompt.contentError']);
+                return;
+            }
+            if (this.state.tmpBind.state === 'RUNNING') {
+                Dialog.confirm({
+                    hasMask: false,
+                    content: '监控将被停止并修改，确认继续吗？',
+                    title: '修改监控',
+                    onOk: () => {this.modifyBind()},
+                    onCancel: () => {}
+                });
+            } else {
+                this.modifyBind();
+            }
+        });
     };
 
-    stopBind = (bid) => {
-        Dialog.confirm({
-            hasMask: false,
-            content: "确认要停止监控吗？",
-            title: "停止监控绑定",
-            onOk: () => {
-                let stopBindUrl = API.link + '/binds/' + bid + '/stop';
-                console.log("stop url: " + stopBindUrl);
-                Axios.patch(stopBindUrl, {}).then(response => {
-                    window.location.reload();
-                }).catch((error)=>{
-                    console.log("停止失败: "+JSON.stringify(error))
-                });
-            },
-            onCancel: () => {}
+    modifyBind = () => {
+        let beforeBind = this.state.tmpBind;
+        let {getValue} = this.field;
+        beforeBind.title = getValue('bindTitle');
+
+        let mList = this.state.memberList;
+        let notifierId = [], notifierName = [], notifierEmail = [];
+        getValue('notifierIndex').map((item) => {
+            notifierId.push(mList[item].id);
+            notifierName.push(mList[item].name);
+            notifierEmail.push(mList[item].email);
         });
+        beforeBind.notifiedUid = notifierId.join(",");
+        beforeBind.notifiedName = notifierName.join(",");
+        beforeBind.notifiedEmail = notifierEmail.join(",");
+
+        let modifyBindUrl = API.link  + "/v2/link/bind/" + beforeBind.bid;
+        Axios.post(modifyBindUrl, beforeBind).then((response) => {
+            this.setState({
+                dialogVisible: false
+            });
+            this.loadBindData("",1)
+        }).catch((error) => {
+            console.log("更新失败", error);
+        }).finally(()=>{
+            this.setState({
+                isLoading: false
+            })
+        })
+
     };
 
     // 获得项目列表
     getProjectList = () => {
         // console.log("展开选择框");
         let getProjectListUrl = API.link + "/projects";
-        let param = {};
+        let param = {
+            userId: window.sessionStorage.getItem('user-id')
+        };
         this.setState({
             isLoading: true
         });
-        Axios.get(getProjectListUrl, {params: param}).then(response=>
-        {
+        Axios.get(getProjectListUrl, {params: param}).then(response=> {
             let projectListTmp = response.data;
             projectListTmp.map((item, index)=>{
                 item.value = index;
                 item.label = item.title;
             });
             this.setState({
-                projectList: projectListTmp,
-                isLoading: false,
-                selectDisable: false
+                projectList: projectListTmp
             });
+        }).catch((error) => {
+            console.log("获取项目列表失败", error);
+        }).finally( () => {
+            this.setState({isLoading: false})
         });
     };
 
@@ -238,6 +265,17 @@ class LinkBind extends Component{
             this.setState({
                 memberList: memberRes,
             });
+
+            if (this.state.currentOpt === 'MODIFY') {
+                let memberSelectValue = [];
+                let currMem = this.state.tmpBind.notifiedUid.split(",");
+                memberRes.map((item, index) => {
+                    if (currMem.indexOf(""+item.id+"") >= 0) {
+                        memberSelectValue.push(index);
+                    }
+                });
+                this.field.setValue('notifierIndex', memberSelectValue);
+            }
         }).catch((error)=>{
             console.error("查询成员列表出错：", error);
         });
@@ -247,24 +285,80 @@ class LinkBind extends Component{
         // console.log("value: " + projectIndex);
         // console.log("choose project: " + JSON.stringify(this.state.projectList[projectIndex]));
         let projectId = this.state.projectList[projectIndex].id;
+        let {setValues} = this.field;
+        setValues({
+            'serviceName': undefined,
+            'notifierIndex': undefined
+        });
+        this.setState({
+            serviceSelectDisable: false,
+            memberSelectDisable: false,
+        });
         this.getServiceList(projectId);
         this.getMemberList(projectId);
     };
 
-    createNewBind = () => {
+    openDialog = (currentOpt, data) => {
+        let {setValues, reset} = this.field;
+        if (currentOpt === 'CREATE') {
+            reset();
+            this.setState({
+                dialogVisible: true,
+                currentOpt: currentOpt,
+                bidDisplay: 'none',
+                projectSelectDisable: false,
+                serviceSelectDisable: true,
+                memberSelectDisable: true,
+            });
+        } else if (currentOpt === 'MODIFY') {
+            setValues({
+                'bindId': data.bid,
+                'bindTitle': data.title,
+                'projectIndex': data.projectTitle,
+                'serviceName': data.service,
+                'threshold': data.threshold,
+                // 'notifierIndex': data.notifiedName.split(',')
+            });
+            this.setState({
+                dialogVisible: true,
+                currentOpt: currentOpt,
+                bidDisplay: 'block',
+                projectSelectDisable: true,
+                serviceSelectDisable: true,
+                memberSelectDisable: false,
+                tmpBind: data
+            });
+            this.getMemberList(data.projectId)
+        }
+    };
+
+    closeDialog = () => {
         this.setState({
-            dialogVisible: true
+            dialogVisible: false
         });
+        this.field.reset();
+    };
+
+    changePage = (currentPage) => {
+        this.setState({
+            isLoading: true
+        });
+        let {getValue} = this.field;
+        this.loadBindData(getValue('keywords'), currentPage);
+    };
+
+    searchBindByKeywords = () => {
+        let {getValue} = this.field;
+        this.loadBindData(getValue('keywords'), 1);
     };
 
     render() {
         const {init} = this.field;
-        const ButtonGroup = Button.Group;
         const createDialogFooter = (<div>
-            <Button type="primary" size="medium" onClick={this.submitCreateBind.bind(this)}>
+            <Button type="primary" size="medium" onClick={this.handleSubmit.bind(this)}>
                 {this.props.intl.messages['link.confirm']}
             </Button>
-            <Button type="normal" size="medium" onClick={()=>{this.setState({dialogVisible: false});}}>
+            <Button type="normal" size="medium" onClick={this.closeDialog.bind(this)}>
                 {this.props.intl.messages['link.cancel']}
             </Button>
         </div>);
@@ -292,7 +386,6 @@ class LinkBind extends Component{
                 callback();
             }
         };
-
         const renderState = (state) => {
             switch (state) {
                 case 'RUNNING':
@@ -308,34 +401,56 @@ class LinkBind extends Component{
         const renderOperate = (value, index, record) => {
             return (
                 <div>
-                    <Button type="primary" size="small" className="operate-button" onClick={this.stopBind.bind(this, record.bid)}>
-                        查看
-                    </Button>
-                    <Button type="normal" size="small" className="operate-button" onClick={this.modifyBind.bind(this, record)}>
-                        编辑
+                    <Link to={"/link/notify-setting/" + record.bid}>
+                        <Button type="primary" size="small" className="operate-button">
+                            {this.props.intl.messages['link.view']}
+                        </Button>
+                    </Link>
+                    <Button type="normal" size="small" className="operate-button" onClick={this.openDialog.bind(this, 'MODIFY',record)}>
+                        {this.props.intl.messages['link.modify']}
                     </Button>
                     <Button type="primary" shape="warning" size="small" onClick={this.deleteBind.bind(this, record)}>
-                        删除
+                        {this.props.intl.messages['link.delete']}
                     </Button>
                 </div>)
         };
 
         return (
             <div>
-                <div style={{marginBottom: '10px'}}>
-                    <Button type='primary' size='medium' onClick={this.createNewBind.bind(this)}>
-                        {this.props.intl.messages['link.bind.create']}
-                    </Button>
-                </div>
+                <Form field={this.field}>
+                    <Row>
+                        <Col span='10'>
+                            <Form.Item wrapperCol={{span: 24}}>
+                                <Input placeholder='根据标题关键字，回车查找'
+                                       defaultValue=''
+                                       hasClear={true}
+                                       onPressEnter={this.searchBindByKeywords.bind(this)}
+                                       {...init("keywords", {})}
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col style={{textAlign: 'right'}}>
+                            <Button type='primary' size='medium' onClick={this.openDialog.bind(this, 'CREATE',{})}>
+                                {this.props.intl.messages['link.bind.create']}
+                            </Button>
+                        </Col>
+                    </Row>
+                </Form>
                 <Dialog
                     visible={this.state.dialogVisible}
                     footer={createDialogFooter}
                     footerAlign='right' shouldUpdatePosition
                     minMargin={50}
                     onClose={()=>{this.setState({dialogVisible: false});}}
-                    title={this.props.intl.messages['link.bind.create']}
+                    title={
+                        this.state.currentOpt === 'CREATE' ? this.props.intl.messages['link.bind.create'] : this.props.intl.messages['link.bind.title.modify']
+                    }
+                    // title={this.props.intl.messages['link.bind.create']}
                     style={{width: "50%"}}>
                     <Form labelAlign='left' field={this.field} direction='ver'>
+                        <Form.Item style={{display: this.state.bidDisplay}} label={this.props.intl.messages['link.bind.tabletitle.id']} {...formItemLayout}>
+                            <Input {...init('bindId')} readOnly={true}/>
+                        </Form.Item>
                         <Form.Item label={this.props.intl.messages['link.bind.form.title']} required {...formItemLayout}>
                             <Input placeholder='请填写标题'
                                    defaultValue=''
@@ -355,6 +470,7 @@ class LinkBind extends Component{
                         </Form.Item>
                         <Form.Item label={this.props.intl.messages['link.choose.project']} required {...formItemLayout}>
                             <Select dataSource={this.state.projectList}
+                                    disabled={this.state.projectSelectDisable}
                                     showSearch={true}
                                     placeholder='请选择项目'
                                     autoWidth={true}
@@ -376,12 +492,11 @@ class LinkBind extends Component{
                         </Form.Item>
                         <Form.Item label={this.props.intl.messages['link.choose.service']} required {...formItemLayout}>
                             <Select dataSource={this.state.serviceList}
-                                    disabled={this.state.selectDisable}
+                                    disabled={this.state.serviceSelectDisable}
                                     placeholder='请选择服务'
                                     showSearch={true}
                                     autoWidth={true}
                                     className='search-select'
-                                    // onOpen={this.getServiceList.bind(this)}
                                     {...init('serviceName', {
                                         rules: [
                                             {
@@ -410,15 +525,19 @@ class LinkBind extends Component{
                                     showSearch={true}
                                     autoWidth={true}
                                     multiple={true}
-                                    // onOpen={this.getMemberList.bind(this)}
-                                    disabled={this.state.selectDisable}
+                                    disabled={this.state.memberSelectDisable}
                                     {...init('notifierIndex',{
                                         rules: [
                                             {
                                                 required: true,
                                                 message: "请填写成员"
                                             }
-                                        ]
+                                        ],
+                                        props: {
+                                            onChange: (v) => {
+                                                console.log("更新通知人员名单", v)
+                                            }
+                                        }
                                     })}/>
                         </Form.Item>
                     </Form>
@@ -428,15 +547,21 @@ class LinkBind extends Component{
                        locale={{"empty": this.props.intl.messages['link.no.data']}}
                 >
                     <Table.Column title={this.props.intl.messages['link.bind.tabletitle.id']} dataIndex='bid' align='center' width='7%'/>
-                    <Table.Column title={this.props.intl.messages['link.bind.tabletitle.title']} dataIndex='title' align='center' width='20%'/>
+                    <Table.Column title={this.props.intl.messages['link.bind.tabletitle.title']} dataIndex='title' align='center'/>
                     {/*<Table.Column title={this.props.intl.messages['link.bind.tabletitle.projectName']} dataIndex='projectTitle' align='center'/>*/}
                     {/*<Table.Column title={this.props.intl.messages['link.bind.tabletitle.service']} dataIndex='service' align='center'/>*/}
-                    <Table.Column title={this.props.intl.messages['link.bind.tabletitle.ctime']} dataIndex='ctime' align='center'/>
+                    <Table.Column title={this.props.intl.messages['link.bind.tabletitle.ctime']} dataIndex='ctime' align='center' width='24%'/>
                     {/*<Table.Column title={this.props.intl.messages['link.bind.tabletitle.threshold']} dataIndex='threshold' align='center'/>*/}
-                    <Table.Column title={this.props.intl.messages['link.bind.tabletitle.state']} cell={renderState} dataIndex='state' align='center'/>
+                    <Table.Column title={this.props.intl.messages['link.bind.tabletitle.state']} cell={renderState} dataIndex='state' align='center' width='15%'/>
                     {/*<Table.Column title={this.props.intl.messages['link.bind.tabletitle.notifier']} dataIndex='notifiedName' align='center'/>*/}
-                    <Table.Column title={this.props.intl.messages['link.bind.tabletitle.operate']} cell={renderOperate} align='center'/>
+                    <Table.Column title={this.props.intl.messages['link.bind.tabletitle.operate']} cell={renderOperate} align='center' width='22%'/>
                 </Table>
+                <Pagination current={this.state.pageNo}
+                            pageSize={this.state.pageSize}
+                            total={this.state.totalCount}
+                            style={{textAlign: 'center', paddingTop:'10px'}}
+                            onChange={this.changePage.bind(this)}
+                />
             </div>
         );
     }

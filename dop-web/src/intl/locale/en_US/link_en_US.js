@@ -10,6 +10,10 @@ const LINK_EN_US = {
     'link.cancel': 'Cancel',
     'link.confirm': 'Confirm',
 
+    'link.view': 'View',
+    'link.delete': 'Delete',
+    'link.modify': 'Modify',
+
     'link.success' : 'Success',
     'link.fail': 'Fail',
 
@@ -105,7 +109,17 @@ const LINK_EN_US = {
     'link.bind.modify': 'Modify',
     'link.bind.start': 'Start',
 
-    'link.choose.service': 'Select a service'
+    'link.choose.service': 'Select a service',
+
+    // 收藏列表
+    'link.star.table.id': 'Id',
+    'link.star.table.note': 'Note',
+    'link.star.table.date': 'Date',
+    'link.star.table.traceId': 'traceId',
+    'link.star.table.operate': 'Operate',
+
+    'link.star.add.note': 'Add a note',
+    'link.star.modify.note': 'Modify the note'
 };
 
 export default LINK_EN_US;

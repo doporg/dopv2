@@ -1,14 +1,16 @@
 import React,{Component} from 'react';
 import {injectIntl} from "react-intl";
 import TraceOverview from "../TraceOverview/TraceOverview";
-import LinkDependency from "../LinkDependency/LinkDependency";
-import SpanDetail from "../SpanDetail/SpanDetail";
+
+import '../../linkStyles.css'
+import TraceDetailPane from "../TraceDetailPane/TraceDetailPane";
 
 class TraceInfo extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            traceInfo : props.traceInfo
+            traceInfo : props.traceInfo,
+            traceId: props.traceId
         }
     }
 
@@ -19,16 +21,17 @@ class TraceInfo extends Component{
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
+        // console.log("traceInfo will receive");
         this.setState({
+            traceId: nextProps.traceId,
             traceInfo: nextProps.traceInfo
         });
     }
 
     render() {
         return <div>
-            <TraceOverview/>
-            <LinkDependency/>
-            <SpanDetail/>
+            <TraceOverview traceId={this.state.traceId} traceInfo={this.state.traceInfo}/>
+            <TraceDetailPane traceId={this.state.traceId} traceInfo={this.state.traceInfo}/>
         </div>;
     }
 }

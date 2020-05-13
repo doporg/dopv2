@@ -28,5 +28,5 @@ public class TraceVO {
 
     private boolean hasError; //出现错误了吗
 
-    private SpanVO[] spansList;
+//    private SpanVO[] spansList;
 }

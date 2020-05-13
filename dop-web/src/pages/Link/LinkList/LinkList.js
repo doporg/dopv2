@@ -6,7 +6,6 @@ import Axios from 'axios';
 import Select from "@icedesign/base/lib/select";
 import Button from "@icedesign/base/lib/button";
 import Dialog from "@icedesign/base/lib/dialog";
-import Search from "@icedesign/base/lib/search";
 import Table from "@icedesign/base/lib/table";
 import Feedback from "@icedesign/base/lib/feedback"
 import Input from "@icedesign/base/lib/input";
@@ -26,6 +25,7 @@ import "../linkStyles.css";
 // import {Table,Search,Dialog,Select,Button} from "@icedesign/base";
 
 import {getCurrentTimestamp, toTimestamp, getCurrentTime, toMicroseconds, timestampToDate, formatDuration} from "../util/TimeUtil";
+import SearchConditionDescription from "../components/SearchConditionDescription/SearchConditionDescription";
 
 const lookBackBase = 3600000;
 class LinkList extends Component{
@@ -98,6 +98,8 @@ class LinkList extends Component{
         const {setValues} = this.field;
         let searchObj = JSON.parse(searchConditions);
         if (searchObj !== undefined && searchObj !== null) {
+            searchObj['start-date'] = new Date(searchObj['start-date']);
+            searchObj['end-date'] = new Date(searchObj['end-date']);
             setValues(searchObj);
             if (searchObj['lookback-type'] === -1) { // 自定义选择时间
                 this.setState({
@@ -105,17 +107,16 @@ class LinkList extends Component{
                 });
             }
             this.setState({isLoading: true});
-            searchObj['start-date'] = new Date(searchObj['start-date']);
-            searchObj['end-date'] = new Date(searchObj['end-date']);
             this.getTraceList(searchObj);
         }
     }
 
     // 查询符合条件的trace
     submitSearch = (e) => {
+        // e.preventDefault();
         const Toast = Feedback.toast;
         this.field.validate((errors, values) => {
-            console.log(values);
+            // console.log(values);
             if (errors) {
                 Toast.error(this.props.intl.messages['link.error.prompt.contentError']);
                 return;
@@ -128,7 +129,8 @@ class LinkList extends Component{
         });
     };
     getTraceList = (values) => {
-        let getLinkListUrl = API.link + "/getTraceList";
+        console.log("values: "+ JSON.stringify(values));
+        let getLinkListUrl = API.link + "/v2/link/trace";
         // 计算lookback和endTs
         var lookBack, endTs;
         if (values['lookback-type'] !== -1) { //选择列表中的时间选项
@@ -154,11 +156,14 @@ class LinkList extends Component{
             let linkListTmp = response.data;
             this.setState({
                 linkList: linkListTmp,
-                isLoading: false,
                 totalCount: linkListTmp.length
             });
         }).catch((error)=>{
             console.error("查询trace列表出错：", error);
+        }).finally(() => {
+            this.setState({
+                isLoading: false
+            });
         });
     };
 
@@ -186,12 +191,13 @@ class LinkList extends Component{
     // 分页查询project列表
     getProjectList = (currentPageNo) => {
         // 获得分页项目列表
-        let getProjectListUrl = API.link + "/getProjectList";
-        // let param = {
-        //     pageNo: currentPageNo,
-        //     pageSize: this.state.pageSizeForPro
-        // };
-        let param = {};
+        let getProjectListUrl = API.link + "/projects";
+        let param = {
+            userId: window.sessionStorage.getItem('user-id'),
+            pageNo: currentPageNo,
+            pageSize: this.state.pageSizeForPro
+        };
+        // let param = {};
         Axios.get(getProjectListUrl, {params: param}).then(response=>
         {
             let projectListTmp = {};
@@ -200,7 +206,6 @@ class LinkList extends Component{
                 pageNoForPro: 1,
                 projectList: projectListTmp,
                 currentPageProList: projectListTmp.slice(0,8),
-                isLoading: false,
                 totalCountForPro: projectListTmp.length,
             });
 
@@ -209,6 +214,10 @@ class LinkList extends Component{
             //     isLoading: false,
             //     totalCountForPro: response.data.totalCount,
             // });
+        }).catch((error) => {
+            console.log("获取项目列表失败", error)
+        }).finally(() => {
+            this.setState({isLoading: false})
         });
     };
     // 确认选择project,更改页面布局，显示链路查询条件
@@ -223,6 +232,7 @@ class LinkList extends Component{
         }
         window.sessionStorage.setItem("link_chosenProjectID", clickedId);
         window.sessionStorage.setItem("link_chosenProjectName", clickedName);
+        window.sessionStorage.removeItem("linkSearchCondition");
 
         this.setState({
             chosenProjectID: clickedId,
@@ -303,7 +313,7 @@ class LinkList extends Component{
     // trace list排序
     onSortLinkListTable = (dataIndex, order) => {
         let dataSource = this.state.linkList.sort(function(a, b) {
-            if (dataIndex === 'spanName') { //字符串，不能相减
+            if (dataIndex === 'spanName' || dataIndex === 'traceId') { //字符串，不能相减
                 let result = a[dataIndex] > b[dataIndex];
                 return order === "asc"? (result ? 1 : -1) : (result ? -1 : 1);
             } else {
@@ -394,12 +404,6 @@ class LinkList extends Component{
         };
         return (
         <div>
-            {/*未选择过项目，显示选择按钮*/}
-            {/*<div style={{display: this.state.displayChooseButton}}>*/}
-                {/*<Button className="choose-button" type="primary" size="medium" onClick={this.onOpenChooseProDialog.bind(this)}>*/}
-                    {/*{this.props.intl.messages['link.choose.project']}*/}
-                {/*</Button>*/}
-            {/*</div>*/}
             {/*更换项目按钮 + 根据traceId查询*/}
             <div style={{marginBottom: '15px', marginTop: '-5px'}}>
                 <Row>
@@ -603,23 +607,19 @@ class LinkList extends Component{
                         </Row>
                     </Form>
                 </Card>
-                <Dialog visible={this.state.helpDialogVisible} style={{width: "50%"}}
-                        footer={false}
-                        title={this.props.intl.messages['link.search.condition.description']}
-                        onClose={()=>{this.setState({helpDialogVisible: false});}}>
-                    查询数据说明
-                </Dialog>
+                <SearchConditionDescription helpDialogVisible={this.state.helpDialogVisible}/>
                 <Table dataSource={this.state.linkList} isLoading={this.state.isLoading}
                        onSort={this.onSortLinkListTable.bind(this)}
                        locale={{"empty": this.props.intl.messages['link.no.data']}}
                        // getRowProps={setRowProps}
                 >
-                    <Table.Column title={this.props.intl.messages['link.list.table.traceId']} dataIndex='traceId' cell={renderTraceId} sortable={true} align='center'/>
+                    <Table.Column title={this.props.intl.messages['link.list.table.traceId']} dataIndex='traceId' cell={renderTraceId} sortable={true} align='center' width='20%'/>
                     <Table.Column title={this.props.intl.messages['link.list.table.timestamp']} dataIndex='timestamp' cell={timestampToDate} sortable={true} align='center'/>
-                    <Table.Column title={this.props.intl.messages['link.list.table.spanName']} dataIndex='spanName' cell={renderSpanName} sortable={true} align='center'/>
+                    <Table.Column title={this.props.intl.messages['link.list.table.spanName']} dataIndex='spanName' cell={renderSpanName} sortable={true} align='center' width='18%'/>
+                    <Table.Column title={this.props.intl.messages['link.list.table.spanNum']} dataIndex='spanNum' sortable={true} align='center' width='12%'/>
                     <Table.Column title={this.props.intl.messages['link.list.table.duration']} dataIndex='duration' cell={formatDuration} sortable={true} align='center'/>
                     <Table.Column title={this.props.intl.messages['link.list.table.successOrFail']} dataIndex='hasError' cell={renderHasError} sortable={true} align='center'/>
-                    <Table.Column title={this.props.intl.messages['link.list.table.detail']} dataIndex='detail' align='center'/>
+                    {/*<Table.Column title={this.props.intl.messages['link.list.table.detail']} dataIndex='detail' align='center'/>*/}
                 </Table>
                 <Pagination total={this.state.totalCount}
                             current={this.state.pageNo}

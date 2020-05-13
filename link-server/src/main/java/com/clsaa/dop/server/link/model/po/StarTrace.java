@@ -2,6 +2,7 @@ package com.clsaa.dop.server.link.model.po;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import java.util.Date;
 @Entity
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class StarTrace {
 
     @Id
@@ -22,7 +24,7 @@ public class StarTrace {
 
     private String traceId;
 
-    private Date date;
+    private Date ctime;
 
     private String note;
 }
