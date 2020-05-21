@@ -8,4 +8,6 @@ import java.util.List;
 public interface NoticeDao extends JpaRepository<Notice, Long> {
 
     List<Notice> findByCuserOrderByNid(long cuser);
+
+    List<Notice> findByBidOrderByTimeDesc(long bid);
 }

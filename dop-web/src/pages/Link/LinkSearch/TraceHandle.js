@@ -28,24 +28,25 @@ export function getTraceSummary(traceId, traceInfo) {
 
 export function buildNodeTree(traceId, traceInfo) {
     let rootSpan;
-    for (let span of traceInfo) {
+    for (let span of traceInfo) { // 寻找root span
         if (span.id === traceId && span.parentId == null) {
             rootSpan = span;
             break;
         }
     }
     if (rootSpan === undefined) return null;
-    let rootNode = buildRootNode(rootSpan);
-    rootNode.nextNodes = getNextNodes(traceId, traceInfo);
+    let rootNode = buildRootNode(rootSpan); // 构造根节点
+    rootNode.nextNodes = getNextNodes(traceId, traceInfo); // 计算子节点
     return rootNode;
 }
 
 function getNextNodes(parentId, traceInfo) {
     let nodes = [];
+    // 根据parentId找到所有子span
     let thisLevelSpans = traceInfo.filter(item => item.parentId === parentId);
     if (thisLevelSpans.length === 0) return null;
     let map = new Map();
-    for (let span of thisLevelSpans) {
+    for (let span of thisLevelSpans) { // 根据span id区分不同节点
         let spanId = span.id;
         if (!map.has(spanId)) {
             let spanArr = [];
@@ -57,15 +58,14 @@ function getNextNodes(parentId, traceInfo) {
             map.set(spanId, tmpArr);
         }
     }
-    map.forEach((value, key) => {
+    map.forEach((value, key) => { // 根据span构造节点
         nodes.push(buildNode(value, key, parentId))
     });
-    nodes.map((node) => {
+    nodes.map((node) => { // 递归寻找子节点
         node.nextNodes = getNextNodes(node.spanId, traceInfo);
     });
     return nodes;
 }
-
 function buildNode(spans, spanId, parentId) {
     let node;
     let hasError = false;
@@ -79,10 +79,10 @@ function buildNode(spans, spanId, parentId) {
         hasError = hasError || (spans[i].tags.error !== undefined)
     }
     let serviceName;
-    if (serverSpanIndex === -1 ) {
-        serviceName = null;
-    } else {
+    if (serverSpanIndex !== -1 ) {
         serviceName = spans[serverSpanIndex].localEndpoint.serviceName
+    } else {
+        serviceName = null;
     }
     node = {
         spanId: spanId,
@@ -90,8 +90,8 @@ function buildNode(spans, spanId, parentId) {
         serviceName: serviceName,
         hasError: hasError,
         spans: spans,
-        serverSpan: serverSpanIndex,
-        clientSpan: clientSpanIndex
+        serverSpanIndex: serverSpanIndex,
+        clientSpanIndex: clientSpanIndex
     };
     return node;
 }
@@ -106,8 +106,8 @@ function buildRootNode(rootSpan) {
         serviceName: rootSpan.localEndpoint.serviceName,
         hasError: rootSpan.tags.error !== undefined,
         spans: spans,
-        serverSpan: 0,
-        clientSpan: null
+        serverSpanIndex: 0,
+        clientSpanIndex: -1
     };
     return rootNode;
 }

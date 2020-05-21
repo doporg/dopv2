@@ -32,6 +32,9 @@ public class StarTraceService {
     }
 
     public void addStar(AddOrDelStar addOrDelStar) {
+        if (hasStar(addOrDelStar.getUserId(), addOrDelStar.getTraceId())) {
+            return;
+        }
         dao.save(new StarTrace(
                 0,
                 addOrDelStar.getUserId(),
@@ -46,10 +49,6 @@ public class StarTraceService {
 
     public void updateStar(ModStar modStar) {
         dao.updateNoteBySid(modStar.getSid(), modStar.getNewNote());
-    }
-
-    public void removeStar(long itemId) {
-        dao.deleteById(itemId);
     }
 
     public Pagination<StarTrace> getStars(long userId, int pageNo, int pageSize, String keyword) {

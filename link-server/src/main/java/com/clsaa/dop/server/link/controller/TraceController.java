@@ -47,15 +47,13 @@ public class TraceController {
             @RequestParam(value = "lookback", defaultValue = "3600000")Long lookback,
             @ApiParam(value = "返回最多链路数", defaultValue = "10")
             @RequestParam(value = "limit", defaultValue = "10")Integer limit) {
-
-        System.out.println("serviceName: " + serviceName);
-        System.out.println("spanName: " + spanName);
-        System.out.println("annotation: " + annotation);
-        System.out.println("minDur: " + minDuration);
-        System.out.println("maxDur: " + maxDuration);
-        System.out.println("endTs: " + endTimestamp);
-        System.out.println("lookback: " + lookback);
-        System.out.println("limit: " + limit);
-        return zipkinQueryService.getTraceList(serviceName, spanName, annotation, minDuration, maxDuration, endTimestamp, lookback, limit);
+        return zipkinQueryService.
+                getTraceList(serviceName, spanName, annotation, minDuration, maxDuration, endTimestamp,
+                        lookback, limit);
     }
 }
+
+
+
+
+

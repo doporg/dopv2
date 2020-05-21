@@ -1,9 +1,6 @@
 package com.clsaa.dop.server.link.controller;
 
-import com.clsaa.dop.server.link.model.vo.monitor.BindVO;
-import com.clsaa.dop.server.link.model.vo.monitor.CreateMonitorBind;
-import com.clsaa.dop.server.link.model.vo.monitor.ModifyMonitorBind;
-import com.clsaa.dop.server.link.model.vo.monitor.StartBindRes;
+import com.clsaa.dop.server.link.model.vo.monitor.*;
 import com.clsaa.dop.server.link.service.MonitorBindService;
 import com.clsaa.rest.result.Pagination;
 import io.swagger.annotations.ApiOperation;
@@ -36,16 +33,8 @@ public class MonitorBindController {
 
     @GetMapping(value = "/{bid}")
     @ApiOperation(value = "根据Id查看监控信息")
-    public BindVO findBind(@ApiParam(value = "链路监控Id")@PathVariable(value = "bid")long bid) {
+    public BindInfo findBind(@ApiParam(value = "链路监控Id")@PathVariable(value = "bid")long bid) {
         System.out.println("find: " + bid);
-//        BindVO vo = service.findById(bid);
-//        System.out.println("find: " + vo);
-//        return vo;
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         return service.findById(bid);
     }
 

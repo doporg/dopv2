@@ -9,6 +9,7 @@ const LINK_EN_US = {
 
     'link.cancel': 'Cancel',
     'link.confirm': 'Confirm',
+    'link.close': 'Close',
 
     'link.view': 'View',
     'link.delete': 'Delete',

@@ -25,11 +25,6 @@ public class OtherApplicationController {
                                                 @RequestParam(value = "pageSize", defaultValue = "8") Integer pageSize,
                                                 @RequestParam(value = "includeFinished", defaultValue = "true") Boolean includeFinished,
                                                 @RequestParam(value = "queryKey", defaultValue = "") String queryKey) {
-        System.out.println("user: "+loginUser);
-        System.out.println("pageNo: "+ pageNo);
-        System.out.println("pageSize: " + pageSize);
-        System.out.println("includeFinished: " + includeFinished);
-        System.out.println("queryKey: " + queryKey);
         Pagination<ProjectVO> result =  projectInterface.findProjectOrderByCtimeWithPage(loginUser,pageNo, pageSize, includeFinished,queryKey);
         for (ProjectVO projectVO : result.getPageList()) {
             System.out.println(projectVO.toString());

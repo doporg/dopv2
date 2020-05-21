@@ -17,6 +17,18 @@ export const timestampToDate = (timestamp) => {
     return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" +second;
 };
 
+export const formatDate = (date) => {
+    let year = date.getFullYear();
+    let month = formatTwoDigit(date.getMonth()+1);
+    let day = formatTwoDigit(date.getDate());
+
+    let hour = formatTwoDigit(date.getHours());
+    let minute= formatTwoDigit(date.getMinutes());
+    let second = formatTwoDigit(date.getSeconds());
+
+    return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" +second;
+};
+
 const formatTwoDigit = (value) => {
     return value < 10 ? "0" + value : value;
 };

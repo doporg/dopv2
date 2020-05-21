@@ -9,6 +9,7 @@ const LINK_ZH_CN = {
 
     'link.cancel': '取消',
     'link.confirm': '确定',
+    'link.close': '关闭',
 
     'link.view': '查看',
     'link.delete': '删除',

@@ -9,9 +9,6 @@ import Grid from "@icedesign/base/lib/grid";
 
 import '../linkStyles.css'
 import ShowTraceOrNothing from "../components/ShowTraceOrNothing/ShowTraceOrNothing";
-import TraceOverview from "../components/TraceOverview/TraceOverview";
-import LinkDependency from "../components/LinkDependency/LinkDependency";
-import SpanDetail from "../components/SpanDetail/SpanDetail";
 import TraceInfo from "../components/TraceInfo/TraceInfo";
 
 const Toast = Feedback.toast;
@@ -71,91 +68,6 @@ class LinkSearch extends Component{
                 isLoading: false
             });
         });
-        // let data = [
-        //     {
-        //         "traceId": "da1536541887c58c",
-        //         "name": "get /service2",
-        //         "parentId": null,
-        //         "id": "da1536541887c58c",
-        //         "kind": "SERVER",
-        //         "timestamp": 1585723339974491,
-        //         "duration": 56486,
-        //         "debug": false,
-        //         "shared": false,
-        //         "localEndpoint": {
-        //             "serviceName": "ribbon-consumer",
-        //             "ipv4": "192.168.191.2",
-        //             "ipv6": null,
-        //             "port": 0
-        //         },
-        //         "remoteEndpoint": null,
-        //         "annotations": null,
-        //         "tags": {
-        //             "http.method": "GET",
-        //             "http.path": "/service2",
-        //             "mvc.controller.class": "HelloController",
-        //             "mvc.controller.method": "getHello"
-        //         }
-        //     },
-        //     {
-        //         "traceId": "da1536541887c58c",
-        //         "name": "get /service1",
-        //         "parentId": "da1536541887c58c",
-        //         "id": "218ac2fc80901d80",
-        //         "kind": "CLIENT",
-        //         "timestamp": 1585723339992948,
-        //         "duration": 30686,
-        //         "debug": false,
-        //         "shared": false,
-        //         "localEndpoint": {
-        //             "serviceName": "ribbon-consumer",
-        //             "ipv4": "192.168.191.2",
-        //             "ipv6": null,
-        //             "port": 0
-        //         },
-        //         "remoteEndpoint": null,
-        //         "annotations": null,
-        //         "tags": {
-        //             "http.method": "GET",
-        //             "http.path": "/service1"
-        //         }
-        //     },
-        //     {
-        //         "traceId": "da1536541887c58c",
-        //         "name": "get /service1",
-        //         "parentId": "da1536541887c58c",
-        //         "id": "218ac2fc80901d80",
-        //         "kind": "SERVER",
-        //         "timestamp": 1585723340005384,
-        //         "duration": 17788,
-        //         "debug": false,
-        //         "shared": true,
-        //         "localEndpoint": {
-        //             "serviceName": "ribbon-provider",
-        //             "ipv4": "192.168.191.2",
-        //             "ipv6": null,
-        //             "port": 0
-        //         },
-        //         "remoteEndpoint": {
-        //             "serviceName": null,
-        //             "ipv4": "192.168.191.2",
-        //             "ipv6": null,
-        //             "port": 0
-        //         },
-        //         "annotations": null,
-        //         "tags": {
-        //             "http.method": "GET",
-        //             "http.path": "/service1",
-        //             "mvc.controller.class": "HelloController",
-        //             "mvc.controller.method": "getHello"
-        //         }
-        //     }
-        // ];
-        // this.setState({
-        //     trace: data
-        // });
-        // console.log("获取data");
-
     };
 
     onSearchTrace = (value) => {
@@ -200,9 +112,6 @@ class LinkSearch extends Component{
 
                 <ShowTraceOrNothing traceId={this.state.traceId} trace={this.state.trace}>
                     <TraceInfo traceId={this.state.traceId} traceInfo={this.state.trace}/>
-                    {/*<TraceOverview traceId={this.state.traceId} traceInfo={this.state.trace}/>*/}
-                    {/*<LinkDependency traceId={this.state.traceId} traceInfo={this.state.trace}/>*/}
-                    {/*<SpanDetail traceId={this.state.traceId} traceInfo={this.state.trace}/>*/}
                 </ShowTraceOrNothing>
 
             </div>);

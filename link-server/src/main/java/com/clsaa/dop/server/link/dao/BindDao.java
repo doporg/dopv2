@@ -38,4 +38,6 @@ public interface BindDao extends JpaRepository<Bind, Long> {
     @Query(value = "select b from Bind b where b.projectId=?1 and b.service=?2 " +
             "and b.state=?3 and b.isDelete=false ")
     Bind checkRepeat(long projectId, String service, MonitorState state);
+
+    List<Bind> findAllByStateEquals(MonitorState state);
 }

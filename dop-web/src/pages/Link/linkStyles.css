@@ -111,28 +111,23 @@
 }
 
 .link-tab {
-    /*position: fixed;*/
-    /*top: 120px;*/
-    /*left: 240px;*/
-    /*right: 0;*/
-    /*display: block;*/
     align-items: center;
     justify-content: center;
     text-align: center;
-    /*height: 90%;*/
-    /*overflow: scroll;*/
-    /*padding: 0 20px;*/
     z-index: 97;
     background: #fff;
     border-radius: 5px;
-    /*box-shadow: rgba(0, 0, 0, 0.2) 2px 0 4px;*/
 }
 
 .link-tab-pane {
     text-align: center;
-    height: 350px;
+    height: 250px;
 }
 
+.link-tab-pane-timeline {
+    text-align: left;
+    height: 250px;
+}
 .node-btn {
     border-radius: 5px;
     text-align: center;
@@ -145,8 +140,34 @@
 
 .svg-con {
     position: absolute;
-    width: 100%;
-    height: 350px;
-    top: 0;
-    left: 0;
+    width: 100px;
+}
+
+.table-tr {
+    height: 30px;
+}
+
+.table-tr td{
+    padding: 12px;
+    border-color: #bfbfbf;
+}
+
+.node-whole-div {
+    height: 25px;
+    cursor: pointer;
+    margin-bottom: 2px;
+}
+.node-name-span {
+    display: inline-block;
+    height: 25px;
+    color: white;
+    vertical-align: middle;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.node-div {
+    display: inline-block;
+    position: absolute;
+    height: 25px;
+    white-space: nowrap;
 }

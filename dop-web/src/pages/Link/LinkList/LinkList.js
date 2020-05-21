@@ -134,7 +134,9 @@ class LinkList extends Component{
         // 计算lookback和endTs
         var lookBack, endTs;
         if (values['lookback-type'] !== -1) { //选择列表中的时间选项
-            lookBack = values['lookback-type'].value * lookBackBase;
+            // console.log("回溯时间选项： " + values['lookback-type']);
+            lookBack = values['lookback-type'] * lookBackBase;
+            // console.log("lookback: " + lookBack);
             endTs = getCurrentTimestamp();
         } else { // 如果是自定义时间
             let startTs = toTimestamp(values['start-date'], values['start-time']);
