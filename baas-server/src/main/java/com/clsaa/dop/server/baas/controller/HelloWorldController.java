@@ -17,24 +17,45 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @EnableAutoConfiguration
 public class HelloWorldController {
-
-    //如果需要使用服务层对象，则在此声明一个私有对象再进行使用
-
     @ApiOperation(value = "接口名称", notes = "接口说明")
     @GetMapping("/v2/baas/hello")
-    /*
-     * 访问用 PostMapping, 相应的，创建数据或删除输入需要用其他注解（GerMapping / DeleteMapping）
-     */
-    public String hellWorld(
-            /*
-            *若有参数则需要进行说明
-            @ApiParam(name,value,required,defaultValue)
-            @RequestParam(value,required,defaultValue) <E> param ,
-             */
-    ) {
-        /*
-         * 函数方法体
-         */
+    public String hellWorld() {
+//        V1Pod pod =
+//                new V1PodBuilder()
+//                        .withNewMetadata()
+//                        .withName("apod")
+//                        .endMetadata()
+//                        .withNewSpec()
+//                        .addNewContainer()
+//                        .withName("www")
+//                        .withImage("nginx")
+//                        .withNewResources()
+//                        .withLimits(new HashMap<>())
+//                        .endResources()
+//                        .endContainer()
+//                        .endSpec()
+//                        .build();
+//        System.out.println(Yaml.dump(pod));
+//
+//        V1Service svc =
+//                new V1ServiceBuilder()
+//                        .withNewMetadata()
+//                        .withName("aservice")
+//                        .endMetadata()
+//                        .withNewSpec()
+//                        .withSessionAffinity("ClientIP")
+//                        .withType("NodePort")
+//                        .addNewPort()
+//                        .withProtocol("TCP")
+//                        .withName("client")
+//                        .withPort(8008)
+//                        .withNodePort(8080)
+//                        .withTargetPort(new IntOrString(8080))
+//                        .endPort()
+//                        .endSpec()
+//                        .build();
+//        System.out.println(Yaml.dump(svc));
+
         return "helloWorld!";
 
     }

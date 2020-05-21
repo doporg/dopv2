@@ -10,6 +10,7 @@ const user = "/user-server";
 const image = "/image-server";
 const test = "/test-server";
 const scan = "/testing-server";
+const baas = "/baas-server";
 const gateway = "/v2/api";
 const link = "/link-server";
 
@@ -25,8 +26,14 @@ const API = {
     user: host + user,
     image: host + image,
     test: host + test,
+<<<<<<< HEAD
     scan:host+scan,
     link: host + link
+=======
+    scan: host + scan,
+    link: "http://localhost:14300",
+    baas: host + baas
+>>>>>>> master
 
 };
 
