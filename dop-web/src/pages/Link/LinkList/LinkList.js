@@ -424,6 +424,7 @@ class LinkList extends Component{
                 minMargin={50}
                 onClose={()=>{this.setState({chooseProDialogVisible: false});}}
                 title={this.props.intl.messages['link.choose.project']}
+                hasMask={false}
                 style={{width: "50%"}}>
                 <Table dataSource={this.state.currentPageProList} isLoading={this.state.isLoading} rowSelection={this.state.chooseProRowSelection}>
                     <Table.Column title={this.props.intl.messages['link.project.id']} dataIndex="id" width="25%" align='center'/>
@@ -487,7 +488,8 @@ class LinkList extends Component{
                                     <Select className='search-select'
                                             autoWidth={true}
                                             dataSource={lookBackOptions}
-                                            defaultValue={lookBackOptions[0]}
+                                            defaultValue={lookBackOptions[0].value.toString()}
+                                            // defaultValue={lookBackOptions[0]}
                                             {...init("lookback-type",{
                                                 props: {
                                                     onChange : (v) => {

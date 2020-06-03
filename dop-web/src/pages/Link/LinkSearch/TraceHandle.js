@@ -26,11 +26,13 @@ export function getTraceSummary(traceId, traceInfo) {
     return summary;
 }
 
+let rootStartTs = 0;
 export function buildNodeTree(traceId, traceInfo) {
     let rootSpan;
     for (let span of traceInfo) { // 寻找root span
         if (span.id === traceId && span.parentId == null) {
             rootSpan = span;
+            rootStartTs = span.timestamp;
             break;
         }
     }
@@ -91,7 +93,8 @@ function buildNode(spans, spanId, parentId) {
         hasError: hasError,
         spans: spans,
         serverSpanIndex: serverSpanIndex,
-        clientSpanIndex: clientSpanIndex
+        clientSpanIndex: clientSpanIndex,
+        rootSpanStartTs: rootStartTs
     };
     return node;
 }
@@ -107,7 +110,8 @@ function buildRootNode(rootSpan) {
         hasError: rootSpan.tags.error !== undefined,
         spans: spans,
         serverSpanIndex: 0,
-        clientSpanIndex: -1
+        clientSpanIndex: -1,
+        rootSpanStartTs: rootStartTs
     };
     return rootNode;
 }

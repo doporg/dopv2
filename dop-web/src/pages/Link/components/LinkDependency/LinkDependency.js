@@ -51,7 +51,8 @@ class LinkDependency extends Component{
                     clientSpanIndex: tmpNode.clientSpanIndex,
                     nextNodeCount:nextNodeCount,
                     spanId: tmpNode.spanId,
-                    parentId: tmpNode.parentId
+                    parentId: tmpNode.parentId,
+                    rootSpanStartTs: tmpNode.rootSpanStartTs
                 });
                 count++;
             }

@@ -156,6 +156,7 @@
     height: 25px;
     cursor: pointer;
     margin-bottom: 2px;
+    font-size: 14px;
 }
 .node-name-span {
     display: inline-block;

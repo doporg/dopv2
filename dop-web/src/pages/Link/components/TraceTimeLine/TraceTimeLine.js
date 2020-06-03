@@ -55,7 +55,8 @@ class TraceTimeLine extends Component{
                         hasError: node.hasError,
                         spans: node.spans,
                         serverSpanIndex: node.serverSpanIndex,
-                        clientSpanIndex: node.clientSpanIndex
+                        clientSpanIndex: node.clientSpanIndex,
+                        rootSpanStartTs: node.rootSpanStartTs
                     });
                 if (node.nextNodes && node.nextNodes.length) {
                     loopTree(node.nextNodes, layer + 1);

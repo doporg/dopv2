@@ -39,10 +39,12 @@ class NodeInfo extends Component{
     // 处理node信息
     handleSpans = () => {
         const node = this.state.node;
+        // console.log("node: " + JSON.stringify(node));
         let resultMap = new Map();
         let serviceName = node.serviceName,
             clientSpanIndex = node.clientSpanIndex,
-            serverSpanIndex = node.serverSpanIndex;
+            serverSpanIndex = node.serverSpanIndex,
+            rootSpanStartTs = node.rootSpanStartTs;
         if (serviceName === null) {
             if (clientSpanIndex !== -1) {
                 serviceName = node.spans[clientSpanIndex].localEndpoint.serviceName;
@@ -62,13 +64,13 @@ class NodeInfo extends Component{
             tagsMap = new Map(Object.entries(clientSpan.tags));
             timeLine.push({
                 timestamp: clientSpan.timestamp,
-                relative: 0,
+                relative: clientSpan.timestamp - rootSpanStartTs,
                 annotation: 'Client Start',
                 address: addIp + "("+address+")"
             });
             timeLine.push({
                 timestamp: clientSpan.timestamp + duration,
-                relative: duration,
+                relative: clientSpan.timestamp + duration - rootSpanStartTs,
                 annotation: 'Client Receive',
                 address: addIp + "("+address+")"
             })
@@ -93,13 +95,13 @@ class NodeInfo extends Component{
             }
             timeLine.push({
                 timestamp: serverSpan.timestamp,
-                relative: 0,
+                relative: serverSpan.timestamp - rootSpanStartTs,
                 annotation: 'Server Start',
                 address: serverAdd + "("+address+")"
             });
             timeLine.push({
                 timestamp: serverSpan.timestamp + serverSpan.duration,
-                relative: serverSpan.duration,
+                relative: serverSpan.timestamp + serverSpan.duration - rootSpanStartTs,
                 annotation: 'Server Send',
                 address: serverAdd + "("+address+")"
             })
@@ -108,13 +110,17 @@ class NodeInfo extends Component{
             tags.push({key: key, value: value});
         });
         if (clientAdd !== null) tags.push({key: 'Client Address', value: clientAdd});
+        let time = timeLine.sort(function (a, b) {
+            return a.relative > b.relative ? 1 : -1;
+        });
+        // console.log("timeLine: " + JSON.stringify(timeLine));
         resultMap.set("serviceName", serviceName);
         resultMap.set("tags", tags);
         resultMap.set("duration", duration);
         resultMap.set("spanName", spanName);
         resultMap.set("spanId", node.spanId);
         resultMap.set("parentId", node.parentId);
-        resultMap.set("timeLine", timeLine);
+        resultMap.set("timeLine", time);
         return resultMap;
     };
 

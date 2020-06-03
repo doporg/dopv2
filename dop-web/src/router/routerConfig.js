@@ -45,13 +45,8 @@ const routerConfig = [
     ...pipelineConfig,
     ...loginConfig,
     ...baasConfig,
-<<<<<<< HEAD
     ...gatewayConfig,
     ...baseConfig];
-=======
-    ...baseConfig,
-    ...gatewayConfig];
->>>>>>> master
 
 
 export default routerConfig;

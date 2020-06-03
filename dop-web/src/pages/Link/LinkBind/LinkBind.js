@@ -441,6 +441,7 @@ class LinkBind extends Component{
                     footer={createDialogFooter}
                     footerAlign='right' shouldUpdatePosition
                     minMargin={50}
+                    hasMask={false}
                     onClose={()=>{this.setState({dialogVisible: false});}}
                     title={
                         this.state.currentOpt === 'CREATE' ? this.props.intl.messages['link.bind.create'] : this.props.intl.messages['link.bind.title.modify']
