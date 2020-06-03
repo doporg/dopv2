@@ -22,13 +22,11 @@ public class ZipkinQueryService {
      * @return Trace
      */
     public List<SpanVO> getTraceById(String traceId) {
-//        SpanVO[] res;
         List<SpanVO> res;
         try {
             res = zipkinQueryInterface.getTraceById(traceId);
         } catch (NotFoundException e) {
             System.out.println("traceId不存在");
-//            BizAssert.justInvalidParam(BizCodes.NOT_FOUND_TRACE);
             return new ArrayList<>();
         }
         return res;
@@ -45,7 +43,8 @@ public class ZipkinQueryService {
                         buildDuration(minDuration),
                         buildDuration(maxDuration),
                         buildEndTs(endTimestamp),
-                        lookback, limit);
+                        buildLookback(lookback),
+                        limit);
 
         return list.stream().map(this::convertSpanListToTraceVO).collect(Collectors.toList());
     }
@@ -79,6 +78,12 @@ public class ZipkinQueryService {
         return traceVO;
     }
 
+    private Long buildLookback(Long lookback) {
+        if (lookback <= 0) {
+            return 3600000L;
+        }
+        return lookback;
+    }
     private String buildName(String name) {
         if (null == name || name.trim().length() == 0 || name.equalsIgnoreCase("all")) {
             return "";
