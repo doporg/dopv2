@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 /**
  * 应用启动类
  *
- * @author joyren,lzy
+ * @author ZJH
  */
 @SpringBootApplication
 @EnableScheduling

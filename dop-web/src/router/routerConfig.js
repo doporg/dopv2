@@ -18,6 +18,7 @@ import {linkConfig} from "../pages/Link";
 
 import {demoConfig} from "../pages/Demo";
 import {baasConfig} from "../pages/Baas";
+import {requirementConfig} from "../pages/Requirement";
 
 
 const baseConfig = [
@@ -45,8 +46,9 @@ const routerConfig = [
     ...pipelineConfig,
     ...loginConfig,
     ...baasConfig,
-    ...baseConfig，
-    ...gatewayConfig];
+    ...gatewayConfig,
+    ...requirementConfig,
+    ...baseConfig];
 
 
 export default routerConfig;

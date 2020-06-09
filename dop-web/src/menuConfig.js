@@ -61,6 +61,11 @@ const asideMenuConfig = [
         icon: 'image',
     },
     {
+        name: <FormattedMessage id="requirement.name" defaultMessage="需求管理"/>,
+        path: '/requirement/newRequirement',
+        icon: 'task',
+    },
+    {
         name: <FormattedMessage id="demo.help" defaultMessage="demo"/>,
         path: '/demo',
         icon: 'key',

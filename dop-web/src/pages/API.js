@@ -13,6 +13,7 @@ const test = "/test-server";
 const gateway = "/v2/api";
 
 const link = "/link-server";
+const requirement = "/requirement-server";
 
 const API = {
     address: "http://www.dop.clsaa.com/#/",
@@ -26,7 +27,8 @@ const API = {
     user: host + user,
     image: host + image,
     test: host + test,
-    link: "http://localhost:14300"
+    link: "http://localhost:14300",
+    requirement: host + requirement,
 };
 
 export default API;
