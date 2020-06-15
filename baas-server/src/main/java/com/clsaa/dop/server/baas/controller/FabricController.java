@@ -61,12 +61,12 @@ public class FabricController {
         netInfo.setStatus(2);
         netInfo.setCreateTime(current);
         netMapper.insertNet(netInfo);
-        fabricYamlGenerateService.replaceWithConfigtxTemplate(orgList,orderList,jm.getConsensus());
-        fabricYamlGenerateService.replaceWithCryptoconfigTemplate(orderList,orgList);
+        fabricYamlGenerateService.replaceWithConfigtxTemplate(NameSpace,orgList,orderList,jm.getConsensus());
+        fabricYamlGenerateService.replaceWithCryptoconfigTemplate(NameSpace,orderList,orgList);
         SFTPUtil sftpUtil = new SFTPUtil();
         sftpUtil.login();
-        File file = new File("src/main/resources/configtx.yaml");
-        File file2 = new File("src/main/resources/crypto-config.yaml");
+        File file = new File("src/main/resources/configtx-"+NameSpace+".yaml");
+        File file2 = new File("src/main/resources/crypto-config-"+NameSpace+".yaml");
         InputStream is = new FileInputStream(file);
         InputStream is2 = new FileInputStream(file2);
         sftpUtil.upload("/mnt","nfsdata/fabric/"+jm.getName(), "configtx.yaml",is);

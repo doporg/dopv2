@@ -20,11 +20,11 @@ public class FabricYamlGenerateService {
     /**
      * 将resources里的configtx-template.ymal根据传进来的参数生成对应的yaml文件
      * */
-    public void replaceWithConfigtxTemplate(List<Organization> orgList, List<Orderer> ordererList, String consensus)throws IOException {
+    public void replaceWithConfigtxTemplate(String Namespace,List<Organization> orgList, List<Orderer> ordererList, String consensus)throws IOException {
         String content = this.getFromYaml("src/main/resources/configtx-template.yaml");
         //下面一行的content中还有一个<AnchorPeerPort>没有替换成相应的端口
         content = content.replace("<orgMspInfo>",generateOrgInfo(orgList));
-        content = content.replace("<AnchorPeerPort>","7050");
+        content = content.replace("<AnchorPeerPort>","7051");
         content = content.replace("<OrdererType>",consensus);
         //下面替换完&OrdererDefaults
         for(int i=0;i<ordererList.size();i++){
@@ -53,7 +53,7 @@ public class FabricYamlGenerateService {
                 content = content.replace("<ProfilesOrg2>","- *"+orgList.get(i).getOrgName());
             }
         }
-        File newfile = new File("src/main/resources/configtx.yaml");
+        File newfile = new File("src/main/resources/configtx-"+Namespace+".yaml");
         FileWriter fw = new FileWriter(newfile);
         BufferedWriter bw = new BufferedWriter(fw);
         bw.write(content);
@@ -70,13 +70,13 @@ public class FabricYamlGenerateService {
             if(i<ordererList.size()-1){
                 String pattern = "            - Host: <ordererName>\n              Port: <ordererPort>\n              ClientTLSCert: crypto-config/ordererOrganizations/consortium/orderers/<ordererName>/tls/server.crt\n              ServerTLSCert: crypto-config/ordererOrganizations/consortium/<ordererName>/orderer0/tls/server.crt\n";
                 pattern = pattern.replace("<ordererName>",ordererList.get(i).getOrderName());
-                pattern = pattern.replace("<ordererPort>",String.valueOf(ordererList.get(i).getOrderport()));
+                pattern = pattern.replace("<ordererPort>",ordererList.get(i).getOrderport());
                 returnContent.append(pattern);
             }
             else{
                 String pattern = "            - Host: <ordererName>\n              Port: <ordererPort>\n              ClientTLSCert: crypto-config/ordererOrganizations/consortium/orderers/<ordererName>/tls/server.crt\n              ServerTLSCert: crypto-config/ordererOrganizations/consortium/<ordererName>/orderer0/tls/server.crt\n";
                 pattern = pattern.replace("<ordererName>",ordererList.get(i).getOrderName());
-                pattern = pattern.replace("<ordererPort>",String.valueOf(ordererList.get(i).getOrderport()));
+                pattern = pattern.replace("<ordererPort>",ordererList.get(i).getOrderport());
                 returnContent.append(pattern);
             }
         }
@@ -116,7 +116,7 @@ public class FabricYamlGenerateService {
     /**
      * 将resources里的crypto-config-template.ymal根据传进来的参数生成对应的yaml文件
      * */
-    public void replaceWithCryptoconfigTemplate(List<Orderer> ordererList, List<Organization> orgList) throws IOException{
+    public void replaceWithCryptoconfigTemplate(String Namespace,List<Orderer> ordererList, List<Organization> orgList) throws IOException{
         String content = this.getFromYaml("src/main/resources/crypto-config-template.yaml");
         //写OrdererOrgs的Specs:
         for(int i=0;i<ordererList.size();i++){
@@ -136,7 +136,7 @@ public class FabricYamlGenerateService {
                 content=content.replace("<OrgInfo>",replacePeerOrgs(PeerOrgs,orgList.get(i).getOrgName(),orgList.get(i).getOrgName(),orgList.get(i).getPeers()));
             }
         }
-        File newfile = new File("src/main/resources/crypto-config.yaml");
+        File newfile = new File("src/main/resources/crypto-config-"+Namespace+".yaml");
         FileWriter fw = new FileWriter(newfile);
         BufferedWriter bw = new BufferedWriter(fw);
         bw.write(content);
