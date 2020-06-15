@@ -19,6 +19,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,9 +52,14 @@ public class FabricController {
         String NameSpace = jm.getName();
         List<Orderer> orderList = jm.getOrder();
         List<Organization> orgList = jm.getOrg();
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String current = sdf.format(date);
         NetInfo netInfo = new NetInfo();
         netInfo.setNetName(NameSpace);
         netInfo.setDescription(netWorkJson);
+        netInfo.setStatus(2);
+        netInfo.setCreateTime(current);
         netMapper.insertNet(netInfo);
         fabricYamlGenerateService.replaceWithConfigtxTemplate(orgList,orderList,jm.getConsensus());
         fabricYamlGenerateService.replaceWithCryptoconfigTemplate(orderList,orgList);
@@ -86,6 +93,8 @@ public class FabricController {
                 fabricNetOperateService.createOrdererService(o, NameSpace);
                 fabricNetOperateService.createOrdererMetricService(o,NameSpace);
             }
+            int NetId = netMapper.queryId(NameSpace);
+            netMapper.updateNetStatu(1,NetId);
         }
         catch (ApiException e){
             System.err.println("Exception when calling CreateFabric");
@@ -93,6 +102,7 @@ public class FabricController {
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
             e.printStackTrace();
+
             return "fail";
         }
         return "success";
@@ -112,6 +122,12 @@ public class FabricController {
     public List<NetInfo> QueryFabric(){
         List<NetInfo> netList = netMapper.getAllNet();
         return netList;
+    }
+    @ApiOperation(value = "删除网络",notes = "接口说明")
+    @GetMapping("/v2/baas/deleteFabric/{id}")
+    public String QueryFabric(@PathVariable(value = "id")int id){
+        netMapper.updateNetStatu(0,id);
+        return "success";
     }
 //    @ApiOperation(value = "根据查询fabric网络",notes = "接口说明")
 //    @PostMapping("/v2/baas/insert")
