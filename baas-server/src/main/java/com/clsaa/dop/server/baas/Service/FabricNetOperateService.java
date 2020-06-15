@@ -34,7 +34,7 @@ public class FabricNetOperateService {
         k8sClientService.setK8sClient();
         CoreV1Api apiInstance = new CoreV1Api();
         V1ObjectMeta om = new V1ObjectMeta().name(netName);
-        V1Namespace namespace = new V1Namespace().apiVersion("apps/va").kind("Namespace").metadata(om);
+        V1Namespace namespace = new V1Namespace().apiVersion("apps/v1").kind("Namespace").metadata(om);
         try {
             V1Namespace result = apiInstance.createNamespace(namespace,null,null,null);
 //            System.out.println(result);

@@ -22,7 +22,7 @@ public class FabricK8sConfigMapGenerateService {
      *创建configMap
      * */
     public V1ConfigMap generateV1ConfigMap(String NameSpace) throws IOException {
-        String content =fabricYamlGenerateService.getFromYaml("src/main/resource/builders-config-template.yaml");
+        String content =fabricYamlGenerateService.getFromYaml("src/main/resources/builders-config-template.yaml");
         Map<String,String> map = new HashMap<>();
         map.put("app",NameSpace);
         V1ObjectMeta om = new V1ObjectMeta().name("builder-config").namespace(NameSpace).labels(map);
