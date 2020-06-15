@@ -71,3 +71,11 @@ ribbon:
   ConnectTimeout: 10000
   ServerListRefreshInterval: 2000
 logging.path: ./logs/${spring.application.name}
+management:
+  metrics:
+    web:
+      server:
+        auto-time-requests: false
+zipkin:
+  storage:
+    type: mysql

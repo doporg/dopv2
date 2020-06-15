@@ -9,13 +9,16 @@ import java.util.*;
 
 @RestController
 @CrossOrigin
-public class testController {
+public class StubController {
 
 //    @Autowired
 //    RestTemplate restTemplate;
 
-    @GetMapping(value = "/getProjectList")
-    public List<Project> getProjectList(String userId) {
+    @GetMapping(value = "/projects")
+    public List<Project> getProjectList(@RequestParam("userId") String userId,
+                                        @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
+                                        @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+        System.out.println(userId + ", " + pageNo + ", " + pageSize);
         List<Project> result = new ArrayList<>();
         result.add(new Project(1L,"project1"));
         result.add(new Project(2L,"project2"));
@@ -68,5 +71,10 @@ public class testController {
 //                "http://link-server/api/v2/services", String.class);
 //        System.err.println(s);
         return "link";
+    }
+
+    @RequestMapping(value = "/testDelete", method = RequestMethod.DELETE)
+    public String testDelete() {
+        return "string";
     }
 }

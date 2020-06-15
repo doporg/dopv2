@@ -45,8 +45,8 @@ const routerConfig = [
     ...pipelineConfig,
     ...loginConfig,
     ...baasConfig,
-    ...baseConfig,
-    ...gatewayConfig];
+    ...gatewayConfig,
+    ...baseConfig];
 
 
 export default routerConfig;

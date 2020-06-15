@@ -20,6 +20,10 @@ public class NoticeService {
         return convertToVo(notices);
     }
 
+    public List<Notice> getNoticeListByBid(long bid) {
+        return noticeDao.findByBidOrderByTimeDesc(bid);
+    }
+
     private List<NoticeVO> convertToVo(List<Notice> notices) {
         return new ArrayList<>();
     }

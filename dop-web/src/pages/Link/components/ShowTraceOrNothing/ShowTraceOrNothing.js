@@ -26,12 +26,12 @@ class ShowTraceOrNothing extends Component{
     }
 
     judgeIfShowTrace = (traceId) => {
+        // console.log("判断有没有traceId： " + traceId);
         return !(traceId === undefined || traceId === '' || traceId === null);
     };
 
     judgeTraceExist = (trace) => {
-        return !(trace === null || trace === []);
-
+        return trace.length !== 0;
     };
 
     render() {

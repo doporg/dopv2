@@ -27,9 +27,8 @@ const API = {
     image: host + image,
     test: host + test,
     scan: host + scan,
-    link: "http://localhost:14300",
+    link: host + link,
     baas: host + baas
-
 };
 
 export default API;

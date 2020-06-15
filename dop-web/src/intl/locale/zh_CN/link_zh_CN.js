@@ -9,6 +9,11 @@ const LINK_ZH_CN = {
 
     'link.cancel': '取消',
     'link.confirm': '确定',
+    'link.close': '关闭',
+
+    'link.view': '查看',
+    'link.delete': '删除',
+    'link.modify': '编辑',
 
     'link.success' : '成功',
     'link.fail': '失败',
@@ -60,8 +65,8 @@ const LINK_ZH_CN = {
 
     // 链路列表表头
     'link.list.table.traceId': 'traceId',
-    'link.list.table.spanName': 'span名称',
-    'link.list.table.spanNum': 'span数',
+    'link.list.table.spanName': '入口span名称',
+    'link.list.table.spanNum': 'span总数',
     'link.list.table.timestamp': '时间',
     'link.list.table.duration': '持续时间(ms/s)',
     'link.list.table.successOrFail': '成功/失败',
@@ -87,21 +92,37 @@ const LINK_ZH_CN = {
 
     // 监控绑定模块
     'link.bind.create': '创建链路监控',
+    'link.bind.title.modify': '编辑链路监控',
     'link.bind.tabletitle.id': 'Id',
     'link.bind.tabletitle.title': '名称',
     'link.bind.tabletitle.projectName': '项目名',
     'link.bind.tabletitle.service': '服务',
+    'link.bind.tabletitle.ctime': '创建时间',
     'link.bind.tabletitle.threshold': '阈值',
     'link.bind.tabletitle.state': '当前状态',
     'link.bind.tabletitle.notifier': '通知人员',
+    'link.bind.tabletitle.notifierEmail': '接收邮箱',
     'link.bind.tabletitle.operate': '操作',
     'link.bind.free': '空闲中',
     'link.bind.running': '运行中',
+
     'link.bind.stop': '停止',
     'link.bind.delete': '删除',
+    'link.bind.modify': '修改',
+    'link.bind.start': '开启',
 
     'link.bind.form.title': '标题',
     'link.choose.service': '选择微服务',
+
+    // 收藏列表
+    'link.star.table.id': 'Id',
+    'link.star.table.note': '备注',
+    'link.star.table.date': '收藏时间',
+    'link.star.table.traceId': 'traceId',
+    'link.star.table.operate': '操作',
+
+    'link.star.add.note': '添加备注',
+    'link.star.modify.note': '编辑备注'
 };
 
 export default LINK_ZH_CN;
