@@ -7,7 +7,7 @@
 }
 
 .creating-new-branch{
-    width: 100%;
+    width: 80%;
 }
 
 .div-new-branch-top{
@@ -23,6 +23,7 @@
     display: flex;
     align-items: center;
     padding: 20px;
+    width: 80%;
     justify-content: center;
 }
 

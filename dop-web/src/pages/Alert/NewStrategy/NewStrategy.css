@@ -1,0 +1,106 @@
+.new-strategy-container{
+    background-color: rgb(255, 255, 255);
+}
+
+.loading-new-strategy{
+    width: 85%;
+}
+
+.creating-new-strategy{
+    width: 100%;
+}
+
+.div-new-strategy-top{
+    font-weight: bold;
+    font-size: 17px;
+    line-height: 60px;
+    height: 60px;
+    padding-left: 20px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.div-new-strategy-input{
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    justify-content: center;
+}
+
+.div-new-strategy-select{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.div-new-strategy-state{
+    width: 85%;
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.input-new-strategy-name{
+    height: 30px;
+    border: 1px solid #e2e2e2;
+    border-radius: 3px;
+    width: 85%;
+}
+
+.input-new-strategy-description{
+    /*height: 90px;*/
+    border: 1px solid #e2e2e2;
+    border-radius: 3px;
+    width: 85%;
+}
+
+.select-new-strategy-state{
+
+}
+
+.text-new-strategy-name{
+    text-align: right;
+    padding-right: 30px;
+    line-height: 40px;
+    width: 15%;
+}
+
+.text-new-strategy-source{
+    text-align: right;
+    padding-right: 30px;
+    line-height: 40px;
+    width: 15%;
+}
+
+.select-new-strategy{
+    width: 100%;
+}
+
+.div-new-strategy-submit{
+    height: 80px;
+    background-color: #fbfbfb;
+    border-top: 1px solid #e8e8e8;
+}
+
+.btn-new-strategy-add{
+    margin-top: 20px;
+    float: left;
+    color: white;
+    width: 100px;
+    height: 40px;
+    border-radius: 2px;
+    margin-left: 20px;
+    font-size: 13px;
+}
+
+.btn-new-strategy-cancel{
+    margin-top: 20px;
+    margin-right: 20px;
+    float: right;
+    width: 60px;
+    height: 40px;
+    border-radius: 2px;
+    margin-left: 15px;
+    font-size: 13px;
+}

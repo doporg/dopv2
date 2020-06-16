@@ -9,10 +9,10 @@ spring:
   application:
     name: alert-server
   datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://115.28.186.77:30306/test?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
-    username: dop
-    password: Dop_mysql_12345
+#    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/alert?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
     max-active: 10
     max-idle: 5
@@ -49,9 +49,9 @@ project:
   groupId: @project.groupId@
   artifactId: @project.artifactId@
   version: @project.version@
-  name: @project.name@
-  description: @project.description@
-  url: @project.url@
+  name: '@project.name@'
+  description: '@project.description@'
+  url: '@project.url@'
 swagger.enable: true
 eureka:
   instance:
@@ -64,7 +64,7 @@ eureka:
     lease-expiration-duration-in-seconds: 10
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://127.0.0.1:8761/eureka/
     registry-fetch-interval-seconds: 5 #定时刷新本地缓存
 ribbon:
   ReadTimeout: 10000
