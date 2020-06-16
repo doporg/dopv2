@@ -15,7 +15,7 @@ const headerMenuConfig = [
     },
     {
         name: <FormattedMessage id="base.help" defaultMessage="帮助"/>,
-        path: 'mailto:812022339@qq.com',
+        path: 'mailto:1171067930@qq.com',
         external: true,
         newWindow: true,
         icon: 'bangzhu',
@@ -31,6 +31,11 @@ const asideMenuConfig = [
     {
         name: <FormattedMessage id="pipeline.name" defaultMessage="流水线管理"/>,
         path: '/pipeline',
+        icon: 'ol-list',
+    },
+    {
+        name: <FormattedMessage id="gateway.name" defaultMessage="API管理"/>,
+        path: '/gateway',
         icon: 'ol-list',
     },
     {

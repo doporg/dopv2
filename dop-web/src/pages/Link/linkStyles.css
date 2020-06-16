@@ -1,0 +1,174 @@
+.footerButton {
+    width: 75px;
+}
+
+.choose-button {
+    margin-bottom: 25px;
+}
+
+.change-button {
+    vertical-align: middle;
+    /*margin-left: 5px;*/
+    height: 31px;
+    width: 90%;
+}
+
+.empty-prompt {
+    justify-content: center;
+    align-content: center;
+    height: 350px;
+}
+
+.prompt-icon-div {
+    display:block;
+    text-align:center;
+    padding-top: 100px;
+}
+.prompt-h-div {
+    display:block;
+    text-align:center;
+    padding-top: 10px;
+}
+
+.prompt-p {
+    font-size: 18px;
+    color: black;
+    font-weight: 100;
+}
+
+.project-input {
+    vertical-align: middle;
+    width: 400px;
+    outline: none;
+    border: none;
+    border-radius: 15px;
+}
+
+.search-by-traceid {
+    vertical-align: middle;
+}
+
+.search-condition {
+    box-shadow: none;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.9);
+    /* background-color: #f8f9fa !important; */
+    background-clip: border-box;
+    margin-bottom: 10px;
+    width: 100%;
+    /*padding: 0 5px;*/
+}
+
+
+/*搜索条件中，label的属性*/
+.search-condition-label {
+
+}
+
+/*搜索条件中的下拉框的属性*/
+.search-select {
+    width: 100%;
+}
+
+.date-picker-style {
+    width: 100%;
+    min-width: auto;
+}
+
+.popup-style {
+    overflow: hidden;
+}
+
+.trace-id:hover{
+    color: #5485f7;
+}
+
+.top-bar {
+    background: rgb(255, 255, 255);
+    padding: 0 20px;
+    left: 240px;
+    top: 62px;
+    height: 60px;
+    right: 0;
+    display: flex;
+    position: fixed;
+    z-index: 99;
+    box-shadow: 2px 0 4px rgba(0,0,0,0.2);
+    justify-content: space-between;
+    align-items: center;
+}
+
+.link-overview {
+    border-color: #000;
+}
+
+.link-overview-header {
+    background-color: #99ccff;
+}
+
+.operate-button {
+    margin-right: 5px;
+}
+
+.link-tab {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 97;
+    background: #fff;
+    border-radius: 5px;
+}
+
+.link-tab-pane {
+    text-align: center;
+    height: 250px;
+}
+
+.link-tab-pane-timeline {
+    text-align: left;
+    height: 250px;
+}
+.node-btn {
+    border-radius: 5px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 16px;
+    width: 150px;
+    padding: 0;
+    position: absolute;
+}
+
+.svg-con {
+    position: absolute;
+    width: 100px;
+}
+
+.table-tr {
+    height: 30px;
+}
+
+.table-tr td{
+    padding: 12px;
+    border-color: #bfbfbf;
+}
+
+.node-whole-div {
+    height: 25px;
+    cursor: pointer;
+    margin-bottom: 2px;
+    font-size: 14px;
+}
+.node-name-span {
+    display: inline-block;
+    height: 25px;
+    color: white;
+    vertical-align: middle;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.node-div {
+    display: inline-block;
+    position: absolute;
+    height: 25px;
+    white-space: nowrap;
+}

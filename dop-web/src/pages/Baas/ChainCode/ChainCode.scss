@@ -1,0 +1,26 @@
+.chaincode-wrapper {
+  background: white;
+  padding: 40px 40px 40px;
+  .button-warning{
+    background-color: #fff;
+    border-color: #ff3000;
+    color: #ff3000;
+  }
+  .button-warning:hover{
+    background-color: #ff3000;
+    border-color: #ff3000;
+    color: #fff;
+  }
+  .button-start{
+    background-color: #fff;
+    border-color: #669933;
+    color: #669933;
+  }
+  .button-start:hover{
+    background-color: #006633;
+    border-color: #006633;
+    color: #fff;
+  }
+}
+
+

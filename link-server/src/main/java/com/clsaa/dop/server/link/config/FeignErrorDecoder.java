@@ -21,10 +21,17 @@ public class FeignErrorDecoder implements ErrorDecoder {
     @Override
     public Exception decode(String methodKey, Response response) {
         try {
-            String body = Util.toString(response.body().asReader());
-            JSONObject jsonObject = JSON.parseObject(body);
-            int code = Integer.valueOf(String.valueOf(jsonObject.get("code")));
-            String msg = String.valueOf(jsonObject.get("message"));
+            System.out.println("response: " + response);
+            Response.Body responseBody = response.body();
+            String body = "";
+            int code = 0;
+            String msg = "";
+            if (responseBody != null) {
+                body = Util.toString(response.body().asReader());
+                JSONObject jsonObject = JSON.parseObject(body);
+                code = Integer.valueOf(String.valueOf(jsonObject.get("code")));
+                msg = String.valueOf(jsonObject.get("message"));
+            }
             switch (response.status()) {
                 case 400:
                     return new InvalidParameterException(code, msg);

@@ -46,4 +46,9 @@ public interface BizCodes {
      * 该凭证不允许被支持此操作
      */
     BizCode INVALID_OPERATION_FOR_CREDENTIAL = new BizCode(13103, "该凭证不允许被支持此操作");
+
+    /**
+     * trace不存在
+     */
+    BizCode NOT_FOUND_TRACE = new BizCode(14301, "traceId对应数据不存在");
 }

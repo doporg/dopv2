@@ -12,8 +12,13 @@ import codeConfig from "../pages/Code";
 import {testConfig} from "../pages/TestCases";
 import {imageConfig} from "../pages/Image";
 import {alertConfig} from "../pages/Alert";
+import {scanConfig} from '../pages/Scan'
+import {gatewayConfig} from "../pages/Gateway";
 
+import {linkConfig} from "../pages/Link";
 import {demoConfig} from "../pages/Demo";
+import {baasConfig} from "../pages/Baas";
+
 
 const baseConfig = [
     {
@@ -32,11 +37,20 @@ const baseConfig = [
 
 const routerConfig = [
     ...alertConfig,
+    ...scanConfig,
+    ...linkConfig,
     ...demoConfig,
     ...imageConfig,
     ...testConfig,
     ...codeConfig,
     ...projectConfig,
-    ...permissionConfig, ...pipelineConfig, ...loginConfig, ...baseConfig];
+    ...permissionConfig,
+    ...pipelineConfig,
+    ...loginConfig,
+    ...baasConfig,
+    ...gatewayConfig,
+    ...baseConfig];
+
+const routerConfig = [...alertConfig, ...imageConfig,...testConfig, ...codeConfig, ...projectConfig,  ...permissionConfig, ...pipelineConfig,...gatewayConfig, ...loginConfig, ...baseConfig];
 
 export default routerConfig;
