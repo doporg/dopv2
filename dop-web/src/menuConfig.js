@@ -15,7 +15,7 @@ const headerMenuConfig = [
     },
     {
         name: <FormattedMessage id="base.help" defaultMessage="帮助"/>,
-        path: 'mailto:812022339@qq.com',
+        path: 'mailto:1171067930@qq.com',
         external: true,
         newWindow: true,
         icon: 'bangzhu',

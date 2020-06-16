@@ -1,0 +1,81 @@
+.monitor-wrapper{
+  background: white;
+  padding: 40px 40px 40px;
+  .monitor-header{
+    padding: 10px 0;
+    .monitor-title{
+      display: inline-block;
+      font-size: 15px;
+      margin-right: 20px;
+      .monitor-subtitle{
+        font-size: 10px;
+        display: inline-block;
+      }
+      .monitor-subtitle-run{
+        color: #669933;
+      }
+      .monitor-subtitle-stop{
+        color: #8c8c8c;
+      }
+      .monitor-subtitle-build{
+        color: #CC6600;
+      }
+      .monitor-subtitle-error{
+        color: #ff3000;
+      }
+    }
+    .button-start{
+      background-color: #fff;
+      border-color: #669933;
+      color: #669933;
+    }
+    .button-start:hover{
+      background-color: #006633;
+      border-color: #006633;
+      color: #fff;
+    }
+    .button-stop{
+      background-color: #fff;
+      border-color: #ff3000;
+      color: #ff3000;
+    }
+    .button-stop:hover{
+      background-color: #ff3000;
+      border-color: #ff3000;
+      color: #fff;
+    }
+  }
+
+  .monitor-container{
+    padding: 0 0 20px;
+    .feedback{
+      margin: 1px 0;
+    }
+    .feedback-loading{
+      background: #8c8c8c;
+    }
+  }
+  .monitor-selection{
+    margin: 5px 0 20px;
+    .monitor-card{
+      width: 100%;
+      .monitor-button{
+        width: 100%;
+        border-radius: 0;
+        margin-top: 20px;
+      }
+      .number{
+        padding-top: 50px;
+        font-size: 70px;
+      }
+    }
+  }
+  .monitor-block{
+    margin: 20px 0;
+    .monitor-card{
+      width: 90%;
+      margin: 0 5% 0;
+    }
+  }
+
+}

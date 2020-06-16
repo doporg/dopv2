@@ -51,9 +51,9 @@ public class SpanVO {
 
     private boolean shared;
 
-    private EndpointVO localEndpointVO;
+    private EndpointVO localEndpoint;
 
-    private EndpointVO remoteEndpointVO;
+    private EndpointVO remoteEndpoint;
 
     private List<AnnotationVO> annotations;
 

@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import java.io.IOException;
 
 /**
- * 讲FeignException转换为标准业务异常
+ * 将FeignException转换为标准业务异常
  *
  * @author joyren
  */

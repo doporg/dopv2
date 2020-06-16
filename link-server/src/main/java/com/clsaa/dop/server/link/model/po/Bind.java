@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Data
@@ -39,4 +40,8 @@ public class Bind {
 
     @Enumerated(EnumType.STRING)
     private MonitorState state; //
+
+    private Date ctime;
+
+    private boolean isDelete;
 }

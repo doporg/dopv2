@@ -105,3 +105,70 @@
 .link-overview-header {
     background-color: #99ccff;
 }
+
+.operate-button {
+    margin-right: 5px;
+}
+
+.link-tab {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 97;
+    background: #fff;
+    border-radius: 5px;
+}
+
+.link-tab-pane {
+    text-align: center;
+    height: 250px;
+}
+
+.link-tab-pane-timeline {
+    text-align: left;
+    height: 250px;
+}
+.node-btn {
+    border-radius: 5px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 16px;
+    width: 150px;
+    padding: 0;
+    position: absolute;
+}
+
+.svg-con {
+    position: absolute;
+    width: 100px;
+}
+
+.table-tr {
+    height: 30px;
+}
+
+.table-tr td{
+    padding: 12px;
+    border-color: #bfbfbf;
+}
+
+.node-whole-div {
+    height: 25px;
+    cursor: pointer;
+    margin-bottom: 2px;
+    font-size: 14px;
+}
+.node-name-span {
+    display: inline-block;
+    height: 25px;
+    color: white;
+    vertical-align: middle;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.node-div {
+    display: inline-block;
+    position: absolute;
+    height: 25px;
+    white-space: nowrap;
+}

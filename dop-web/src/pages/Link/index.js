@@ -1,7 +1,8 @@
 import LinkList from './LinkList/LinkList';
-import LinkDetail from './LinkDetail/LinkDetail';
+import LinkSearch from './LinkSearch/LinkSearch';
 import LinkStar from './LinkStar/LinkStar';
 import LinkBind from './LinkBind/LinkBind';
+import LinkBindDetail from "./LinkBind/LinkBindDetail/LinkBindDetail";
 import LinkLayout from '../../layouts/LinkLayout';
 
 const linkConfig = [
@@ -15,13 +16,13 @@ const linkConfig = [
     {
         path: '/link/detail/:traceId',
         layout: LinkLayout,
-        component: LinkDetail,
+        component: LinkSearch,
         isLogin: true
     },
     {
         path: '/link/detail',
         layout: LinkLayout,
-        component: LinkDetail,
+        component: LinkSearch,
         isLogin: true
     },
     {
@@ -35,7 +36,13 @@ const linkConfig = [
         layout: LinkLayout,
         component: LinkBind,
         isLogin: true
+    },
+    {
+        path: '/link/notify-setting/:bid',
+        layout: LinkLayout,
+        component: LinkBindDetail,
+        isLogin: true
     }
 ];
 
-export {LinkList, LinkDetail, LinkStar, linkConfig}
+export {LinkList, LinkSearch, LinkStar, LinkBind, LinkBindDetail, linkConfig}

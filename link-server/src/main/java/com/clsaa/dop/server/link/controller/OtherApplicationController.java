@@ -19,17 +19,12 @@ public class OtherApplicationController {
     @Autowired
     private ProjectInterface projectInterface;
 
-//    @GetMapping(value = "/getProjectList")
+//    @GetMapping(value = "/projects")
     public Pagination<ProjectVO> getProjectList(@RequestHeader(HttpHeaders.X_LOGIN_USER) Long loginUser,
                                                 @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
-                                                @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+                                                @RequestParam(value = "pageSize", defaultValue = "8") Integer pageSize,
                                                 @RequestParam(value = "includeFinished", defaultValue = "true") Boolean includeFinished,
                                                 @RequestParam(value = "queryKey", defaultValue = "") String queryKey) {
-        System.out.println("user: "+loginUser);
-        System.out.println("pageNo: "+ pageNo);
-        System.out.println("pageSize: " + pageSize);
-        System.out.println("includeFinished: " + includeFinished);
-        System.out.println("queryKey: " + queryKey);
         Pagination<ProjectVO> result =  projectInterface.findProjectOrderByCtimeWithPage(loginUser,pageNo, pageSize, includeFinished,queryKey);
         for (ProjectVO projectVO : result.getPageList()) {
             System.out.println(projectVO.toString());
@@ -58,6 +53,9 @@ public class OtherApplicationController {
         result.add(new UserV1((long) 2,"Jerry", "552000264@qq.com","", null, null));
         result.add(new UserV1((long) 3,"Tom", "779722192@qq.com","", null, null));
         result.add(new UserV1((long) 4,"Rose", "298109291@qq.com","", null, null));
+        if (projectId > 5) {
+            result.add(new UserV1((long) 5, "Andy", "02091181881@qq.com","", null,null));
+        }
         return result;
 //        return projectInterface.getMemberInProject(loginUser, projectId, organizationId);
     }
