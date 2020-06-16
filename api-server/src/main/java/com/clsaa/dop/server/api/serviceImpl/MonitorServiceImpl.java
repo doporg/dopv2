@@ -10,14 +10,14 @@ import com.clsaa.dop.server.api.module.kong.logModule.requestLog.RequestLog;
 import com.clsaa.dop.server.api.module.kong.logModule.responseLog.ResponseLog;
 import com.clsaa.dop.server.api.module.po.Service;
 import com.clsaa.dop.server.api.module.vo.response.ResponseResult;
-import com.clsaa.dop.server.api.module.vo.response.monitor.ApiRequestLog;
-import com.clsaa.dop.server.api.module.vo.response.monitor.ApiRequestLogDetail;
-import com.clsaa.dop.server.api.module.vo.response.monitor.ApiSimpleInfo;
-import com.clsaa.dop.server.api.module.vo.response.monitor.TrafficStatistics;
+import com.clsaa.dop.server.api.module.vo.response.monitor.*;
 import com.clsaa.dop.server.api.service.MonitorService;
 
 import com.clsaa.dop.server.api.util.UTCUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -35,16 +35,26 @@ public class MonitorServiceImpl implements MonitorService {
     }
 
     @Override
-    public ResponseResult<TrafficStatistics> getTrafficStatistics() {
-        Date currentTime = UTCUtils.timeBefore30m();
+    public ResponseResult<TrafficStatistics> getTrafficStatistics(int time) {
+        Date currentTime = UTCUtils.timeBefore(time);
         TrafficStatistics trafficStatistics = new TrafficStatistics();
         int num = 5;
 
         //成功、失败请求数
         List<Integer> successStatus = getSuccessHttpStatus();
         List<Integer> failStatus = getFailHttpStatus();
-        trafficStatistics.setSuccessfulRequests(logRepository.countLogByTimeAfterAndResponseStatusIn(currentTime,successStatus));
-        trafficStatistics.setFailedRequests(logRepository.countLogByTimeAfterAndResponseStatusIn(currentTime,failStatus));
+        int successRequests = logRepository.countLogByTimeAfterAndResponseStatusIn(currentTime,successStatus);
+        int failRequests = logRepository.countLogByTimeAfterAndResponseStatusIn(currentTime,failStatus);
+        trafficStatistics.setSuccessfulRequests(successRequests);
+        trafficStatistics.setFailedRequests(failRequests);
+
+        //吞吐量（throughput）
+        int throughput = (successRequests+failRequests)/time;
+        trafficStatistics.setThroughput(throughput);
+
+        //错误率（errorRate）
+        int errorRate = (successRequests+failRequests)!=0?failRequests/(successRequests+failRequests):0;
+        trafficStatistics.setErrorRate(errorRate);
 
         //平均响应时间
         trafficStatistics.setResponseTime(getAverageResponseTime(currentTime));
@@ -80,29 +90,46 @@ public class MonitorServiceImpl implements MonitorService {
     }
 
     @Override
-    public ResponseResult<List<ApiRequestLog>> getRequestLog(String beginTime, String endTime, int statusCode) {
+    public ResponseResult<ApiRequestLogList> getRequestLog(String beginTime, String endTime, int statusCode,int pageNo, int pageSize) {
         Date beginDate = UTCUtils.stringToDate(beginTime);
         Date endDate = UTCUtils.stringToDate(endTime);
         if (beginDate!=null&&endDate!=null){
-            List<Log> logs = logRepository.findByTimeAfterAndTimeBeforeAndResponseStatusOrderByTimeDesc(beginDate,endDate,statusCode);
-            List<ApiRequestLog> apiRequestLogs = new LinkedList<>();
+            Sort sort = new Sort(Sort.Direction.DESC,"time");
+            Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+            List<Log> logs = logRepository.findAllByTimeAfterAndTimeBeforeAndResponseStatus(beginDate,endDate,statusCode,pageable).getContent();
+
+            if (pageSize == 0) throw new AssertionError();
+            int num = logs.size();
+            int pageNum = (num-1)/pageSize+1;
+            int current = pageNo<pageNum?pageNo:pageNum;
+            ApiRequestLogList apiRequestLogList = new ApiRequestLogList(pageNum,current);
             for(Log log:logs){
-                apiRequestLogs.add(new ApiRequestLog(log.getId(),log.getRequestPath(),log.getResponseStatus(),log.getProxyTimeout(),UTCUtils.dateToString(log.getTime())));
+                apiRequestLogList.addApiRequestLog(new ApiRequestLogDetail(log.getId(),log.getRequestMethod(),log.getRequestPath(),
+                        log.getRequestSize(),log.getResponseStatus(),log.getProxyTimeout(),log.getResponseTimeout(),log.getResponseSize(),
+                        UTCUtils.dateToString(log.getTime()),log.getClientIP(),log.getServiceId()));
             }
-            return new ResponseResult<>(0,"success",apiRequestLogs);
+            return new ResponseResult<>(0,"success",apiRequestLogList);
         }else {
             return new ResponseResult<>(1,"date format error");
         }
     }
 
     @Override
-    public ResponseResult<List<ApiRequestLog>> getRequestLog() {
-        List<Log> logs = logRepository.findTop10ByOrderByTimeDesc();
-        List<ApiRequestLog> apiRequestLogs = new LinkedList<>();
+    public ResponseResult<ApiRequestLogList> getRequestLog(String apiId, int pageNo, int pageSize) {
+        Sort sort = new Sort(Sort.Direction.DESC,"time");
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        List<Log> logs = logRepository.findAllByServiceId(apiId,pageable).getContent();
+        if (pageSize == 0) throw new AssertionError();
+        int num = logs.size();
+        int pageNum = (num-1)/pageSize+1;
+        int current = pageNo<pageNum?pageNo:pageNum;
+        ApiRequestLogList apiRequestLogList = new ApiRequestLogList(pageNum,current);
         for(Log log:logs){
-            apiRequestLogs.add(new ApiRequestLog(log.getId(),log.getRequestPath(),log.getResponseStatus(),log.getProxyTimeout(),UTCUtils.dateToString(log.getTime())));
+            apiRequestLogList.addApiRequestLog(new ApiRequestLogDetail(log.getId(),log.getRequestMethod(),log.getRequestPath(),
+                    log.getRequestSize(),log.getResponseStatus(),log.getProxyTimeout(),log.getResponseTimeout(),log.getResponseSize(),
+                    UTCUtils.dateToString(log.getTime()),log.getClientIP(),log.getServiceId()));
         }
-        return new ResponseResult<>(0,"success",apiRequestLogs);
+        return new ResponseResult<>(0,"success",apiRequestLogList);
     }
 
     @Override
@@ -158,7 +185,7 @@ public class MonitorServiceImpl implements MonitorService {
                 int frequency = Integer.parseInt(String.valueOf(results.get(i)[1]));
                 Service service = serviceRepository.findServiceById(serviceId);
                 if (service!=null){
-                    ApiSimpleInfo apiSimpleInfo = new ApiSimpleInfo(serviceId,service.getServiceRoute().getPath());
+                    ApiSimpleInfo apiSimpleInfo = new ApiSimpleInfo(serviceId,service.getServiceRoute().getPath(),service.getName());
                     apiSimpleInfo.setFrequency(frequency);
                     apiSimpleInfos.add(apiSimpleInfo);
                     if (apiSimpleInfos.size()>=num){
@@ -181,7 +208,7 @@ public class MonitorServiceImpl implements MonitorService {
                 int responseTime = Integer.parseInt(String.valueOf(results.get(i)[1]));
                 Service service = serviceRepository.findServiceById(serviceId);
                 if (service!=null){
-                    ApiSimpleInfo apiSimpleInfo = new ApiSimpleInfo(serviceId,service.getServiceRoute().getPath());
+                    ApiSimpleInfo apiSimpleInfo = new ApiSimpleInfo(serviceId,service.getServiceRoute().getPath(),service.getName());
                     apiSimpleInfo.setResponseTime(responseTime);
                     apiSimpleInfos.add(apiSimpleInfo);
                     if (apiSimpleInfos.size()>=num){
@@ -204,7 +231,7 @@ public class MonitorServiceImpl implements MonitorService {
                 int responseTime = Integer.parseInt(String.valueOf(results.get(i)[1]));
                 Service service = serviceRepository.findServiceById(serviceId);
                 if (service!=null){
-                    ApiSimpleInfo apiSimpleInfo = new ApiSimpleInfo(serviceId,service.getServiceRoute().getPath());
+                    ApiSimpleInfo apiSimpleInfo = new ApiSimpleInfo(serviceId,service.getServiceRoute().getPath(),service.getName());
                     apiSimpleInfo.setFailTimes(responseTime);
                     apiSimpleInfos.add(apiSimpleInfo);
                     if (apiSimpleInfos.size()>=num){

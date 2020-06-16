@@ -19,4 +19,5 @@ import BAAS_EN_US from "./en_US/baas_en_US";
 const en_US = {...BAAS_EN_US, ...Demo_EN_US, ...BASE_EN_US, ...LOGIN_EN_US, ...PIPELINE_EN_US,  ...PERMISSION_EN_US, ...PROJECTS_EN_US,...CODE_EN_US,...IMAGE_EN_US,...TEST_EN_US,...LINK_EN_US,...SCAN_EN_US,...GATEWAY_EN_US};
 
 
+
 export default en_US;

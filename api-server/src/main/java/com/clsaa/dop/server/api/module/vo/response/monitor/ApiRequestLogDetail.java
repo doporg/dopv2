@@ -2,7 +2,11 @@ package com.clsaa.dop.server.api.module.vo.response.monitor;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
 @ApiModel(description = "请求日志")
 public class ApiRequestLogDetail {
     @ApiModelProperty(value = "logId")
@@ -11,17 +15,17 @@ public class ApiRequestLogDetail {
     @ApiModelProperty(value = "requestMethod")
     private String requestMethod;
 
-    @ApiModelProperty(value = "requestPath")
-    private String requestPath;
+    @ApiModelProperty(value = "path")
+    private String path;
 
     @ApiModelProperty(value = "requestSize")
     private int requestSize;
 
     @ApiModelProperty(value = "responseStatus")
-    private int responseStatus;
+    private int statusCode;
 
     @ApiModelProperty(value = "proxyTimeout")
-    private int proxyTimeout;
+    private int timeConsuming;
 
     @ApiModelProperty(value = "responseTimeout")
     private int responseTimeout;
@@ -38,64 +42,18 @@ public class ApiRequestLogDetail {
     @ApiModelProperty(value = "serviceId")
     private String serviceId;
 
-    public ApiRequestLogDetail() {
-    }
 
-    public ApiRequestLogDetail(String logId, String requestMethod, String requestPath, int requestSize, int responseStatus, int proxyTimeout, int responseTimeout, int responseSize, String time, String clientIP, String serviceId) {
+    public ApiRequestLogDetail(String logId, String requestMethod, String path, int requestSize, int statusCode, int timeConsuming, int responseTimeout, int responseSize, String time, String clientIP, String serviceId) {
         this.logId = logId;
         this.requestMethod = requestMethod;
-        this.requestPath = requestPath;
+        this.path = path;
         this.requestSize = requestSize;
-        this.responseStatus = responseStatus;
-        this.proxyTimeout = proxyTimeout;
+        this.statusCode = statusCode;
+        this.timeConsuming = timeConsuming;
         this.responseTimeout = responseTimeout;
         this.responseSize = responseSize;
         this.time = time;
         this.clientIP = clientIP;
         this.serviceId = serviceId;
-    }
-
-    public String getLogId() {
-        return logId;
-    }
-
-    public String getRequestMethod() {
-        return requestMethod;
-    }
-
-    public String getRequestPath() {
-        return requestPath;
-    }
-
-    public int getRequestSize() {
-        return requestSize;
-    }
-
-    public int getResponseStatus() {
-        return responseStatus;
-    }
-
-    public int getProxyTimeout() {
-        return proxyTimeout;
-    }
-
-    public int getResponseTimeout() {
-        return responseTimeout;
-    }
-
-    public int getResponseSize() {
-        return responseSize;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public String getClientIP() {
-        return clientIP;
-    }
-
-    public String getServiceId() {
-        return serviceId;
     }
 }

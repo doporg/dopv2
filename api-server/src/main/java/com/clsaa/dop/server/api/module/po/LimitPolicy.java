@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @Entity
 @NoArgsConstructor
-public class CurrentLimitPolicy {
+public class LimitPolicy {
     @Id
     @GenericGenerator(name = "jpa-uuid", strategy = "uuid")
     @GeneratedValue(generator = "jpa-uuid")
@@ -35,10 +35,10 @@ public class CurrentLimitPolicy {
     private int day;
 
 
-    @OneToMany(mappedBy = "currentLimitPolicy",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "limitPolicy",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
     private List<Service> services;
 
-    public CurrentLimitPolicy(String name,String description, int second, int minute, int hour, int day) {
+    public LimitPolicy(String name, String description, int second, int minute, int hour, int day) {
         this.name = name;
         this.description = description;
         this.second = second;

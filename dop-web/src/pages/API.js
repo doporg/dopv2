@@ -9,16 +9,16 @@ const code = "/code-server";
 const user = "/user-server";
 const image = "/image-server";
 const test = "/test-server";
+
 const scan = "/testing-server";
 const baas = "/baas-server";
 const gateway = "/v2/api";
 const link = "/link-server";
 
+
 const API = {
     address: "http://www.dop.clsaa.com/#/",
-    // address: "http://localhost:3000/#/",
-    gateway: host,
-
+    gateway: host+gateway,
     pipeline: host + pipeline,
     application: host + application,
     permission: host + permission,

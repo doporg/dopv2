@@ -21,5 +21,15 @@ const gatewayMenuConfig=[
         path: '/gateway/currentLimit',
         icon: 'box',
     },
+    {
+        name: <FormattedMessage id="gateway.menu.statistic" defaultMessage="流量统计"/>,
+        path: '/gateway/statistic',
+        icon: 'category',
+    },
+    {
+        name: <FormattedMessage id="gateway.menu.log" defaultMessage="日志"/>,
+        path: '/gateway/log',
+        icon: 'chart-bar',
+    },
 ];
 export {gatewayMenuConfig};

@@ -18,6 +18,9 @@ import com.clsaa.dop.server.api.restTemplate.ApiRestTemplate;
 import com.clsaa.dop.server.api.service.PolicyService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
@@ -32,18 +35,18 @@ public class PolicyServiceImpl implements PolicyService {
     private ApiRestTemplate apiRestTemplate;
     private UpstreamRepository upstreamRepository;
     private TargetRepository targetRepository;
-    private CurrentLimitPolicyRepository currentLimitPolicyRepository;
+    private LimitPolicyRepository limitPolicyRepository;
 
     @Autowired
     public PolicyServiceImpl(ServiceRouteRepository serviceRouteRepository, ServiceRepository serviceRepository,
                              ApiRestTemplate apiRestTemplate, UpstreamRepository upstreamRepository, TargetRepository targetRepository,
-                             CurrentLimitPolicyRepository currentLimitPolicyRepository) {
+                             LimitPolicyRepository limitPolicyRepository) {
         this.serviceRouteRepository = serviceRouteRepository;
         this.serviceRepository = serviceRepository;
         this.apiRestTemplate = apiRestTemplate;
         this.upstreamRepository = upstreamRepository;
         this.targetRepository = targetRepository;
-        this.currentLimitPolicyRepository = currentLimitPolicyRepository;
+        this.limitPolicyRepository = limitPolicyRepository;
     }
 
     @Override
@@ -247,15 +250,17 @@ public class PolicyServiceImpl implements PolicyService {
     @Override
     public ResponseResult<RoutePolicyList> getRoutingPolicy(int pageNo, int pageSize, String type) {
         List<ServiceRoute> serviceRoutes;
+        Sort sort = new Sort(Sort.Direction.DESC,"name");
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         switch (type) {
             case "All":
-                serviceRoutes = serviceRouteRepository.findAll();
+                serviceRoutes = serviceRouteRepository.findAll(pageable).getContent();
                 break;
             case "ServiceDiscoveryPolicy":
-                serviceRoutes = serviceRouteRepository.findByType(RoutePolicyType.getServiceDiscoveryPolicyName());
+                serviceRoutes = serviceRouteRepository.findAllByType(RoutePolicyType.getServiceDiscoveryPolicyName(),pageable).getContent();
                 break;
             case "WeightingPolicy":
-                serviceRoutes = serviceRouteRepository.findByType(RoutePolicyType.getWeightingPolicyName());
+                serviceRoutes = serviceRouteRepository.findAllByType(RoutePolicyType.getWeightingPolicyName(),pageable).getContent();
                 break;
             default:
                 return new ResponseResult<>(1, "type not match");
@@ -264,9 +269,8 @@ public class PolicyServiceImpl implements PolicyService {
         int num = serviceRoutes.size();
         int pageNum = (num-1)/pageSize+1;
         int current = pageNo<pageNum?pageNo:pageNum;
-        RoutePolicyList routePolicyList = new RoutePolicyList(num,current);
-        for(int i = (current-1)*pageSize;i < pageSize&&i<num;i++){
-            ServiceRoute serviceRoute = serviceRoutes.get(i);
+        RoutePolicyList routePolicyList = new RoutePolicyList(pageNum,current);
+        for(ServiceRoute serviceRoute :serviceRoutes){
             routePolicyList.addRoutePolicy(new RoutingPolicyDetail(serviceRoute.getId(),serviceRoute.getName(),serviceRoute.getDescription(),serviceRoute.getType()));
         }
         return new ResponseResult<>(0, "success",routePolicyList);
@@ -284,10 +288,10 @@ public class PolicyServiceImpl implements PolicyService {
 
     @Override
     public ResponseResult<String> createCurrentLimitPolicy(CurrentLimitPolicyParam policyParams) {
-        if (currentLimitPolicyRepository.findByName(policyParams.getName())==null){
-            CurrentLimitPolicy currentLimitPolicy = new CurrentLimitPolicy(policyParams.getName(),policyParams.getDescription(),policyParams.getSecond(),policyParams.getMinute(),policyParams.getHour(),policyParams.getDay());
-            currentLimitPolicyRepository.saveAndFlush(currentLimitPolicy);
-            return new ResponseResult<>(0, "success",currentLimitPolicy.getId());
+        if (limitPolicyRepository.findByName(policyParams.getName())==null){
+            LimitPolicy limitPolicy = new LimitPolicy(policyParams.getName(),policyParams.getDescription(),policyParams.getSecond(),policyParams.getMinute(),policyParams.getHour(),policyParams.getDay());
+            limitPolicyRepository.saveAndFlush(limitPolicy);
+            return new ResponseResult<>(0, "success", limitPolicy.getId());
         }else {
             return new ResponseResult<>(2, "name repeat");
         }
@@ -295,16 +299,16 @@ public class PolicyServiceImpl implements PolicyService {
 
     @Override
     public ResponseResult modifyCurrentLimitPolicy(CurrentLimitPolicyParam policyParams, String policyId) {
-        CurrentLimitPolicy policy = currentLimitPolicyRepository.findCurrentLimitPolicyById(policyId);
+        LimitPolicy policy = limitPolicyRepository.findLimitPolicyById(policyId);
         if (policy!=null){
             policy.setName(policyParams.getName());
             policy.setSecond(policyParams.getSecond());
             policy.setMinute(policyParams.getMinute());
             policy.setHour(policyParams.getHour());
             policy.setDay(policyParams.getDay());
-            currentLimitPolicyRepository.saveAndFlush(policy);
+            limitPolicyRepository.saveAndFlush(policy);
 
-            List<Service> services = serviceRepository.findByCurrentLimitPolicy(policy);
+            List<Service> services = serviceRepository.findByLimitPolicy(policy);
             for(Service service:services){
                 if (!updateServiceCurrentLimitPolicy(service,policy)){
                     return new ResponseResult<>(2, "update currentPolicy fail");
@@ -318,10 +322,10 @@ public class PolicyServiceImpl implements PolicyService {
 
     @Override
     public ResponseResult<String> deleteCurrentLimitPolicy(String policyId) {
-        CurrentLimitPolicy policy = currentLimitPolicyRepository.findCurrentLimitPolicyById(policyId);
+        LimitPolicy policy = limitPolicyRepository.findLimitPolicyById(policyId);
         if (policy!=null){
-            if (serviceRepository.findByCurrentLimitPolicy(policy).size()==0){
-                currentLimitPolicyRepository.delete(policy);
+            if (serviceRepository.findByLimitPolicy(policy).size()==0){
+                limitPolicyRepository.delete(policy);
                 return new ResponseResult<>(0, "success");
             }else {
                 return new ResponseResult<>(2, "policy is used");
@@ -333,26 +337,27 @@ public class PolicyServiceImpl implements PolicyService {
 
     @Override
     public ResponseResult<CurrentLimitPolicyList> getCurrentLimitPolicies(int pageNo, int pageSize) {
-        List<CurrentLimitPolicy> currentLimitPolicies = currentLimitPolicyRepository.findAll();
+        Sort sort = new Sort(Sort.Direction.DESC,"name");
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        List<LimitPolicy> currentLimitPolicies = limitPolicyRepository.findAll(pageable).getContent();
         if (pageSize == 0) throw new AssertionError();
         int num = currentLimitPolicies.size();
         int pageNum = (num-1)/pageSize+1;
         int current = pageNo<pageNum?pageNo:pageNum;
 
-        CurrentLimitPolicyList currentLimitPolicyList = new CurrentLimitPolicyList(num,current);
-        for(int i = (current-1)*pageSize;i < pageSize&&i<num;i++){
-            CurrentLimitPolicy currentLimitPolicy = currentLimitPolicies.get(i);
-            currentLimitPolicyList.addCurrentLimitPolicy(new CurrentLimitPolicyDetail(currentLimitPolicy.getId(),currentLimitPolicy.getName(),currentLimitPolicy.getDescription(),
-                    currentLimitPolicy.getSecond(),currentLimitPolicy.getMinute(),currentLimitPolicy.getHour(),currentLimitPolicy.getDay()));
+        CurrentLimitPolicyList currentLimitPolicyList = new CurrentLimitPolicyList(pageNum,current);
+        for(LimitPolicy limitPolicy:currentLimitPolicies){
+            currentLimitPolicyList.addCurrentLimitPolicy(new CurrentLimitPolicyDetail(limitPolicy.getId(), limitPolicy.getName(), limitPolicy.getDescription(),
+                    limitPolicy.getSecond(), limitPolicy.getMinute(), limitPolicy.getHour(), limitPolicy.getDay()));
         }
         return new ResponseResult<>(0, "success",currentLimitPolicyList);
     }
 
     @Override
     public ResponseResult<CurrentLimitPolicyDetail> getCurrentLimitPolicyDetail(String policyId) {
-        CurrentLimitPolicy currentLimitPolicy = currentLimitPolicyRepository.findCurrentLimitPolicyById(policyId);
-        if (currentLimitPolicy!=null){
-            return new ResponseResult<>(0, "success",new CurrentLimitPolicyDetail(currentLimitPolicy.getId(),currentLimitPolicy.getName(),currentLimitPolicy.getDescription(),currentLimitPolicy.getSecond(),currentLimitPolicy.getMinute(),currentLimitPolicy.getHour(),currentLimitPolicy.getDay()));
+        LimitPolicy limitPolicy = limitPolicyRepository.findLimitPolicyById(policyId);
+        if (limitPolicy !=null){
+            return new ResponseResult<>(0, "success",new CurrentLimitPolicyDetail(limitPolicy.getId(), limitPolicy.getName(), limitPolicy.getDescription(), limitPolicy.getSecond(), limitPolicy.getMinute(), limitPolicy.getHour(), limitPolicy.getDay()));
         }else {
             return new ResponseResult<>(1, "policy not found");
         }
@@ -360,30 +365,30 @@ public class PolicyServiceImpl implements PolicyService {
 
     @Override
     public ResponseResult<List<CurrentLimitPolicyDetail>> searchCurrentLimitPolicy(String value) {
-        List<CurrentLimitPolicy> currentLimitPolicies = currentLimitPolicyRepository.findByNameStartingWith(value);
+        List<LimitPolicy> currentLimitPolicies = limitPolicyRepository.findByNameStartingWith(value);
         List<CurrentLimitPolicyDetail> currentLimitPolicyDetails = new LinkedList<>();
-        for (CurrentLimitPolicy currentLimitPolicy : currentLimitPolicies) {
-            currentLimitPolicyDetails.add(new CurrentLimitPolicyDetail(currentLimitPolicy.getId(),currentLimitPolicy.getName(),currentLimitPolicy.getDescription(),
-                    currentLimitPolicy.getSecond(),currentLimitPolicy.getMinute(),currentLimitPolicy.getHour(),currentLimitPolicy.getDay()));
+        for (LimitPolicy limitPolicy : currentLimitPolicies) {
+            currentLimitPolicyDetails.add(new CurrentLimitPolicyDetail(limitPolicy.getId(), limitPolicy.getName(), limitPolicy.getDescription(),
+                    limitPolicy.getSecond(), limitPolicy.getMinute(), limitPolicy.getHour(), limitPolicy.getDay()));
         }
         return new ResponseResult<>(0, "success",currentLimitPolicyDetails);
     }
 
-    public boolean updateServiceCurrentLimitPolicy(Service service, CurrentLimitPolicy currentLimitPolicy){
+    public boolean updateServiceCurrentLimitPolicy(Service service, LimitPolicy limitPolicy){
         String pluginId = service.getRateLimitingPluginId();
         if (!pluginId.equals("")){
             apiRestTemplate.deletePlugin(pluginId);
         }
-        if (currentLimitPolicy==null){
+        if (limitPolicy ==null){
             service.setRateLimitingPluginId("");
-            service.setCurrentLimitPolicy(null);
+            service.setLimitPolicy(null);
             serviceRepository.saveAndFlush(service);
             return true;
         }else {
-            pluginId =  apiRestTemplate.createCurrentLimitPolicy(service.getId(),currentLimitPolicy.getSecond(),currentLimitPolicy.getMinute(),currentLimitPolicy.getHour(),currentLimitPolicy.getDay());
+            pluginId =  apiRestTemplate.createCurrentLimitPolicy(service.getId(), limitPolicy.getSecond(), limitPolicy.getMinute(), limitPolicy.getHour(), limitPolicy.getDay());
             if (pluginId!=null){
                 service.setRateLimitingPluginId(pluginId);
-                service.setCurrentLimitPolicy(currentLimitPolicy);
+                service.setLimitPolicy(limitPolicy);
                 serviceRepository.saveAndFlush(service);
                 return true;
             }else {
