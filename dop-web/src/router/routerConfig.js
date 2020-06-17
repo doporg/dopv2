@@ -49,8 +49,7 @@ const routerConfig = [
     ...loginConfig,
     ...baasConfig,
     ...gatewayConfig,
-    ...baseConfig];
-
-const routerConfig = [...alertConfig, ...imageConfig,...testConfig, ...codeConfig, ...projectConfig,  ...permissionConfig, ...pipelineConfig,...gatewayConfig, ...loginConfig, ...baseConfig];
+    ...baseConfig
+];
 
 export default routerConfig;

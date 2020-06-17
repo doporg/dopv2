@@ -3,6 +3,7 @@ import {Select, Input, Button, Field, Switch} from "@icedesign/base";
 import Axios from 'axios';
 import API from "../../API";
 import {Feedback} from '@icedesign/base';
+import { FormBinderWrapper } from '@icedesign/form-binder';
 import {injectIntl } from 'react-intl';
 
 import './NewStrategy.css'
