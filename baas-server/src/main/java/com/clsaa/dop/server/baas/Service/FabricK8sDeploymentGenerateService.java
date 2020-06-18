@@ -237,7 +237,7 @@ public class FabricK8sDeploymentGenerateService {
      * */
     public List<V1Container> generateChaincodeSecondSpecContainer(String orgName){
         List<V1EnvVar> envList = new ArrayList<>();
-        V1EnvVar v1 = new V1EnvVar().name("CHAINCODE_CCID").value("marbles:7971dc3cd7cdcc281ca0f79d79c36e472a9536367ce81a28cd361f567714af39");envList.add(v1);
+        V1EnvVar v1 = new V1EnvVar().name("CHAINCODE_CCID").value("registry.dop.clsaa.com/chaincode/marbles:1.0");envList.add(v1);
         V1EnvVar v2 = new V1EnvVar().name("CHAINCODE_ADDRESS").value("0.0.0.0:7052");envList.add(v2);
         List<V1ContainerPort> portList = new ArrayList<>();
         V1ContainerPort p1 = new V1ContainerPort().containerPort(7052);portList.add(p1);

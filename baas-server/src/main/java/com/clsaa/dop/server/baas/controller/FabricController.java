@@ -117,7 +117,7 @@ public class FabricController {
     }
 
 
-    @ApiOperation(value = "根据查询fabric网络",notes = "接口说明")
+    @ApiOperation(value = "查询fabric网络",notes = "接口说明")
     @GetMapping("/v2/baas/queryFabric")
     public List<NetInfo> QueryFabric(){
         List<NetInfo> netList = netMapper.getAllNet();
