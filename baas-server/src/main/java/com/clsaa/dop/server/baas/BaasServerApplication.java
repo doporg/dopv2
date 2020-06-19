@@ -18,7 +18,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableAsync
 @EnableFeignClients
 @ComponentScan("com.clsaa")
-@MapperScan(value = {"com.baasexample.demo.Mapper"})
 public class BaasServerApplication {
     public static void main(String[] args) {
         SpringApplication.run(BaasServerApplication.class, args);

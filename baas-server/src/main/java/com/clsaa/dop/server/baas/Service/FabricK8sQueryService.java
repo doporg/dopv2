@@ -27,9 +27,8 @@ public class FabricK8sQueryService {
     public Map<String,String> getNameSpacePodListStatu(String NameSpace) throws IOException, ApiException {
         k8sClientService.setK8sClient();
         CoreV1Api apiInstance = new CoreV1Api();
-        String namespace = "hyperledger";
         try {
-            V1PodList result = apiInstance.listNamespacedPod(namespace, true, null, null, null, null, null, null, null, null);
+            V1PodList result = apiInstance.listNamespacedPod(NameSpace, true, null, null, null, null, null, null, null, null);
             List<V1Pod> list = result.getItems();
             Map<String,String> map = new HashMap<>();
             for(V1Pod s:list){

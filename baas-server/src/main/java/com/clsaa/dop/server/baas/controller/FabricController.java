@@ -1,8 +1,9 @@
 package com.clsaa.dop.server.baas.controller;
 
-import com.clsaa.dop.server.baas.Mapper.NetMapper;
+import com.clsaa.dop.server.baas.Mapper.NewNetMapper;
 import com.clsaa.dop.server.baas.Service.*;
 import com.clsaa.dop.server.baas.model.dbMo.NetInfo;
+import com.clsaa.dop.server.baas.model.dbMo.NewNetInfo;
 import com.clsaa.dop.server.baas.model.jsonMo.jsonModel;
 import com.clsaa.dop.server.baas.model.yamlMo.Orderer;
 import com.clsaa.dop.server.baas.model.yamlMo.Organization;
@@ -40,7 +41,7 @@ public class FabricController {
     @Autowired
     FabricYamlGenerateService fabricYamlGenerateService;
     @Autowired
-    NetMapper netMapper;
+    NewNetMapper newNetMapper;
     @Autowired
     FabricK8sQueryService fabricK8sQueryService;
     @Autowired
@@ -55,12 +56,15 @@ public class FabricController {
         Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String current = sdf.format(date);
-        NetInfo netInfo = new NetInfo();
-        netInfo.setNetName(NameSpace);
-        netInfo.setDescription(netWorkJson);
-        netInfo.setStatus(2);
-        netInfo.setCreateTime(current);
-        netMapper.insertNet(netInfo);
+        NewNetInfo newNetInfo = new NewNetInfo();
+        newNetInfo.setNamespace(NameSpace);
+        newNetInfo.setOrdererList(orderList.toString());
+        newNetInfo.setOrgList(orgList.toString());
+        newNetInfo.setTls(jm.getTls());
+        newNetInfo.setConsensus(jm.getConsensus());
+        newNetInfo.setStatus(2);
+        newNetInfo.setCreatetime(current);
+        newNetMapper.insertNet(newNetInfo);
         fabricYamlGenerateService.replaceWithConfigtxTemplate(NameSpace,orgList,orderList,jm.getConsensus());
         fabricYamlGenerateService.replaceWithCryptoconfigTemplate(NameSpace,orderList,orgList);
         SFTPUtil sftpUtil = new SFTPUtil();
@@ -72,6 +76,7 @@ public class FabricController {
         sftpUtil.upload("/mnt","nfsdata/fabric/"+jm.getName(), "configtx.yaml",is);
         sftpUtil.upload("/mnt","nfsdata/fabric/"+jm.getName(), "crypto-config.yaml",is2);
         sftpUtil.logout();
+        int NetId = newNetMapper.queryId(NameSpace);
         String jobName =jenkinsService.createCreatFabricJob(NameSpace);
         jenkinsService.buildJob(jobName);
         try {
@@ -93,8 +98,7 @@ public class FabricController {
                 fabricNetOperateService.createOrdererService(o, NameSpace);
                 fabricNetOperateService.createOrdererMetricService(o,NameSpace);
             }
-            int NetId = netMapper.queryId(NameSpace);
-            netMapper.updateNetStatu(1,NetId);
+
         }
         catch (ApiException e){
             System.err.println("Exception when calling CreateFabric");
@@ -102,7 +106,7 @@ public class FabricController {
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
             e.printStackTrace();
-
+            newNetMapper.updateNetStatu(1,NetId);
             return "fail";
         }
         return "success";
@@ -112,21 +116,21 @@ public class FabricController {
     @ApiOperation(value = "根据查询fabric网络",notes = "接口说明")
     @GetMapping("/v2/baas/queryFabric/{id}")
     public String QueryFabricNetById( @PathVariable(value = "id") int id){
-        NetInfo netInfo = netMapper.findNetById(id);
+        NewNetInfo netInfo = newNetMapper.findNetById(id);
         return netInfo.toString();
     }
 
 
     @ApiOperation(value = "查询fabric网络",notes = "接口说明")
     @GetMapping("/v2/baas/queryFabric")
-    public List<NetInfo> QueryFabric(){
-        List<NetInfo> netList = netMapper.getAllNet();
+    public List<NewNetInfo> QueryFabric(){
+        List<NewNetInfo> netList = newNetMapper.getAllNet();
         return netList;
     }
     @ApiOperation(value = "删除网络",notes = "接口说明")
     @GetMapping("/v2/baas/deleteFabric/{id}")
     public String QueryFabric(@PathVariable(value = "id")int id){
-        netMapper.updateNetStatu(0,id);
+        newNetMapper.updateNetStatu(0,id);
         return "success";
     }
 //    @ApiOperation(value = "根据查询fabric网络",notes = "接口说明")

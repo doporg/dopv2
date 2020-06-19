@@ -2,12 +2,14 @@ package com.clsaa.dop.server.baas.controller;
 
 import com.clsaa.dop.server.baas.Mapper.ChaincodeMapper;
 import com.clsaa.dop.server.baas.Mapper.ChannelMapper;
-import com.clsaa.dop.server.baas.Mapper.NetMapper;
+import com.clsaa.dop.server.baas.Mapper.NewNetMapper;
 import com.clsaa.dop.server.baas.Service.FabricChaincodeService;
 import com.clsaa.dop.server.baas.Service.FabricK8sQueryService;
 import com.clsaa.dop.server.baas.Service.JsonService;
+import com.clsaa.dop.server.baas.model.dbMo.ChaincodeInfo;
 import com.clsaa.dop.server.baas.model.dbMo.ChannelInfo;
 import com.clsaa.dop.server.baas.model.dbMo.NetInfo;
+import com.clsaa.dop.server.baas.model.dbMo.NewNetInfo;
 import com.clsaa.dop.server.baas.model.jsonMo.chaincodeJsonModel;
 import com.clsaa.dop.server.baas.model.jsonMo.jsonModel;
 import io.kubernetes.client.ApiException;
@@ -41,7 +43,7 @@ public class ChaincodeController {
     @Autowired
     ChannelMapper channelMapper;
     @Autowired
-    NetMapper netMapper;
+    NewNetMapper newNetMapper;
     @Autowired
     ChaincodeMapper chaincodeMapper;
     @Autowired
@@ -53,10 +55,8 @@ public class ChaincodeController {
         chaincodeJsonModel chaincodeInfo = jsonService.CastJsonToChaincodeBean(chaincodeJson);
         int NetId = chaincodeInfo.getNetworkId();
         int ChannelId = chaincodeInfo.getChannelId();
-        NetInfo info = netMapper.findNetById(NetId);
-        String Namespace = info.getNetName();
-        jsonModel js = jsonService.CastJsonToNetBean(info.getDescription());
-        String NameSpace = js.getName();
+        NewNetInfo info = newNetMapper.findNetById(NetId);
+        String Namespace = info.getNamespace();
         ChannelInfo cinfo = channelMapper.findChannelById(ChannelId);
         String channelName = cinfo.getChannelName();
         String peerPodName = cinfo.getPeerList().split(",")[0];
@@ -77,5 +77,11 @@ public class ChaincodeController {
             return e.toString();
         }
         return "success";
+    }
+
+    @ApiOperation(value = "查询链码", notes = "接口说明")
+    @PostMapping("/v2/baas/queryAllChaincode")
+    public List<ChaincodeInfo> queryAllChaincode(){
+        return chaincodeMapper.getAllChaincode();
     }
 }

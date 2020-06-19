@@ -6,9 +6,9 @@ package com.clsaa.dop.server.baas.config;
  * @author Monhey
  */
 public class JenkinsClient {
-    private static String uri;
-    private static String username ;
-    private static String password ;
+    private static String uri = "http://jenkins.dop.clsaa.com:8088";
+    private static String username = "dop";
+    private static String password = "Dop123..";
 
     public JenkinsClient() {
     }
