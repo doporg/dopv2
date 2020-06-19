@@ -68,13 +68,13 @@ public class FabricYamlGenerateService {
         returnContent.append("    EtcdRaft:\n        Consenters:\n");
         for(int i=0;i<ordererList.size();i++){
             if(i<ordererList.size()-1){
-                String pattern = "            - Host: <ordererName>\n              Port: <ordererPort>\n              ClientTLSCert: crypto-config/ordererOrganizations/consortium/orderers/<ordererName>/tls/server.crt\n              ServerTLSCert: crypto-config/ordererOrganizations/consortium/<ordererName>/orderer0/tls/server.crt\n";
+                String pattern = "            - Host: <ordererName>\n              Port: <ordererPort>\n              ClientTLSCert: crypto-config/ordererOrganizations/consortium/orderers/<ordererName>/tls/server.crt\n              ServerTLSCert: crypto-config/ordererOrganizations/consortium/orderers/<ordererName>/tls/server.crt\n";
                 pattern = pattern.replace("<ordererName>",ordererList.get(i).getOrderName());
                 pattern = pattern.replace("<ordererPort>",ordererList.get(i).getOrderport());
                 returnContent.append(pattern);
             }
             else{
-                String pattern = "            - Host: <ordererName>\n              Port: <ordererPort>\n              ClientTLSCert: crypto-config/ordererOrganizations/consortium/orderers/<ordererName>/tls/server.crt\n              ServerTLSCert: crypto-config/ordererOrganizations/consortium/<ordererName>/orderer0/tls/server.crt\n";
+                String pattern = "            - Host: <ordererName>\n              Port: <ordererPort>\n              ClientTLSCert: crypto-config/ordererOrganizations/consortium/orderers/<ordererName>/tls/server.crt\n              ServerTLSCert: crypto-config/ordererOrganizations/consortium/orderers/<ordererName>/tls/server.crt\n";
                 pattern = pattern.replace("<ordererName>",ordererList.get(i).getOrderName());
                 pattern = pattern.replace("<ordererPort>",ordererList.get(i).getOrderport());
                 returnContent.append(pattern);

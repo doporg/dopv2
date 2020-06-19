@@ -11,4 +11,7 @@ import lombok.Data;
 public class Orderer {
     private String orderName;
     private String orderport;
+    public String toString(){
+        return this.getOrderName()+":"+this.getOrderport();
+    }
 }

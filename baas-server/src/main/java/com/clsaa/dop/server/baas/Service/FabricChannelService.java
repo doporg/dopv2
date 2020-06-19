@@ -2,8 +2,10 @@ package com.clsaa.dop.server.baas.Service;
 
 import com.clsaa.dop.server.baas.Mapper.ChannelMapper;
 import com.clsaa.dop.server.baas.Mapper.NetMapper;
+import com.clsaa.dop.server.baas.Mapper.NewNetMapper;
 import com.clsaa.dop.server.baas.model.dbMo.ChannelInfo;
 import com.clsaa.dop.server.baas.model.dbMo.NetInfo;
+import com.clsaa.dop.server.baas.model.dbMo.NewNetInfo;
 import com.clsaa.dop.server.baas.model.jsonMo.jsonModel;
 import com.clsaa.dop.server.baas.model.yamlMo.BlockData;
 import com.clsaa.dop.server.baas.model.yamlMo.Orderer;
@@ -29,7 +31,7 @@ public class FabricChannelService {
     @Autowired
     k8sExecService k8sExecService;
     @Autowired
-    NetMapper netMapper;
+    NewNetMapper netMapper;
     @Autowired
     ChannelMapper channelMapper;
     @Autowired
@@ -41,14 +43,11 @@ public class FabricChannelService {
     @Autowired
     GetBlockInfoService getBlockInfoService;
     //创建channel并且把peer加进去
-    public List<String> createChannel(int NetId, String ChannelName, List<String> peerList) throws InterruptedException, ApiException, ParseException, IOException {
+    public List<String> createChannel(int NetId,String ChannelName,List<String> peerList) throws InterruptedException, ApiException, ParseException, IOException {
         List<String> result = new ArrayList<>();
-        NetInfo net = netMapper.findNetById(NetId);
-        String Namespace = net.getNetName();
-        jsonModel js =jsonService.CastJsonToNetBean(net.getDescription());
-        List<Orderer> ordererList = js.getOrder();
-        Orderer or = ordererList.get(0);
-        String order = or.getOrderName()+":"+or.getOrderport();
+        NewNetInfo net = netMapper.findNetById(NetId);
+        String Namespace = net.getNamespace();
+        String order = net.getOrdererList().split(",")[0].split("\\[")[1];
         StringBuilder cmd = new StringBuilder("peer channel create -o ");
         cmd.append(order+" -c");
         cmd.append(ChannelName);
@@ -87,8 +86,8 @@ public class FabricChannelService {
         ChannelInfo channelInfo = channelMapper.findChannelById(channelId);
         int NetId  = channelInfo.getNetId();
         String[] peerList =channelInfo.getPeerList().split(",");
-        NetInfo net = netMapper.findNetById(NetId);
-        String Namespace = net.getNetName();
+        NewNetInfo net = netMapper.findNetById(NetId);
+        String Namespace = net.getNamespace();
         Map<String,String> map = fabricK8sQueryService.getNameSpacePodListStatu(Namespace);
         Set<String> set = map.keySet();
         List<String> PeerPodList = new ArrayList<>();
@@ -109,8 +108,8 @@ public class FabricChannelService {
         String channelName =channelInfo.getChannelName();
         String[] peerList =channelInfo.getPeerList().split(",");
         int NetId  = channelInfo.getNetId();
-        NetInfo net = netMapper.findNetById(NetId);
-        String Namespace = net.getNetName();
+        NewNetInfo net = netMapper.findNetById(NetId);
+        String Namespace = net.getNamespace();
         Map<String,String> map = fabricK8sQueryService.getNameSpacePodListStatu(Namespace);
         Set<String> set = map.keySet();
         List<String> PeerPodList = new ArrayList<>();
@@ -138,8 +137,8 @@ public class FabricChannelService {
         ChannelInfo channelInfo = channelMapper.findChannelById(channelId);
         String channelName =channelInfo.getChannelName();
         int NetId  = channelInfo.getNetId();
-        NetInfo net = netMapper.findNetById(NetId);
-        String Namespace = net.getNetName();
+        NewNetInfo net = netMapper.findNetById(NetId);
+        String Namespace = net.getNamespace();
         List<TxData> dataList = new ArrayList<>();
         for(int i=height-1;i>=0;i--){
             dataList.add(getBlockInfoService.readTxDataFile("http://121.42.13.243/"+Namespace+"/"+channelName+"_"+i+".json"));
