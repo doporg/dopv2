@@ -20,6 +20,7 @@ public class JenkinsService {
     private String user;
     private String pwd;
     private JenkinsServer jenkins;
+
     private JenkinsClient jenkinsClient = new JenkinsClient();
 
 

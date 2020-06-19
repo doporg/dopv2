@@ -35,9 +35,9 @@ public class SFTPUtil {
     /** SFTP 登录密码*/
     private String password;
     /** 私钥 */
-    private String privateKey ;
+    private String privateKey="src/main/resources/dopv2.pem" ;
     /** SFTP 服务器地址IP地址*/
-    private String host;
+    private String host="121.42.13.243";
     /** SFTP 端口*/
     private int port = 22;
 

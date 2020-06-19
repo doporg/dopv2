@@ -2,6 +2,7 @@ package com.clsaa.dop.server.baas.Mapper;
 
 import com.clsaa.dop.server.baas.model.dbMo.NewNetInfo;
 import org.apache.ibatis.annotations.*;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
