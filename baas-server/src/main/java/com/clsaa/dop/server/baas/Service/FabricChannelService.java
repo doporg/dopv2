@@ -1,7 +1,6 @@
 package com.clsaa.dop.server.baas.Service;
 
 import com.clsaa.dop.server.baas.Mapper.ChannelMapper;
-import com.clsaa.dop.server.baas.Mapper.NetMapper;
 import com.clsaa.dop.server.baas.Mapper.NewNetMapper;
 import com.clsaa.dop.server.baas.model.dbMo.ChannelInfo;
 import com.clsaa.dop.server.baas.model.dbMo.NetInfo;
