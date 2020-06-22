@@ -337,10 +337,12 @@ public class PolicyServiceImpl implements PolicyService {
 
     @Override
     public ResponseResult<CurrentLimitPolicyList> getCurrentLimitPolicies(int pageNo, int pageSize) {
+        //获取流控策略列表
+
+        //采用分页查询
         Sort sort = new Sort(Sort.Direction.DESC,"name");
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         List<LimitPolicy> currentLimitPolicies = limitPolicyRepository.findAll(pageable).getContent();
-        if (pageSize == 0) throw new AssertionError();
         int num = currentLimitPolicies.size();
         int pageNum = (num-1)/pageSize+1;
         int current = pageNo<pageNum?pageNo:pageNum;

@@ -1,7 +1,6 @@
 package com.clsaa.dop.server.api.controller;
 
 import com.clsaa.dop.server.api.module.kong.logModule.KongHttpLog;
-import com.clsaa.dop.server.api.module.vo.response.monitor.ApiRequestLog;
 import com.clsaa.dop.server.api.module.vo.response.monitor.ApiRequestLogDetail;
 import com.clsaa.dop.server.api.module.vo.response.monitor.ApiRequestLogList;
 import com.clsaa.dop.server.api.module.vo.response.monitor.TrafficStatistics;
@@ -37,6 +36,8 @@ public class MonitorController {
     public ResponseResult<TrafficStatistics> getTrafficStatistics(@ApiParam(name = "time")@RequestParam("time")int time){
         return monitorService.getTrafficStatistics(time);
     }
+
+
 
     @ApiOperation(value = "接收请求日志")
     @PostMapping("/log")

@@ -48,9 +48,13 @@ public class ApiRestTemplate {
     }
 
     public KongService createService(String host,String name,Long timeout,String protocol,Long port,String path){
+        //创建Service
+
         MultiValueMap<String,String> header = new LinkedMultiValueMap<>();
+        //添加请求头
         header.add(HttpHeaders.CONTENT_TYPE,(MediaType.MULTIPART_FORM_DATA_VALUE));
 
+        //在MultiValueMap中放入请求参数
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
         map.add("host", host);
         map.add("name", name);
@@ -59,14 +63,17 @@ public class ApiRestTemplate {
         map.add("protocol",protocol);
         map.add("connect_timeout", timeout);
 
+
         HttpEntity<MultiValueMap> request = new HttpEntity<>(map, header);
         try {
+            //发送Post请求创建Service
             ResponseEntity<KongService> exchangeResult = restTemplate.exchange(serviceUrl, HttpMethod.POST, request, KongService.class);
-            //System.out.println(exchangeResult.getStatusCode()+" "+exchangeResult.getStatusCodeValue());
-            //System.out.println(JSON.toJSONString(exchangeResult.getBody()));
+
             if (exchangeResult.getStatusCode().equals(HttpStatus.CREATED)){
+                //创建成功，返回创建信息
                 return exchangeResult.getBody();
             }else {
+                //创建失败
                 return null;
             }
         }catch (HttpClientErrorException ex){

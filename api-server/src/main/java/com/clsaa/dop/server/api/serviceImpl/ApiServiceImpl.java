@@ -52,24 +52,29 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public ResponseResult<String> createApi(CreateApiParams createApiParams) {
 
-        //查看是否有同名service
-        if (serviceRepository.findByName(createApiParams.getName())==null){
+        //查看是否有同名或相同路径的service
+        if (serviceRepository.findByName(createApiParams.getName())==null&&routeRepository.findByRequestPath(createApiParams.getRequestPath())==null){
             String upstreamId = createApiParams.getRoutingPolicyId();
             ServiceRoute serviceRoute = serviceRouteRepository.findServiceRouteById(upstreamId);
             FusePolicy fusePolicy = createApiParams.getFusePolicy();
             //查看负载均衡策略是否存在
             if(serviceRoute !=null){
-                KongService kongService = apiRestTemplate.createService(serviceRoute.getHost(),createApiParams.getName(),createApiParams.getTimeout(),"http", serviceRoute.getPort(),serviceRoute.getPath());
+
+                //在Kong服务器中创建Service对象
+                KongService kongService = apiRestTemplate.createService(serviceRoute.getHost(),createApiParams.getName(),
+                        createApiParams.getTimeout(),"http", serviceRoute.getPort(),serviceRoute.getPath());
+                //修改Upstream对象
                 KongUpstream kongUpstream = apiRestTemplate.modifyFusePolicy(serviceRoute.getHost(),fusePolicy);
 
                 if (kongService!=null&&kongUpstream!=null){
 
-                    //更新数据库
+                    //API数据持久化
                     Service service = new Service(kongService.getId(),createApiParams.getName(),createApiParams.getDescription(),
                             createApiParams.getTimeout(),fusePolicy.isEnable(),
                             fusePolicy.getFuseDetectionRing(),fusePolicy.getCriticalFusingFailureRate(),fusePolicy.getFuseDuration(),
                             fusePolicy.getReplyDetectionRingSize(), serviceRoute);
                     serviceRepository.saveAndFlush(service);
+
                     Route route = new Route(false,createApiParams.getRequestMethod(),createApiParams.getRequestPath(),service);
                     routeRepository.saveAndFlush(route);
 
@@ -78,6 +83,7 @@ public class ApiServiceImpl implements ApiService {
                         //更新流控策略
                         LimitPolicy limitPolicy = limitPolicyRepository.findLimitPolicyById(createApiParams.getCurrentLimitPolicyId());
                         if (policyService.updateServiceCurrentLimitPolicy(service, limitPolicy)){
+                            //创建成功，返回api的ID
                             return new ResponseResult<>(0,"success",service.getId());
                         }else {
                             return new ResponseResult<>(5,"current limit policy update error",service.getId());
@@ -86,12 +92,15 @@ public class ApiServiceImpl implements ApiService {
                         return new ResponseResult<>(4,"cache policy update error",service.getId());
                     }
                 }else {
+                    //Kong服务异常
                     return new ResponseResult<>(3,"fail");
                 }
             }else {
+                //路由策略缺失
                 return new ResponseResult<>(2,"no route policy");
             }
         }else{
+            //重名
             return new ResponseResult<>(1,"name repeat");
         }
     }

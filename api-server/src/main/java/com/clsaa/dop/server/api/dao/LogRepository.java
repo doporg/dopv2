@@ -21,6 +21,9 @@ public interface LogRepository extends JpaRepository<Log,String> {
     @Query(nativeQuery = true,value = "select avg(response_timeout) from log where time > ?1 ;")
     List<Object> findAverageResponseTime(Date timestamp);
 
+    @Query(nativeQuery = true,value = "select count(distinct clientip) from log where time > ?1 ;")
+    List<Object> findClientIP(Date timestamp);
+
     @Query(nativeQuery = true,value = "select service_id,count(*) from log where time > ?1 group by service_id order by count(*) desc;")
     List<Object[]> findFrequentService(Date timestamp);
 
