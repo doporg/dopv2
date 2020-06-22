@@ -24,10 +24,10 @@
 
 流量统计为用户提供可视化的监控信息，用户可方便的查询运行中 API 的请求转发情况，方便用户对API进行运维管理。
 
-![](.\picture\statistic.png)
+![](./picture/statistic.png)
 
 ### 5. 日志
 
 用户可以查看API的相关日志信息，包括API的请求路径，访问时间，网关耗时和状态码等。
 
-![](.\picture\log.png)
+![](./picture/log.png)
