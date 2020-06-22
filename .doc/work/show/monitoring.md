@@ -3,7 +3,7 @@
 ## 1.用户管理
 
 管理员和普通用户都要进行登录。
-![login](../img/monitoring/login.png)
+![login](./img/monitoring/login.png)
 
 管理员可以增加和删除用户。
 ![config](/img/monitoring/config.png)
