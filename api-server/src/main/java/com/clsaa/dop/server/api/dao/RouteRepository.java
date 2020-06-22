@@ -10,5 +10,7 @@ import java.util.List;
 public interface RouteRepository extends JpaRepository<Route,String> {
     Route findRouteByServiceId(String id);
 
+    Route findByRequestPath(String path);
+
     Page<Route> findAllByOnline(boolean online, Pageable pageable);
 }

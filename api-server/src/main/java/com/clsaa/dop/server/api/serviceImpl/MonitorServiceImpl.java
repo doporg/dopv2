@@ -40,6 +40,10 @@ public class MonitorServiceImpl implements MonitorService {
         TrafficStatistics trafficStatistics = new TrafficStatistics();
         int num = 5;
 
+        //API数量
+        int apiNum = (int)serviceRepository.count();
+        trafficStatistics.setApiNum(apiNum);
+
         //成功、失败请求数
         List<Integer> successStatus = getSuccessHttpStatus();
         List<Integer> failStatus = getFailHttpStatus();
@@ -70,6 +74,9 @@ public class MonitorServiceImpl implements MonitorService {
         //失败次数前五服务
         List<ApiSimpleInfo> failApi =  getFailService(currentTime,num);
         trafficStatistics.setCallFailedApi(failApi);
+
+        //访问IP数
+        trafficStatistics.setClientIP(getClientIP(currentTime));
 
         return new ResponseResult<>(0,"success",trafficStatistics);
 
@@ -170,6 +177,15 @@ public class MonitorServiceImpl implements MonitorService {
         List<Object> results = logRepository.findAverageResponseTime(timestamp);
         if (results.size()>0&&results.get(0)!=null){
             return Double.parseDouble(String.valueOf(results.get(0)));
+        }else {
+            return 0;
+        }
+    }
+
+    private int getClientIP(Date timestamp){
+        List<Object> results = logRepository.findClientIP(timestamp);
+        if (results.size()>0&&results.get(0)!=null){
+            return Integer.parseInt(String.valueOf(results.get(0)));
         }else {
             return 0;
         }

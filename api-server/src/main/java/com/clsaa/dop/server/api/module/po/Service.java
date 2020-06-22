@@ -75,4 +75,21 @@ public class Service {
         this.proxyCachePluginId = "";
     }
 
+    public Service(String name, String description, Long timeout,
+                   boolean fuse, Long fuseDetectionRing, Long criticalFusingFailureRate, Long fuseDuration, Long replyDetectionRingSize, ServiceRoute serviceRoute) {
+        this.id = "";
+        this.name = name;
+        this.description = description;
+        this.timeout = timeout;
+        this.caching = false;
+        this.cachingTime = 300L;
+        this.fuse = fuse;
+        this.fuseDetectionRing = fuseDetectionRing;
+        this.criticalFusingFailureRate = criticalFusingFailureRate;
+        this.fuseDuration = fuseDuration;
+        this.replyDetectionRingSize = replyDetectionRingSize;
+        this.serviceRoute = serviceRoute;
+        this.rateLimitingPluginId = "";
+        this.proxyCachePluginId = "";
+    }
 }

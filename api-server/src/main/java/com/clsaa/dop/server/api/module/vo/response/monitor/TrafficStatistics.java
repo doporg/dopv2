@@ -14,6 +14,9 @@ import java.util.List;
 @ApiModel(description = "API数据统计")
 public class TrafficStatistics {
 
+    @ApiModelProperty(value = "apiNum")
+    private int apiNum;
+
     @ApiModelProperty(value = "successfulRequests")
     private int successfulRequests;
 
@@ -37,4 +40,7 @@ public class TrafficStatistics {
 
     @ApiModelProperty(value = "callFailedApi")
     private List<ApiSimpleInfo> callFailedApi;
+
+    @ApiModelProperty(value = "clientIP")
+    private int clientIP;
 }
