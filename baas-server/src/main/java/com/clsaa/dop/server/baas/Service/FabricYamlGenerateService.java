@@ -44,7 +44,7 @@ public class FabricYamlGenerateService {
         }
         //下面替换Profiles
         for(int i=0;i<orgList.size();i++){
-            if(i<ordererList.size()-1){
+            if(i<orgList.size()-1){
                 content = content.replace("<ProfilesOrg>","- *"+orgList.get(i).getOrgName()+"\n                    <ProfilesOrg>");
                 content = content.replace("<ProfilesOrg2>","- *"+orgList.get(i).getOrgName()+"\n                <ProfilesOrg>");
             }
@@ -95,10 +95,10 @@ public class FabricYamlGenerateService {
         StringBuilder returnContent = new StringBuilder("");
         content.append("- &<orgName>\n        Name: <orgName>MSP\n        ID: <orgName>MSP\n        ");
         content.append("MSPDir: crypto-config/peerOrganizations/<orgName>/msp \n        Policies: &<orgName>Policies\n            ");
-        content.append("Readers:\n                 Type: Signature\n                Rule: \"OR('<orgName>MSP.admin', '<orgName>MSP.peer', '<orgName>MSP.client')\"\n            ");
-        content.append("Writers:\n                 Type: Signature\n                Rule: \"OR('<orgName>MSP.admin', '<orgName>MSP.peer', '<orgName>MSP.client')\"\n            ");
-        content.append("Admins:\n                 Type: Signature\n                Rule: \"OR('<orgName>MSP.admin')\"\n            ");
-        content.append("Endorsement:\n                 Type: Signature\n                Rule: \"OR('<orgName>MSP.admin')\"\n        ");
+        content.append("Readers:\n                Type: Signature\n                Rule: \"OR('<orgName>MSP.admin', '<orgName>MSP.peer', '<orgName>MSP.client')\"\n            ");
+        content.append("Writers:\n                Type: Signature\n                Rule: \"OR('<orgName>MSP.admin', '<orgName>MSP.peer', '<orgName>MSP.client')\"\n            ");
+        content.append("Admins:\n                Type: Signature\n                Rule: \"OR('<orgName>MSP.admin')\"\n            ");
+        content.append("Endorsement:\n                Type: Signature\n                Rule: \"OR('<orgName>MSP.admin')\"\n        ");
         content.append("AnchorPeers:\n            - Host: peer0-<orgName>\n              Port: <AnchorPeerPort>");
         for(int i=0;i<orgList.size();i++){
             String con = content.toString();

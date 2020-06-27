@@ -3,7 +3,7 @@ package com.clsaa.dop.server.baas.Service;
 import com.clsaa.dop.server.baas.model.yamlMo.Peer;
 import io.kubernetes.client.models.*;
 import org.springframework.stereotype.Service;
-
+import com.clsaa.dop.server.baas.model.yamlMo.Orderer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,8 +21,8 @@ public class FabricK8sDeploymentGenerateService {
      **/
     public V1Deployment generatePeerDeployment(Peer peer, String orgName, String NameSpace){
         Map<String,String> map = new HashMap<>();
-        map.put("app",peer.getPeerName()+"-"+orgName);
-        V1ObjectMeta om  = new V1ObjectMeta().name(peer.getPeerName()+"-"+orgName).namespace(NameSpace).labels(map);
+        map.put("app",peer.getPeerName());
+        V1ObjectMeta om  = new V1ObjectMeta().name(peer.getPeerName()).namespace(NameSpace).labels(map);
         return new V1Deployment().apiVersion("apps/v1")
                 .kind("Deployment")
                 .metadata(om)
@@ -81,7 +81,7 @@ public class FabricK8sDeploymentGenerateService {
      * */
     public V1DeploymentSpec genetatePeerFirstSpec(String OrgName, Peer peer, String netName){
         Map<String,String> map = new HashMap<>();
-        map.put("app",peer.getPeerName()+"-"+OrgName);
+        map.put("app",peer.getPeerName());
         V1LabelSelector ls = new V1LabelSelector().matchLabels(map);
         V1DeploymentStrategy ds = new V1DeploymentStrategy().type("Recreate");
         V1DeploymentSpec dps = new V1DeploymentSpec().selector(ls).replicas(1).strategy(ds).template(generatePeerTemplate(peer,OrgName,netName));
@@ -146,26 +146,26 @@ public class FabricK8sDeploymentGenerateService {
         }
         List<V1EnvVar> envList = new ArrayList<>();
         V1EnvVar v1 = new V1EnvVar().name("FABRIC_LOGGING_SPEC").value("INFO");envList.add(v1);
-        V1EnvVar v2 = new V1EnvVar().name("CORE_PEER_ADDRESS").value(peer.getPeerName()+"-"+orgName+":7051");envList.add(v2);
-        V1EnvVar v3 = new V1EnvVar().name("CORE_PEER_GOSSIP_EXTERNALENDPOINT").value(peer.getPeerName()+"-"+orgName+":7051");envList.add(v3);
-        V1EnvVar v4 = new V1EnvVar().name("CORE_PEER_CHAINCODELISTENADDRESS").value(peer.getPeerName()+"-"+orgName+":7052");envList.add(v4);
-        V1EnvVar v5 = new V1EnvVar().name("CORE_PEER_GOSSIP_USELEADERELECTION").value("\"true\"");envList.add(v5);
-        V1EnvVar v6 = new V1EnvVar().name("CORE_PEER_GOSSIP_BOOTSTRAP").value(peer.getPeerName()+"-"+orgName+":7051");envList.add(v6);
-        V1EnvVar v7 = new V1EnvVar().name("CORE_PEER_ID").value(peer.getPeerName()+"-"+orgName);envList.add(v7);
+        V1EnvVar v2 = new V1EnvVar().name("CORE_PEER_ADDRESS").value(peer.getPeerName()+":7051");envList.add(v2);
+        V1EnvVar v3 = new V1EnvVar().name("CORE_PEER_GOSSIP_EXTERNALENDPOINT").value(peer.getPeerName()+":7051");envList.add(v3);
+        V1EnvVar v4 = new V1EnvVar().name("CORE_PEER_CHAINCODELISTENADDRESS").value(peer.getPeerName()+":7052");envList.add(v4);
+        V1EnvVar v5 = new V1EnvVar().name("CORE_PEER_GOSSIP_USELEADERELECTION").value("true");envList.add(v5);
+        V1EnvVar v6 = new V1EnvVar().name("CORE_PEER_GOSSIP_BOOTSTRAP").value(peer.getPeerName()+":7051");envList.add(v6);
+        V1EnvVar v7 = new V1EnvVar().name("CORE_PEER_ID").value(peer.getPeerName());envList.add(v7);
         V1EnvVar v8 = new V1EnvVar().name("CORE_PEER_LOCALMSPID").value(orgName+"MSP");envList.add(v8);
-        V1EnvVar v9 = new V1EnvVar().name("CORE_PEER_PROFILE_ENABLED").value("\"true\"");envList.add(v9);
+        V1EnvVar v9 = new V1EnvVar().name("CORE_PEER_PROFILE_ENABLED").value("true");envList.add(v9);
         V1EnvVar v10 = new V1EnvVar().name("CORE_PEER_TLS_CERT_FILE").value("/etc/hyperledger/fabric/tls/server.crt");envList.add(v10);
-        V1EnvVar v11 = new V1EnvVar().name("CORE_PEER_TLS_ENABLED").value("\"true\"");envList.add(v11);
+        V1EnvVar v11 = new V1EnvVar().name("CORE_PEER_TLS_ENABLED").value("true");envList.add(v11);
         V1EnvVar v12 = new V1EnvVar().name("CORE_PEER_TLS_KEY_FILE").value("/etc/hyperledger/fabric/tls/server.key");envList.add(v12);
         V1EnvVar v13 = new V1EnvVar().name("CORE_PEER_TLS_ROOTCERT_FILE").value("/etc/hyperledger/fabric/tls/ca.crt");envList.add(v13);
         V1EnvVar v14 = new V1EnvVar().name("CORE_VM_ENDPOINT").value("http://localhost:2375");envList.add(v14);
         V1EnvVar v15 = new V1EnvVar().name("CORE_OPERATIONS_LISTENADDRESS").value("0.0.0.0:9443");envList.add(v15);
         V1EnvVar v16 = new V1EnvVar().name("CORE_METRICS_PROVIDER").value("prometheus");envList.add(v16);
         List<V1VolumeMount> voList = new ArrayList<>();
-        V1VolumeMount vm1 = new V1VolumeMount().mountPath("/host/var/run/").name(peer.getPeerName()+"-"+orgName+"-claim0");voList.add(vm1);
-        V1VolumeMount vm2 = new V1VolumeMount().mountPath("/etc/hyperledger/fabric/msp").name(peer.getPeerName()+"-"+orgName+"-claim1");voList.add(vm2);
-        V1VolumeMount vm3 = new V1VolumeMount().mountPath("/etc/hyperledger/fabric/tls").name(peer.getPeerName()+"-"+orgName+"-claim2");voList.add(vm3);
-        V1VolumeMount vm4 = new V1VolumeMount().mountPath("/var/hyperledger/production").name(peer.getPeerName()+"-persistentdata");voList.add(vm4);
+        V1VolumeMount vm1 = new V1VolumeMount().mountPath("/host/var/run/").name(peer.getPeerName()+"-claim0");voList.add(vm1);
+        V1VolumeMount vm2 = new V1VolumeMount().mountPath("/etc/hyperledger/fabric/msp").name(peer.getPeerName()+"-claim1");voList.add(vm2);
+        V1VolumeMount vm3 = new V1VolumeMount().mountPath("/etc/hyperledger/fabric/tls").name(peer.getPeerName()+"-claim2");voList.add(vm3);
+        V1VolumeMount vm4 = new V1VolumeMount().mountPath("/var/hyperledger/production").name(peer.getPeerName().split("-")[0]+"-persistentdata");voList.add(vm4);
         V1VolumeMount vm5 = new V1VolumeMount().mountPath("/etc/hyperledger/fabric/core.yaml").name("builders-config").subPath("core.yaml");voList.add(vm5);
         V1VolumeMount vm6 = new V1VolumeMount().mountPath("/builders/external").name("external-builder");voList.add(vm6);
         V1Container OrdererServiceContainer = new V1Container().env(envList)
@@ -217,7 +217,7 @@ public class FabricK8sDeploymentGenerateService {
         V1EnvVar v1 = new V1EnvVar().name("FABRIC_CA_HOME").value("/etc/hyperledger/fabric-ca-server");envList.add(v1);
         V1EnvVar v2 = new V1EnvVar().name("FABRIC_CA_SERVER_CA_NAME").value("ca-"+orgName);envList.add(v2);
         V1EnvVar v3 = new V1EnvVar().name("FABRIC_CA_SERVER_TLS_CERTFILE").value("/etc/hyperledger/fabric-ca-server-config/ca."+orgName+"-cert.pem");envList.add(v3);
-        V1EnvVar v4 = new V1EnvVar().name("FABRIC_CA_SERVER_TLS_ENABLED").value("\"true\"");envList.add(v4);
+        V1EnvVar v4 = new V1EnvVar().name("FABRIC_CA_SERVER_TLS_ENABLED").value("true");envList.add(v4);
         V1EnvVar v5 = new V1EnvVar().name("FABRIC_CA_SERVER_TLS_KEYFILE").value("/etc/hyperledger/fabric-ca-server-config/priv_sk");envList.add(v5);
         List<V1VolumeMount> voList = new ArrayList<>();
         V1VolumeMount vm1 = new V1VolumeMount().mountPath("/etc/hyperledger/fabric-ca-server-config").name("ca-"+orgName+"-claim0").readOnly(true);voList.add(vm1);
@@ -252,7 +252,7 @@ public class FabricK8sDeploymentGenerateService {
     /**
      * 生成orderer Deployment spec中spec的container模块
      * */
-    public List<V1Container> generateOrdererSecondSpecContainer(){
+    public List<V1Container> generateOrdererSecondSpecContainer(String OrdererName){
         List<V1EnvVar> EnvList = new ArrayList<>();
         V1EnvVar v1 = new V1EnvVar().name("FABRIC_LOGGING_SPEC").value("DEBUG");EnvList.add(v1);
         V1EnvVar v2 = new V1EnvVar().name("ORDERER_OPERATIONS_LISTENADDRESS").value("0.0.0.0:8443");EnvList.add(v2);
@@ -263,7 +263,7 @@ public class FabricK8sDeploymentGenerateService {
         V1EnvVar v7 = new V1EnvVar().name("ORDERER_GENERAL_LOCALMSPDIR").value("/var/hyperledger/orderer/msp");EnvList.add(v7);
         V1EnvVar v8 = new V1EnvVar().name("ORDERER_GENERAL_LOCALMSPID").value("OrdererMSP");EnvList.add(v8);
         V1EnvVar v9 = new V1EnvVar().name("ORDERER_GENERAL_TLS_CERTIFICATE").value("/var/hyperledger/orderer/tls/server.crt");EnvList.add(v9);
-        V1EnvVar v10 = new V1EnvVar().name("ORDERER_GENERAL_TLS_ENABLED").value("\"true\"");EnvList.add(v10);
+        V1EnvVar v10 = new V1EnvVar().name("ORDERER_GENERAL_TLS_ENABLED").value("true");EnvList.add(v10);
         V1EnvVar v11 = new V1EnvVar().name("ORDERER_GENERAL_TLS_PRIVATEKE").value("/var/hyperledger/orderer/tls/server.key");EnvList.add(v11);
         V1EnvVar v12 = new V1EnvVar().name("ORDERER_GENERAL_TLS_ROOTCAS").value("\"[/var/hyperledger/orderer/tls/ca.crt]\"");EnvList.add(v12);
         V1EnvVar v13 = new V1EnvVar().name("ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE").value("/var/hyperledger/orderer/tls/server.crt");EnvList.add(v13);
@@ -275,10 +275,10 @@ public class FabricK8sDeploymentGenerateService {
         V1ContainerPort p1 = new V1ContainerPort().containerPort(7050);portList.add(p1);
         V1ContainerPort p2 = new V1ContainerPort().containerPort(8443);portList.add(p2);
         List<V1VolumeMount> voList = new ArrayList<>();
-        V1VolumeMount vm1 = new V1VolumeMount().mountPath("/var/hyperledger/production").name("rderer-persistentdata");voList.add(vm1);
-        V1VolumeMount vm2 = new V1VolumeMount().mountPath("var/hyperledger/orderer/genesis.block").name("orderer-claim0");voList.add(vm2);
-        V1VolumeMount vm3 = new V1VolumeMount().mountPath("/var/hyperledger/orderer/msp").name("orderer-claim1");voList.add(vm3);
-        V1VolumeMount vm4 = new V1VolumeMount().mountPath("/var/hyperledger/orderer/tls").name("orderer-claim2");voList.add(vm4);
+        V1VolumeMount vm1 = new V1VolumeMount().mountPath("/var/hyperledger/production").name(OrdererName+"-persistentdata");voList.add(vm1);
+        V1VolumeMount vm2 = new V1VolumeMount().mountPath("var/hyperledger/orderer/genesis.block").name(OrdererName+"-claim0");voList.add(vm2);
+        V1VolumeMount vm3 = new V1VolumeMount().mountPath("/var/hyperledger/orderer/msp").name(OrdererName+"-claim1");voList.add(vm3);
+        V1VolumeMount vm4 = new V1VolumeMount().mountPath("/var/hyperledger/orderer/tls").name(OrdererName+"-claim2");voList.add(vm4);
         V1Container OrdererServiceContainer = new V1Container().args(argsList).args(argsList)
                 .env(EnvList)
                 .image("hyperledger/fabric-orderer:amd64-2.1.0")
@@ -294,21 +294,21 @@ public class FabricK8sDeploymentGenerateService {
      * */
     public V1PodTemplateSpec generatePeerTemplate(Peer peer,String orgName,String netName){
         Map<String,String> map = new HashMap<>();
-        map.put("app",peer.getPeerName()+"-"+orgName);
+        map.put("app",peer.getPeerName());
         V1ObjectMeta om = new V1ObjectMeta().labels(map);
         V1HostPathVolumeSource hps1 = new V1HostPathVolumeSource().path("/var/run").type("Directory");
-        V1HostPathVolumeSource hps2 = new V1HostPathVolumeSource().path("/mnt/nfsserver/"+netName+"/crypto-config/peerOrganizations/"+orgName+"/peers/"+peer.getPeerName()+"-"+orgName+"/msp").type("Directory");
-        V1HostPathVolumeSource hps3 = new V1HostPathVolumeSource().path("/mnt/nfsserver/"+netName+"/crypto-config/peerOrganizations/"+orgName+"/peers/"+peer.getPeerName()+"-"+orgName+"/tls").type("Directory");
-        V1HostPathVolumeSource hps4 = new V1HostPathVolumeSource().path("/mnt/nfsserver/"+netName+"/pau/storage/"+peer.getPeerName()+"-"+orgName).path("DirectoryOrCreate");
-        V1HostPathVolumeSource hps5 = new V1HostPathVolumeSource().path("/mnt/nfsserver/"+netName+"/buildpack");
+        V1HostPathVolumeSource hps2 = new V1HostPathVolumeSource().path("/mnt/nfsdata/fabric/"+netName+"/crypto-config/peerOrganizations/"+orgName+"/peers/"+peer.getPeerName()+"/msp").type("Directory");
+        V1HostPathVolumeSource hps3 = new V1HostPathVolumeSource().path("/mnt/nfsdata/fabric/"+netName+"/crypto-config/peerOrganizations/"+orgName+"/peers/"+peer.getPeerName()+"/tls").type("Directory");
+        V1HostPathVolumeSource hps4 = new V1HostPathVolumeSource().path("/mnt/nfsdata/fabric/"+netName+"/pau/storage/"+peer.getPeerName()).path("DirectoryOrCreate");
+        V1HostPathVolumeSource hps5 = new V1HostPathVolumeSource().path("/mnt/nfsdata/fabric/"+netName+"/buildpack");
         V1KeyToPath ktp = new V1KeyToPath().key("core.yaml").path("core.yaml");
         List<V1KeyToPath> ktpList = new ArrayList<>();ktpList.add(ktp);
         V1ConfigMapVolumeSource cmv = new V1ConfigMapVolumeSource().name("builders-config").items(ktpList);
         List<V1Volume> vList = new ArrayList<>();
-        V1Volume v1 = new V1Volume().name(peer.getPeerName()+"-"+orgName+"claim0").hostPath(hps1);vList.add(v1);
-        V1Volume v2 = new V1Volume().name(peer.getPeerName()+"-"+orgName+"claim1").hostPath(hps2);vList.add(v2);
-        V1Volume v3 = new V1Volume().name(peer.getPeerName()+"-"+orgName+"claim2").hostPath(hps3);vList.add(v3);
-        V1Volume v4 = new V1Volume().name(peer.getPeerName()+"-persistentdata").hostPath(hps4);vList.add(v4);
+        V1Volume v1 = new V1Volume().name(peer.getPeerName()+"claim0").hostPath(hps1);vList.add(v1);
+        V1Volume v2 = new V1Volume().name(peer.getPeerName()+"claim1").hostPath(hps2);vList.add(v2);
+        V1Volume v3 = new V1Volume().name(peer.getPeerName()+"claim2").hostPath(hps3);vList.add(v3);
+        V1Volume v4 = new V1Volume().name(peer.getPeerName().split("-")[0]+"-persistentdata").hostPath(hps4);vList.add(v4);
         V1Volume v5 = new V1Volume().name("external-builder").hostPath(hps5);vList.add(v5);
         V1Volume v6 = new V1Volume().name("builders-config").configMap(cmv);vList.add(v6);
         V1PodSpec ps = new V1PodSpec().containers(generatePeerSecondSpecContainer(orgName,peer))
@@ -326,16 +326,16 @@ public class FabricK8sDeploymentGenerateService {
         Map<String,String> map = new HashMap<>();
         map.put("app",OrdererName);
         V1ObjectMeta om = new V1ObjectMeta().labels(map);
-        V1HostPathVolumeSource hps1 = new V1HostPathVolumeSource().path("/mnt/nfsserver/pau/storage/orderer").type("DirectoryOrCreate");
-        V1HostPathVolumeSource hps2 = new V1HostPathVolumeSource().path("/mnt/nfsserver/"+netName+"/channel-artifacts/genesis.block");
-        V1HostPathVolumeSource hps3 = new V1HostPathVolumeSource().path("/mnt/nfsserver/"+netName+"/crypto-config/ordererOrganizations/consortium/orderers/orderer0/msp");
-        V1HostPathVolumeSource hps4 = new V1HostPathVolumeSource().path("/mnt/nfsserver/"+netName+"/crypto-config/ordererOrganizations/consortium/orderers/orderer0/tls");
+        V1HostPathVolumeSource hps1 = new V1HostPathVolumeSource().path("/mnt/nfsdata/pau/storage/orderer").type("DirectoryOrCreate");
+        V1HostPathVolumeSource hps2 = new V1HostPathVolumeSource().path("/mnt/nfsdata/fabric/"+netName+"/channel-artifacts/genesis.block");
+        V1HostPathVolumeSource hps3 = new V1HostPathVolumeSource().path("/mnt/nfsdata/fabric/"+netName+"/crypto-config/ordererOrganizations/consortium/orderers/"+OrdererName+"/msp");
+        V1HostPathVolumeSource hps4 = new V1HostPathVolumeSource().path("/mnt/nfsdata/fabric/"+netName+"/crypto-config/ordererOrganizations/consortium/orderers/"+OrdererName+"/tls");
         List<V1Volume> vList = new ArrayList<>();
-        V1Volume v1 = new V1Volume().name("orderer-persistentdata").hostPath(hps1);vList.add(v1);
-        V1Volume v2 = new V1Volume().name("orderer-claim0").hostPath(hps2);vList.add(v2);
-        V1Volume v3 = new V1Volume().name("orderer-claim1").hostPath(hps3);vList.add(v3);
-        V1Volume v4 = new V1Volume().name("orderer-claim2").hostPath(hps4);vList.add(v4);
-        V1PodSpec ps = new V1PodSpec().containers(generateOrdererSecondSpecContainer())
+        V1Volume v1 = new V1Volume().name(OrdererName+"-persistentdata").hostPath(hps1);vList.add(v1);
+        V1Volume v2 = new V1Volume().name(OrdererName+"-claim0").hostPath(hps2);vList.add(v2);
+        V1Volume v3 = new V1Volume().name(OrdererName+"-claim1").hostPath(hps3);vList.add(v3);
+        V1Volume v4 = new V1Volume().name(OrdererName+"-claim2").hostPath(hps4);vList.add(v4);
+        V1PodSpec ps = new V1PodSpec().containers(generateOrdererSecondSpecContainer(OrdererName))
                 .restartPolicy("Always")
                 .volumes(vList);
         V1PodTemplateSpec pts = new V1PodTemplateSpec().metadata(om)
@@ -351,10 +351,10 @@ public class FabricK8sDeploymentGenerateService {
         map.put("app","cli-"+orgName);
         V1ObjectMeta om = new V1ObjectMeta().labels(map);
         List<V1Volume> vList = new ArrayList<>();
-        V1HostPathVolumeSource hpvs1 = new V1HostPathVolumeSource().path("/var/run/").type("Directory");
-        V1HostPathVolumeSource hpvs2= new V1HostPathVolumeSource().path("/mnt/nfsserver/"+netName+"/chaincode").type("Directory");
-        V1HostPathVolumeSource hpvs3 = new V1HostPathVolumeSource().path("/mnt/nfsserver/"+netName+"/channel-artifacts").type("Directory");
-        V1HostPathVolumeSource hpvs4 = new V1HostPathVolumeSource().path("/mnt/nfsserver/"+netName+"crypto-config").type("Directory");
+        V1HostPathVolumeSource hpvs1 = new V1HostPathVolumeSource().path("/var/run/fabric/").type("Directory");
+        V1HostPathVolumeSource hpvs2= new V1HostPathVolumeSource().path("/mnt/nfsdata/fabric/"+netName+"/chaincode").type("Directory");
+        V1HostPathVolumeSource hpvs3 = new V1HostPathVolumeSource().path("/mnt/nfsdata/fabric/"+netName+"/channel-artifacts").type("Directory");
+        V1HostPathVolumeSource hpvs4 = new V1HostPathVolumeSource().path("/mnt/nfsdata/fabric/"+netName+"/crypto-config").type("Directory");
         V1Volume v1 = new V1Volume().name("cli-claim0").hostPath(hpvs1);vList.add(v1);
         V1Volume v2 = new V1Volume().name("cli-claim1").hostPath(hpvs2);vList.add(v2);
         V1Volume v3 = new V1Volume().name("cli-claim2").hostPath(hpvs3);vList.add(v3);
@@ -373,7 +373,7 @@ public class FabricK8sDeploymentGenerateService {
         Map<String,String> map = new HashMap<>();
         map.put("app","ca-"+orgName);
         V1ObjectMeta om = new V1ObjectMeta().labels(map);
-        V1HostPathVolumeSource hps1 = new V1HostPathVolumeSource().path("/mnt/nfsserver/"+netName+"/crypto-config/peerOrganizations/"+orgName+"/ca/").type("Directory");
+        V1HostPathVolumeSource hps1 = new V1HostPathVolumeSource().path("/mnt/nfsdata/fabric/"+netName+"/crypto-config/peerOrganizations/"+orgName+"/ca/").type("Directory");
         List<V1Volume> vList = new ArrayList<>();
         V1Volume v1 = new V1Volume().name("ca-"+orgName+"-claim0").hostPath(hps1);vList.add(v1);
         V1PodSpec ps = new V1PodSpec().containers(generateCaSecondSpecContainer(orgName))

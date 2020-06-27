@@ -24,4 +24,7 @@ public interface ChaincodeMapper {
     @Insert("insert into chaincode (ChaincodeName,ChaincodeVersion,git,ChannelId,NetId) values (#{ChaincodeName},#{ChaincodeVersion},#{git},#{ChannelId},#{NetId})")
     @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
     public void insertChaincode(ChaincodeInfo chaincodeInfo);
+
+    @Select("select * from chaincode where id = #{id}")
+    public ChaincodeInfo findChaincodeById(@Param("id") int id);
 }

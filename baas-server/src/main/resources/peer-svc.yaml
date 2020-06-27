@@ -1,0 +1,34 @@
+#---------------- Peer0 Org1 Service ---------------
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: <peerName>
+  name: <peerName>
+  namespace: <NameSpace>
+spec:
+  type: ClusterIP
+  ports:
+  - name: "peer-core"
+    port: 7051
+    targetPort: 7051
+  selector:
+    app: <peerName>
+---
+#---------------- Peer0 Org1 Metrics Service ---------------
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: <peerName>
+    metrics-service: "true"
+  name: <peerName>-metrics
+  namespace: <NameSpace>
+spec:
+  type: ClusterIP
+  ports:
+  - name: "peer-metrics"
+    port: 9443
+    targetPort: 9443
+  selector:
+    app: <peerName>

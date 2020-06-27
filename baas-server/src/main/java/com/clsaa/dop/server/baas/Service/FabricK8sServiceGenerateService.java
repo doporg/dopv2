@@ -26,10 +26,10 @@ public class FabricK8sServiceGenerateService {
      * */
     public V1Service generateOrdererService(Orderer orderer, String NameSpace){
         Map<String,String> map = new HashMap<>();
-        map.put("app:",orderer.getOrderName());
+        map.put("app",orderer.getOrderName());
         V1ObjectMeta om = new V1ObjectMeta().labels(map).name(orderer.getOrderName()).namespace(NameSpace);
         List<V1ServicePort> spList = new ArrayList<>();
-        V1ServicePort sp = new V1ServicePort().name("\""+orderer.getOrderName()+"\"").port(Integer.parseInt(orderer.getOrderport())).targetPort(new IntOrString(orderer.getOrderport()));
+        V1ServicePort sp = new V1ServicePort().name(orderer.getOrderName()).port(Integer.parseInt(orderer.getOrderport())).targetPort(new IntOrString(Integer.parseInt(orderer.getOrderport())));
         spList.add(sp);
         V1ServiceSpec ss = new V1ServiceSpec().type("ClusterIP").ports(spList).selector(map);
         return new V1Service().apiVersion("v1").kind("Service").metadata(om).spec(ss);
@@ -39,11 +39,11 @@ public class FabricK8sServiceGenerateService {
      * */
     public V1Service generateOrdererMetricService(Orderer orderer,String NameSpace){
         Map<String,String> map = new HashMap<>();
-        map.put("app:",orderer.getOrderName());
-        map.put("metrics-service","\"true\"");
+        map.put("app",orderer.getOrderName());
+        map.put("metrics-service","true");
         V1ObjectMeta om = new V1ObjectMeta().labels(map).name(orderer.getOrderName()+"-metrics").namespace(NameSpace);
         List<V1ServicePort> spList = new ArrayList<>();
-        V1ServicePort sp = new V1ServicePort().name("\"orderer-metrics\"").port(8443).targetPort(new IntOrString(8443));
+        V1ServicePort sp = new V1ServicePort().name("orderer-metrics").port(8443).targetPort(new IntOrString(8443));
         spList.add(sp);
         V1ServiceSpec ss = new V1ServiceSpec().type("ClusterIP").ports(spList).selector(map);
         return new V1Service().apiVersion("v1").kind("Service").metadata(om).spec(ss);
@@ -56,7 +56,7 @@ public class FabricK8sServiceGenerateService {
         map.put("app:","ca-"+orgName);
         V1ObjectMeta om = new V1ObjectMeta().labels(map).name("ca-"+orgName).namespace(NameSpace);
         List<V1ServicePort> spList = new ArrayList<>();
-        V1ServicePort sp = new V1ServicePort().name("\"https\"").port(7054).targetPort(new IntOrString(7054));
+        V1ServicePort sp = new V1ServicePort().name("https").port(7054).targetPort(new IntOrString(7054));
         spList.add(sp);
         V1ServiceSpec ss = new V1ServiceSpec().type("ClusterIP").ports(spList).selector(map);
         return new V1Service().apiVersion("v1").kind("Service").metadata(om).spec(ss);
@@ -66,10 +66,10 @@ public class FabricK8sServiceGenerateService {
      * */
     public V1Service generatePeerService(Peer peer, String orgName, String NameSpace){
         Map<String,String> map = new HashMap<>();
-        map.put("app:",peer.getPeerName()+"-"+orgName);
-        V1ObjectMeta om = new V1ObjectMeta().labels(map).name(peer.getPeerName()+"-"+orgName).namespace(NameSpace);
+        map.put("app:",peer.getPeerName());
+        V1ObjectMeta om = new V1ObjectMeta().labels(map).name(peer.getPeerName()).namespace(NameSpace);
         List<V1ServicePort> spList = new ArrayList<>();
-        V1ServicePort sp = new V1ServicePort().name("\"peer-core\"").port(7051).targetPort(new IntOrString(7051));
+        V1ServicePort sp = new V1ServicePort().name("peer-core").port(7051).targetPort(new IntOrString(7051));
         spList.add(sp);
         V1ServiceSpec ss = new V1ServiceSpec().type("ClusterIP").ports(spList).selector(map);
         return new V1Service().apiVersion("v1").kind("Service").metadata(om).spec(ss);
@@ -79,11 +79,11 @@ public class FabricK8sServiceGenerateService {
      * */
     public V1Service generatePeerMetricService(Peer peer,String orgName,String NameSpace){
         Map<String,String> map = new HashMap<>();
-        map.put("app:",peer.getPeerName()+"-"+orgName);
-        map.put("metrics-service","\"true\"");
-        V1ObjectMeta om = new V1ObjectMeta().labels(map).name(peer.getPeerName()+"-"+orgName+"-metrics").namespace(NameSpace);
+        map.put("app",peer.getPeerName());
+        map.put("metrics-service","true");
+        V1ObjectMeta om = new V1ObjectMeta().labels(map).name(peer.getPeerName()+"-metrics").namespace(NameSpace);
         List<V1ServicePort> spList = new ArrayList<>();
-        V1ServicePort sp = new V1ServicePort().name("\"peer-metrics\"").port(9443).targetPort(new IntOrString(9443));
+        V1ServicePort sp = new V1ServicePort().name("peer-metrics").port(9443).targetPort(new IntOrString(9443));
         spList.add(sp);
         V1ServiceSpec ss = new V1ServiceSpec().type("ClusterIP").ports(spList).selector(map);
         return new V1Service().apiVersion("v1").kind("Service").metadata(om).spec(ss);
@@ -94,7 +94,7 @@ public class FabricK8sServiceGenerateService {
      * */
     public V1Service generateChaincodeService(String NameSpace,String orgName){
         Map<String,String> map = new HashMap<>();
-        map.put("app:","chaincode-marbles-"+orgName);
+        map.put("app","chaincode-marbles-"+orgName);
         V1ObjectMeta om = new V1ObjectMeta().labels(map).name("chaincode-marbles-"+orgName).namespace(NameSpace);
         V1ServicePort sp = new V1ServicePort().name("grpc").port(7052).targetPort(new IntOrString(7052));
         List<V1ServicePort> spList = new ArrayList<>();

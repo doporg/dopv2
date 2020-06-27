@@ -9,12 +9,16 @@ import com.clsaa.dop.server.baas.model.jsonMo.jsonModel;
 import com.clsaa.dop.server.baas.model.yamlMo.BlockData;
 import com.clsaa.dop.server.baas.model.yamlMo.Orderer;
 import com.clsaa.dop.server.baas.model.yamlMo.TxData;
+import com.clsaa.dop.server.baas.util.SFTPUtil;
 import io.kubernetes.client.ApiException;
 import org.apache.commons.cli.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,44 +45,61 @@ public class FabricChannelService {
     JenkinsService jenkinsService;
     @Autowired
     GetBlockInfoService getBlockInfoService;
+    @Autowired
+    K8sYamlGenerateService k8sYamlGenerateService;
     //创建channel并且把peer加进去
-    public List<String> createChannel(int NetId,String ChannelName,List<String> peerList) throws InterruptedException, ApiException, ParseException, IOException {
+    //在pod里面执行shell命令 不能用kubectl exec -- command 做法是创建Linux shell 然后 kubectl exec
+    //链码要在生成yaml以后 用jenkins去生成pod 并打包 不同的组织链码要不一样打包 打包以后还要得到ccid
+    //invoke的话也要
+    public String createChannel(int NetId,String ChannelName,List<String> peerList) throws InterruptedException, ApiException, ParseException, IOException, SftpException {
         List<String> result = new ArrayList<>();
         NewNetInfo net = netMapper.findNetById(NetId);
         String Namespace = net.getNamespace();
-        String order = net.getOrdererList().split(",")[0].split("\\[")[1];
-        StringBuilder cmd = new StringBuilder("peer channel create -o ");
-        cmd.append(order+" -c");
-        cmd.append(ChannelName);
-        cmd.append(" -f /mnt/"+Namespace+"/scripts/channel-artifacts/channel.tx --tls true --cafile $ORDERER_CA");
-        String command = cmd.toString();
-        StringBuilder joinCmd = new StringBuilder("peer channel join -b ");
-        joinCmd.append(ChannelName+".block");
-        String joinCommand = joinCmd.toString();
+        List<String> con = new ArrayList<>();
+        List<String> CliPodList = new ArrayList<>();
+        boolean flag = true;
+        for(String peer:peerList){
+            con.add(peer.split("-")[1]);
+        }
         Map<String,String> map = fabricK8sQueryService.getNameSpacePodListStatu(Namespace);
         Set<String> set = map.keySet();
-        List<String> PeerPodList = new ArrayList<>();
         for(String s:set){
-            for(String peer:peerList)
-                if(s.contains(peer))
-                    PeerPodList.add(s);
+            for(String org:con)
+                if(s.contains("cli-"+org))
+                    CliPodList.add(s);
         }
-        StringBuilder cmd2 = new StringBuilder("peer channel fetch 0 ");
-        cmd2.append(ChannelName+".block -c "+ChannelName+" -o "+order);
-        cmd2.append(" --tls --cafile $ORDERER_CA");
-        String joinCommand2 = cmd2.toString();
-        for(int i=0;i<PeerPodList.size();i++){
-            String pod = PeerPodList.get(i);
+        SFTPUtil sftpUtil = new SFTPUtil();
+        sftpUtil.login();
+        k8sYamlGenerateService.replaceChannelShell(ChannelName,2,Namespace);
+        File file = new File("src/main/resources/"+Namespace+"-firstChannel.sh");
+        File file2 = new File("src/main/resources/"+Namespace+"-secChannel.sh");
+        InputStream is = new FileInputStream(file);
+        InputStream is2 = new FileInputStream(file2);
+        sftpUtil.upload("/mnt","nfsdata/fabric/"+Namespace, "firstChannel.sh",is);
+        sftpUtil.upload("/mnt","nfsdata/fabric/"+Namespace, "secChannel.sh",is2);
+        for(int i=0;i<CliPodList.size();i++){
             if(i==0){
-                result.add(k8sExecService.KubectlExec(pod,Namespace,command));
-                result.add(k8sExecService.KubectlExec(pod,Namespace,joinCommand));
+                String jobName =jenkinsService.createFirstChannel(Namespace,CliPodList.get(i),ChannelName);
+                jenkinsService.buildJob(jobName);
+                result.add(k8sExecService.KubectlExec(CliPodList.get(i),Namespace,"peer channel list"));
             }
             else{
-                result.add((k8sExecService.KubectlExec(pod,Namespace,joinCommand2)));
-                result.add(k8sExecService.KubectlExec(pod,Namespace,joinCommand));
+                String jobName =jenkinsService.createSecChannel(Namespace,CliPodList.get(i),ChannelName);
+                jenkinsService.buildJob(jobName);
+                result.add(k8sExecService.KubectlExec(CliPodList.get(i),Namespace,"peer channel list"));
             }
         }
-        return result;
+        file.delete();
+        file2.delete();
+        sftpUtil.logout();
+        for(String res:result){
+            if(!res.equals(ChannelName))
+                flag=false;
+        }
+        if(flag)
+            return "create channel success!";
+        else
+            return "create channel fail";
     }
     /*获取区块高度*/
     public int getChannelHeight(int channelId) throws IOException, ApiException, ParseException, InterruptedException {
