@@ -124,16 +124,22 @@ public class K8sYamlGenerateService {
         String content;
         if(count==1){
             content = this.getFromYaml("src/main/resources/firstChannel.sh");
+            content = content.replace("<channelName>",channelName);
+            File newFile = new File("src/main/resources/"+NameSpace+"-firstChannel.sh");
+            FileWriter fw = new FileWriter(newFile);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(content);
+            bw.close();
         }
         else{
             content = this.getFromYaml("src/main/resources/secChannel.sh");
+            content = content.replace("<channelName>",channelName);
+            File newFile = new File("src/main/resources/"+NameSpace+"-secChannel.sh");
+            FileWriter fw = new FileWriter(newFile);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(content);
+            bw.close();
         }
-        content = content.replace("<channelName>",channelName);
-        File newFile = new File("src/main/resources/"+NameSpace+"-firstChannel.sh");
-        FileWriter fw = new FileWriter(newFile);
-        BufferedWriter bw = new BufferedWriter(fw);
-        bw.write(content);
-        bw.close();
     }
     public void generateCaServiceYaml(String orgName,String NameSpace) throws IOException {
         String content = this.getFromYaml("src/main/resources/ca-svc.yaml");
@@ -194,4 +200,6 @@ public class K8sYamlGenerateService {
         ttfFile.delete();
         return s;
     }
+
+
 }

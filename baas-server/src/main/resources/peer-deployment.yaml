@@ -30,16 +30,16 @@ spec:
               value: <peerName>:7051
             - name: CORE_PEER_GOSSIP_EXTERNALENDPOINT
               value: <peerName>:7051
+            - name: CORE_PEER_GOSSIP_BOOTSTRAP
+              value: <peerName>:7051
             - name: CORE_PEER_CHAINCODELISTENADDRESS
               value: localhost:7052
             - name: CORE_PEER_GOSSIP_USELEADERELECTION
               value: "true"
-            - name: CORE_PEER_GOSSIP_BOOTSTRAP
-              value: <peerName>:7051
             - name: CORE_PEER_ID
               value: <peerName>
             - name: CORE_PEER_LOCALMSPID
-              value: <peerFirstName>MSP
+              value: <orgName>MSP
             - name: CORE_PEER_PROFILE_ENABLED
               value: "true"
             - name: CORE_PEER_TLS_CERT_FILE
@@ -94,11 +94,11 @@ spec:
             type: Directory
         - name: <peerFirstName>-persistentdata
           hostPath:
-            path: /home/<NameSpace>/pau/storage/<peerName>
+            path: /mnt/nfsdata/fabric/<NameSpace>/pau/old/storage/<peerName>
             type: DirectoryOrCreate
         - name: external-builder
           hostPath:
-            path: /mnt/nfsdata/fabric/buildpack
+            path: /mnt/nfsdata/fabric/<NameSpace>/buildpack
         - name: builders-config
           configMap:
             name: builders-config

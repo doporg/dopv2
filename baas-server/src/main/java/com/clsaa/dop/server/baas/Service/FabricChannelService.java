@@ -70,6 +70,7 @@ public class FabricChannelService {
         }
         SFTPUtil sftpUtil = new SFTPUtil();
         sftpUtil.login();
+        k8sYamlGenerateService.replaceChannelShell(ChannelName,1,Namespace);
         k8sYamlGenerateService.replaceChannelShell(ChannelName,2,Namespace);
         File file = new File("src/main/resources/"+Namespace+"-firstChannel.sh");
         File file2 = new File("src/main/resources/"+Namespace+"-secChannel.sh");

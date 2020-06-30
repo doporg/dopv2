@@ -145,4 +145,25 @@ public class NewFabricController {
         jenkinsService.buildJob(job2);
         return "Success";
     }
+
+    @ApiOperation(value = "根据查询fabric网络",notes = "接口说明")
+    @GetMapping("/v2/baas/queryFabric/{id}")
+    public String QueryFabricNetById( @PathVariable(value = "id") int id){
+        NewNetInfo netInfo = netMapper.findNetById(id);
+        return netInfo.toString();
+    }
+
+
+    @ApiOperation(value = "根据查询fabric网络",notes = "接口说明")
+    @GetMapping("/v2/baas/queryFabric")
+    public List<NewNetInfo> QueryFabric(){
+        List<NewNetInfo> netList = netMapper.getAllNet();
+        return netList;
+    }
+    @ApiOperation(value = "删除网络",notes = "接口说明")
+    @GetMapping("/v2/baas/deleteFabric/{id}")
+    public String QueryFabric(@PathVariable(value = "id")int id){
+        netMapper.updateNetStatu(0,id);
+        return "success";
+    }
 }

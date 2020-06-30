@@ -12,6 +12,6 @@ import java.util.List;
 @Data
 public class channelJsonModel {
     private String name;
-    private String networkId;
+    private int networkId;
     private List<String> peers;
 }

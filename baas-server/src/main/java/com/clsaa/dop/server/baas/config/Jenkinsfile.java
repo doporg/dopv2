@@ -27,8 +27,9 @@ public class Jenkinsfile {
         sb.append("cd "+NameSpace+"\n");
         sb.append("chmod 777 fabricOps.sh\n");
         sb.append("sh fabricOps.sh start\n");
-        sb.append("mkdir chaincode\n");
-        sb.append("mkdir buildpack");
+        sb.append("cd ../\n");
+        sb.append("cp -r chaincode "+NameSpace+"/\n");
+        sb.append("cp -r buildpack "+NameSpace+"/");
         this.Script=sb.toString();
     }
 

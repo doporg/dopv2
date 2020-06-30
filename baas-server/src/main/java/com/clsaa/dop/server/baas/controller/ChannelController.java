@@ -51,10 +51,10 @@ public class ChannelController {
         String peerList = sb.toString();
         ChannelInfo ci = new ChannelInfo();
         ci.setChannelName(c.getName());
-        ci.setNetId(Integer.parseInt(c.getNetworkId()));
+        ci.setNetId(c.getNetworkId());
         ci.setPeerList(peerList);
         channelMapper.insertChannel(ci);
-        return fabricChannelService.createChannel(Integer.parseInt(c.getNetworkId()),c.getName(),list);
+        return fabricChannelService.createChannel(c.getNetworkId(),c.getName(),list);
     }
 
     @ApiOperation(value = "查询fabri通道块信息", notes = "接口说明")
