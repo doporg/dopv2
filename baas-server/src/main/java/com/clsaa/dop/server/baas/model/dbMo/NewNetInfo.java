@@ -17,4 +17,7 @@ public class NewNetInfo {
     private String tls;
     private String createtime;
     private int status;
+    public String toString(){
+        return "id:"+id+"\nnamespace:"+namespace+"\nordererList:"+ordererList+"\norgList"+orgList+"\nconsensus:"+consensus+"\ntls:"+tls+"\ncreateTime:"+createtime+"\nstatus:"+status;
+    }
 }

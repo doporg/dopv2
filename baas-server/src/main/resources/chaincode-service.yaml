@@ -1,0 +1,15 @@
+--- #---------------- Chaincode Service ---------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: chaincode-<chaincodeName>-<orgName>
+  namespace: <NameSpace>
+  labels:
+    app: chaincode-<chaincodeName>-<orgName>
+spec:
+  ports:
+    - name: grpc
+      port: 7052
+      targetPort: 7052
+  selector:
+    app: chaincode-<chaincodeName>-<orgName>

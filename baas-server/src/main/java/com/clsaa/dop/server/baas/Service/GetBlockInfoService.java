@@ -36,7 +36,10 @@ public class GetBlockInfoService {
                     bd.setBlockNum(Integer.parseInt(line.split("\"")[3]));
                 }
                 if(line.contains("previous_hash")){
-                    bd.setPreHash(line.split("\"")[3]);
+                    if(bd.getBlockNum()!=0)
+                        bd.setPreHash(line.split("\"")[3]);
+                    else
+                        bd.setPreHash(null);
                 }
                 if(line.contains("timestamp")){
                     bd.setTimeStamp(line.split("\"")[3]);

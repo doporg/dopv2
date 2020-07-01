@@ -1,0 +1,52 @@
+--- #---------------- CA org2 Deployment ---------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ca-<orgName>
+  name: ca-<orgName>
+  namespace: <NameSpace>
+spec:
+  selector:
+    matchLabels:
+      app: ca-<orgName>
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ca-<orgName>
+    spec:
+      containers:
+        - args:
+            - sh
+            - -c
+            - fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.<orgName>-cert.pem
+              --ca.keyfile /etc/hyperledger/fabric-ca-server-config/priv_sk
+              -b admin:adminpw -d
+          env:
+            - name: FABRIC_CA_HOME
+              value: /etc/hyperledger/fabric-ca-server
+            - name: FABRIC_CA_SERVER_CA_NAME
+              value: ca-<orgName>
+            - name: FABRIC_CA_SERVER_TLS_CERTFILE
+              value: /etc/hyperledger/fabric-ca-server-config/ca.<orgName>-cert.pem
+            - name: FABRIC_CA_SERVER_TLS_ENABLED
+              value: "true"
+            - name: FABRIC_CA_SERVER_TLS_KEYFILE
+              value: /etc/hyperledger/fabric-ca-server-config/priv_sk
+          image: hyperledger/fabric-ca:amd64-1.4.6
+          name: ca-<orgName>
+          ports:
+            - containerPort: 7054
+          volumeMounts:
+            - mountPath: /etc/hyperledger/fabric-ca-server-config
+              name: ca-<orgName>-claim0
+              readOnly: true
+      restartPolicy: Always
+      volumes:
+        - name: ca-<orgName>-claim0
+          hostPath:
+            path: /mnt/nfsdata/fabric/<NameSpace>/crypto-config/peerOrganizations/<orgName>/ca/
+            type: Directory

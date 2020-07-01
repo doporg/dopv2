@@ -4,6 +4,8 @@ import com.clsaa.dop.server.baas.model.dbMo.ChannelInfo;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 注释写在这
  *
@@ -21,4 +23,6 @@ public interface ChannelMapper {
     @Select("select * from net where id = #{id}")
     public ChannelInfo findChannelById(@Param("id") int id);
 
+    @Select("select * from channel")
+    public List<ChannelInfo> findAllChannel();
 }

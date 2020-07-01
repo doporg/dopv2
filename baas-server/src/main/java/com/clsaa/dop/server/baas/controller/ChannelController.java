@@ -7,6 +7,7 @@ import com.clsaa.dop.server.baas.model.dbMo.ChannelInfo;
 import com.clsaa.dop.server.baas.model.jsonMo.channelJsonModel;
 import com.clsaa.dop.server.baas.model.yamlMo.BlockData;
 import com.clsaa.dop.server.baas.model.yamlMo.TxData;
+import com.jcraft.jsch.SftpException;
 import io.kubernetes.client.ApiException;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.cli.ParseException;
@@ -35,7 +36,7 @@ public class ChannelController {
 
     @ApiOperation(value = "创建fabri通道", notes = "接口说明")
     @PostMapping("/v2/baas/createChannel")
-    public List<String> CreateChannel(@RequestBody String channelJson) throws InterruptedException, ApiException, ParseException, IOException {
+    public String CreateChannel(@RequestBody String channelJson) throws InterruptedException, ApiException, ParseException, IOException, SftpException {
         channelJsonModel c = jsonService.CastJsonToChannelBean(channelJson);
         List<String> list = c.getPeers();
         StringBuilder sb = new StringBuilder("");
@@ -50,10 +51,10 @@ public class ChannelController {
         String peerList = sb.toString();
         ChannelInfo ci = new ChannelInfo();
         ci.setChannelName(c.getName());
-        ci.setNetId(Integer.parseInt(c.getNetworkId()));
+        ci.setNetId(c.getNetworkId());
         ci.setPeerList(peerList);
         channelMapper.insertChannel(ci);
-        return fabricChannelService.createChannel(Integer.parseInt(c.getNetworkId()),c.getName(),list);
+        return fabricChannelService.createChannel(c.getNetworkId(),c.getName(),list);
     }
 
     @ApiOperation(value = "查询fabri通道块信息", notes = "接口说明")
@@ -67,5 +68,9 @@ public class ChannelController {
     public List<TxData> queryChannelTXData(@PathVariable(value = "ChannelId") int ChannelId) throws InterruptedException, ApiException, ParseException, IOException {
         return fabricChannelService.QueryChannelTx(ChannelId);
     }
-
+    @ApiOperation(value = "查询所有通道", notes = "接口说明")
+    @GetMapping("/v2/baas/queryAllChannel")
+    public List<ChannelInfo> queryAllChannel(){
+        return channelMapper.findAllChannel();
+    }
 }
