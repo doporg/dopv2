@@ -10,6 +10,7 @@ import com.clsaa.dop.server.baas.model.yamlMo.BlockData;
 import com.clsaa.dop.server.baas.model.yamlMo.Orderer;
 import com.clsaa.dop.server.baas.model.yamlMo.TxData;
 import com.clsaa.dop.server.baas.util.SFTPUtil;
+import com.jcraft.jsch.SftpException;
 import io.kubernetes.client.ApiException;
 import org.apache.commons.cli.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class FabricChannelService {
     //在pod里面执行shell命令 不能用kubectl exec -- command 做法是创建Linux shell 然后 kubectl exec
     //链码要在生成yaml以后 用jenkins去生成pod 并打包 不同的组织链码要不一样打包 打包以后还要得到ccid
     //invoke的话也要
-    public String createChannel(int NetId,String ChannelName,List<String> peerList) throws InterruptedException, ApiException, ParseException, IOException, SftpException {
+    public String createChannel(int NetId,String ChannelName,List<String> peerList) throws InterruptedException, ApiException, ParseException, IOException, SftpException, SftpException {
         List<String> result = new ArrayList<>();
         NewNetInfo net = netMapper.findNetById(NetId);
         String Namespace = net.getNamespace();

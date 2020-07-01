@@ -5,6 +5,7 @@ import com.clsaa.dop.server.baas.config.Jenkinsfile;
 import com.clsaa.dop.server.baas.config.JobConfig;
 import com.clsaa.dop.server.baas.model.yamlMo.Organization;
 import com.offbytwo.jenkins.JenkinsServer;
+import com.offbytwo.jenkins.model.Job;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -42,7 +43,7 @@ public class JenkinsService {
     public void getJobList(){
         try {
             // 获取 Job 列表
-            Map<String,Job> jobs = jenkins.getJobs();
+            Map<String, Job> jobs = jenkins.getJobs();
             for (Job job:jobs.values()){
                 System.out.println(job.getName());
             }
