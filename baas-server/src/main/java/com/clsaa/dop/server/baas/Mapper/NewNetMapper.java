@@ -23,7 +23,7 @@ public interface NewNetMapper {
     //QueryByid
     @Select("select * from newnet where id = #{id}")
     public NewNetInfo findNetById (@Param("id") int id);
-    @Select("select id from net where namesapce = #{namesapce}")
+    @Select("select id from newnet where namesapce = #{namesapce}")
     public int queryId(@Param("namesapce")String namesapce);
     //QueryAllNet
     @Select("select * from newnet")
