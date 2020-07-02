@@ -30,18 +30,22 @@ public class GetBlockInfoService {
             while ((line = reader.readLine()) != null){
                 lineNum++;
                 if(line.contains("tx_id")){
+//                    System.out.println(line);
                     bd.setDataHash(line.split("\"")[3]);
                 }
                 if(line.contains("number")){
+//                    System.out.println(line);
                     bd.setBlockNum(Integer.parseInt(line.split("\"")[3]));
                 }
                 if(line.contains("previous_hash")){
+//                    System.out.println(line);
                     if(bd.getBlockNum()!=0)
                         bd.setPreHash(line.split("\"")[3]);
                     else
                         bd.setPreHash(null);
                 }
                 if(line.contains("timestamp")){
+//                    System.out.println(line);
                     bd.setTimeStamp(line.split("\"")[3]);
                 }
             }

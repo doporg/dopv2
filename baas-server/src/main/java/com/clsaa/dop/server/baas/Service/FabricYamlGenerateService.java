@@ -46,7 +46,7 @@ public class FabricYamlGenerateService {
         for(int i=0;i<orgList.size();i++){
             if(i<orgList.size()-1){
                 content = content.replace("<ProfilesOrg>","- *"+orgList.get(i).getOrgName()+"\n                    <ProfilesOrg>");
-                content = content.replace("<ProfilesOrg2>","- *"+orgList.get(i).getOrgName()+"\n                <ProfilesOrg>");
+                content = content.replace("<ProfilesOrg2>","- *"+orgList.get(i).getOrgName()+"\n                <ProfilesOrg2>");
             }
             else{
                 content = content.replace("<ProfilesOrg>","- *"+orgList.get(i).getOrgName());
@@ -201,4 +201,3 @@ public class FabricYamlGenerateService {
     }
 
 }
-
