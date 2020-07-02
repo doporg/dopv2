@@ -1,5 +1,5 @@
 server:
-  port: 15800
+  port: 14800
 spring:
   http:
     encoding:
