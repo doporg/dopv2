@@ -4,7 +4,7 @@
 
 http://rocketmq.apache.org/release_notes/
 
-传到服务器上
+node3-服务器上
 
 安装unzip
 
@@ -16,7 +16,7 @@ unzip 	rocketmq-all-4.6.0-bin-release.zip
 
 修改**`conf/broker.conf`**
 
-添加brokerIP1 = 121.42.13.103(公网端口)
+添加brokerIP1 = 115.28.186.77(公网端口)
 
 
 
@@ -34,8 +34,9 @@ nohup sh bin/mqnamesrv &
 
 ### 2.4. 运行Broker
 
+
 ```
-nohup sh bin/mqbroker -n 121.42.13.103:9876 -c conf/broker.conf &
+nohup sh bin/mqbroker -n 115.28.186.77:9876 -c conf/broker.conf &
 ```
 
 > 通过-c参数指定配置文件 查看运行日志：tail -f ~/logs/rocketmqlogs/broker.log

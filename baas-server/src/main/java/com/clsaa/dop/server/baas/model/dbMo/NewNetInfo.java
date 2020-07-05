@@ -1,6 +1,6 @@
 package com.clsaa.dop.server.baas.model.dbMo;
 
-import lombok.Data;
+import lombok.*;
 
 /**
  * 注释写在这
@@ -8,6 +8,10 @@ import lombok.Data;
  * @author Monhey
  */
 @Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class NewNetInfo {
     private int id;
     private String namespace;

@@ -1,6 +1,8 @@
 package com.clsaa.dop.server.baas.model.dbMo;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
@@ -10,6 +12,8 @@ import java.util.Date;
  * @author Monhey
  */
 @Data
+@Getter
+@Setter
 public class NetInfo {
     private int id;
     private String NetName;
