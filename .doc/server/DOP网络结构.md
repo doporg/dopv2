@@ -2,13 +2,13 @@
 
 ## 网址：
 
-Jenkins: jenkins.dop.clsaa.com:8088
+Jenkins: jenkins.dop.clsaa.com
 
 harbor: https://registry.dop.clsaa.com
 
 eureka: discovery.dop.clsaa.com
 
-gitlab: http://gitlab.dop.clsaa.com:8088/
+gitlab: http://gitlab.dop.clsaa.com
 
 gateway: open.dop.clsaa.com
 
@@ -18,7 +18,7 @@ dop-web: www.dop.clsaa.com
 
 **Nginx**：
 
-- 端口：8088,443
+- 端口：80,443
 
 - 转发的服务：
 
