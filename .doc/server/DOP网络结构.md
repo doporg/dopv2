@@ -22,7 +22,7 @@ dop-web: www.dop.clsaa.com
 
 - 转发的服务：
 
-  1. **jenkins**，node1,8080端口
+  1. **jenkins**，node3,8080端口
   2.  harbor,  node3, 6443端口
   3.  gitlab, node2,  30808端口
 
