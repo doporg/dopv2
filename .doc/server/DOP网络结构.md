@@ -28,6 +28,13 @@ dop-web: www.dop.clsaa.com
 
 - 启动方式：systemctl start nginx
 
+**mysql**:
+
+- 端口：30306(暴露的node3的端口)
+- 启动方式：cd /opt/tools   kubectl apply -f mysql.yaml  kubectl apply -f mysql-pv.yaml  kubectl apply -f mysql-pvc.yaml 
+
+- 访问：nodeIp：nodeport
+
 
 
 **Redis**：
@@ -55,12 +62,7 @@ dop-web: www.dop.clsaa.com
 - 端口：6443
 - 启动方式：cd /mnt/tools/harbor   ./install.sh
 
-**mysql**:
 
-- 端口：30306
-- 启动方式：cd /opt/tools   kubectl apply -f mysql.yaml  kubectl apply -f mysql-pv.yaml  kubectl apply -f mysql-pvc.yaml 
-
-- 访问：nodeIp：nodeport
 
 
 
